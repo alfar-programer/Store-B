@@ -1,0 +1,38 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
+@import "tailwindcss";
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Outfit', sans-serif;
+}
+
+:root {
+    /* Primary Background */
+    --bg-primary: #ffffff;
+    /* White */
+
+    /* Secondary Background / Surface */
+    --bg-secondary: #f8f9fa;
+    /* Light gray */
+
+    /* Primary Text */
+    --text-primary: #212529;
+    /* Very dark gray (almost black) */
+
+    /* Secondary Text */
+    --text-secondary: #7A9C85;
+    /* Medium gray */
+
+    /* Primary Accent / Brand Color */
+    --accent-primary: #0d6efd;
+    /* Bright blue */
+
+    /* Hover or Active States */
+    --accent-hover: #0b5ed7;
+    /* Slightly darker blue */
+
+    /* Borders & Dividers */
+    --border-color: #dee2e6;
+    /* Light gray */
+}
