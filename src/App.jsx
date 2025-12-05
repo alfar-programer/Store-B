@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import Home from './components/Home page/Home'
 import Cart from './components/Cart/Cart'
@@ -8,8 +8,24 @@ import AllProducts from './components/AllProduct/AllProducts'
 import About from './components/About/About'
 import Checkout from './components/Checkout/Checkout'
 import OrderConfirmation from './components/OrderConfirmation/OrderConfirmation'
+import LoadingScreen from './components/LoadingScreen/LoadingScreen'
 
 const App = () => {
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    // Simulate app initialization
+    const timer = setTimeout(() => {
+      setLoading(false)
+    }, 2500) // 2.5 seconds loading time
+
+    return () => clearTimeout(timer)
+  }, [])
+
+  if (loading) {
+    return <LoadingScreen />
+  }
+
   return (
     <Router>
       <div>
