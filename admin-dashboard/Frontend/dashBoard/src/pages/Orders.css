@@ -1,5 +1,6 @@
 .orders-page {
-    max-width: 1400px;
+    width: 100%;
+    padding: 2rem;
 }
 
 .page-header {

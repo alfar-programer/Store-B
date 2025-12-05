@@ -26,8 +26,8 @@ const Header = () => {
                 <div className="max-w-[1400px] mx-auto px-10 flex justify-between items-center">
                     {/* Logo */}
                     <div className="logo-container">
-                        <Link to="/" className="text-3xl font-bold text-gray-900 tracking-tight no-underline">
-                            Aoura<span className="text-blue-600">Living</span>
+                        <Link to="/" className="flex items-center">
+                            <img src="/svg/logo_black.png" alt="Aoura Living" className="h-12 w-auto" />
                         </Link>
                     </div>
 

@@ -78,22 +78,30 @@ const Cart = () => {
 
                                 <div className="cart-item-price">
                                     <div className="price-display">
-                                        <span className="item-total">${calculateItemTotal(item.price, item.quantity)}</span>
-                                        {item.discount > 0 && (
-                                            <span className="item-original-total">
-                                                ${calculateItemTotal(
-                                                    (parseFloat(item.price) / (1 - item.discount / 100)).toFixed(2),
+                                        {item.discount > 0 ? (
+                                            <>
+                                                <span className="item-total">${calculateItemTotal(
+                                                    (parseFloat(item.price) * (1 - item.discount / 100)).toFixed(2),
                                                     item.quantity
-                                                )}
-                                            </span>
+                                                )}</span>
+                                                <span className="item-original-total">
+                                                    ${calculateItemTotal(item.price, item.quantity)}
+                                                </span>
+                                            </>
+                                        ) : (
+                                            <span className="item-total">${calculateItemTotal(item.price, item.quantity)}</span>
                                         )}
                                     </div>
                                     <div className="unit-price-display">
-                                        <span className="item-unit-price">${item.price} each</span>
-                                        {item.discount > 0 && (
-                                            <span className="item-original-unit">
-                                                ${(parseFloat(item.price) / (1 - item.discount / 100)).toFixed(2)}
-                                            </span>
+                                        {item.discount > 0 ? (
+                                            <>
+                                                <span className="item-unit-price">${(parseFloat(item.price) * (1 - item.discount / 100)).toFixed(2)} each</span>
+                                                <span className="item-original-unit">
+                                                    ${parseFloat(item.price).toFixed(2)}
+                                                </span>
+                                            </>
+                                        ) : (
+                                            <span className="item-unit-price">${parseFloat(item.price).toFixed(2)} each</span>
                                         )}
                                     </div>
                                 </div>

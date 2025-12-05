@@ -9,6 +9,7 @@ import About from './components/About/About'
 import Checkout from './components/Checkout/Checkout'
 import OrderConfirmation from './components/OrderConfirmation/OrderConfirmation'
 import LoadingScreen from './components/LoadingScreen/LoadingScreen'
+import Contact from './components/Contact/Contact'
 
 const App = () => {
   const [loading, setLoading] = useState(true)
@@ -38,6 +39,7 @@ const App = () => {
           <Route path="/order-confirmation" element={<OrderConfirmation />} />
           <Route path="/allproducts" element={<AllProducts />} />
           <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
         </Routes>
       </div>
     </Router>

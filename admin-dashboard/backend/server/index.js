@@ -75,6 +75,24 @@ const Order = sequelize.define('Order', {
     }
 });
 
+// Category Model
+const Category = sequelize.define('Category', {
+    name: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true
+    },
+    description: {
+        type: DataTypes.TEXT,
+        allowNull: true
+    },
+    image: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        defaultValue: './images/aiimg/img6.jpg'
+    }
+});
+
 // Multer configuration for image upload
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -239,15 +257,86 @@ app.delete('/api/products/:id', async (req, res) => {
 // Get dashboard stats
 app.get('/api/stats', async (req, res) => {
     try {
+        // Get current month data
+        const now = new Date();
+        const currentMonthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+        const previousMonthStart = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+        const previousMonthEnd = new Date(now.getFullYear(), now.getMonth(), 0, 23, 59, 59);
+
+        // Total counts
         const products = await Product.count();
         const orders = await Order.count();
         const ordersData = await Order.findAll();
         const revenue = ordersData.reduce((sum, order) => sum + parseFloat(order.total), 0);
 
+        // Current month data
+        const currentMonthProducts = await Product.count({
+            where: {
+                createdAt: { [sequelize.Sequelize.Op.gte]: currentMonthStart }
+            }
+        });
+        const currentMonthOrders = await Order.count({
+            where: {
+                createdAt: { [sequelize.Sequelize.Op.gte]: currentMonthStart }
+            }
+        });
+        const currentMonthOrdersData = await Order.findAll({
+            where: {
+                createdAt: { [sequelize.Sequelize.Op.gte]: currentMonthStart }
+            }
+        });
+        const currentMonthRevenue = currentMonthOrdersData.reduce((sum, order) => sum + parseFloat(order.total), 0);
+
+        // Previous month data
+        const previousMonthProducts = await Product.count({
+            where: {
+                createdAt: {
+                    [sequelize.Sequelize.Op.gte]: previousMonthStart,
+                    [sequelize.Sequelize.Op.lte]: previousMonthEnd
+                }
+            }
+        });
+        const previousMonthOrders = await Order.count({
+            where: {
+                createdAt: {
+                    [sequelize.Sequelize.Op.gte]: previousMonthStart,
+                    [sequelize.Sequelize.Op.lte]: previousMonthEnd
+                }
+            }
+        });
+        const previousMonthOrdersData = await Order.findAll({
+            where: {
+                createdAt: {
+                    [sequelize.Sequelize.Op.gte]: previousMonthStart,
+                    [sequelize.Sequelize.Op.lte]: previousMonthEnd
+                }
+            }
+        });
+        const previousMonthRevenue = previousMonthOrdersData.reduce((sum, order) => sum + parseFloat(order.total), 0);
+
+        // Calculate growth percentages
+        const calculateGrowth = (current, previous) => {
+            if (previous === 0) return current > 0 ? 100 : 0;
+            return ((current - previous) / previous * 100).toFixed(1);
+        };
+
+        const productsGrowth = calculateGrowth(currentMonthProducts, previousMonthProducts);
+        const ordersGrowth = calculateGrowth(currentMonthOrders, previousMonthOrders);
+        const revenueGrowth = calculateGrowth(currentMonthRevenue, previousMonthRevenue);
+
+        // Overall growth (average of all metrics)
+        const overallGrowth = ((parseFloat(productsGrowth) + parseFloat(ordersGrowth) + parseFloat(revenueGrowth)) / 3).toFixed(1);
+
         res.json({
             products,
             orders,
-            revenue
+            revenue,
+            growth: {
+                products: productsGrowth,
+                orders: ordersGrowth,
+                revenue: revenueGrowth,
+                overall: overallGrowth
+            }
         });
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -301,8 +390,111 @@ app.put('/api/orders/:id', async (req, res) => {
     }
 });
 
+// Category Routes
+
+// Get all categories
+app.get('/api/categories', async (req, res) => {
+    try {
+        const categories = await Category.findAll({
+            order: [['name', 'ASC']]
+        });
+        res.json(categories);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Get single category
+app.get('/api/categories/:id', async (req, res) => {
+    try {
+        const category = await Category.findByPk(req.params.id);
+        if (!category) {
+            return res.status(404).json({ error: 'Category not found' });
+        }
+        res.json(category);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Create category
+app.post('/api/categories', upload.single('image'), async (req, res) => {
+    try {
+        const { name, description } = req.body;
+
+        if (!name) {
+            return res.status(400).json({ error: 'Category name is required' });
+        }
+
+        const categoryData = {
+            name,
+            description: description || ''
+        };
+
+        // Add image path if file was uploaded
+        if (req.file) {
+            categoryData.image = `uploads/${req.file.filename}`;
+        }
+
+        const category = await Category.create(categoryData);
+
+        res.status(201).json(category);
+    } catch (error) {
+        if (error.name === 'SequelizeUniqueConstraintError') {
+            return res.status(400).json({ error: 'Category name already exists' });
+        }
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Update category
+app.put('/api/categories/:id', upload.single('image'), async (req, res) => {
+    try {
+        const category = await Category.findByPk(req.params.id);
+        if (!category) {
+            return res.status(404).json({ error: 'Category not found' });
+        }
+
+        const { name, description } = req.body;
+
+        const updateData = {
+            name: name || category.name,
+            description: description !== undefined ? description : category.description
+        };
+
+        // Update image if new one is uploaded
+        if (req.file) {
+            updateData.image = `uploads/${req.file.filename}`;
+        }
+
+        await category.update(updateData);
+
+        res.json(category);
+    } catch (error) {
+        if (error.name === 'SequelizeUniqueConstraintError') {
+            return res.status(400).json({ error: 'Category name already exists' });
+        }
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Delete category
+app.delete('/api/categories/:id', async (req, res) => {
+    try {
+        const category = await Category.findByPk(req.params.id);
+        if (!category) {
+            return res.status(404).json({ error: 'Category not found' });
+        }
+
+        await category.destroy();
+        res.json({ message: 'Category deleted successfully' });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
 // Initialize database and start server
-sequelize.sync().then(() => {
+sequelize.sync({ alter: true }).then(() => {
     app.listen(PORT, () => {
         console.log(`Server is running on http://localhost:${PORT}`);
         console.log(`Uploads directory: ${path.join(__dirname, 'uploads')}`);

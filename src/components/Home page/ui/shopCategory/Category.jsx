@@ -1,106 +1,75 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import axios from 'axios'
 import './category.css'
-import { categoryData } from '../../../../data/Data'
 
+
+import CircularGallery from '../../../CircularGallery/CircularGallery'
 
 const Category = () => {
-  // Duplicate the data for infinite scroll effect
-  const duplicatedData = [...categoryData, ...categoryData, ...categoryData];
-  const [isPlaying, setIsPlaying] = useState(true);
-  const carouselRef = useRef(null);
-  const [isDragging, setIsDragging] = useState(false);
-  const [startX, setStartX] = useState(0);
-  const [scrollLeft, setScrollLeft] = useState(0);
+  const [categories, setCategories] = useState([])
+  const [loading, setLoading] = useState(true)
 
-  // Mouse down handler
-  const handleMouseDown = (e) => {
-    if (!carouselRef.current) return;
-    setIsDragging(true);
-    setIsPlaying(false);
-    const carousel = carouselRef.current;
-    setStartX(e.pageX - carousel.offsetLeft);
-    setScrollLeft(carousel.scrollLeft);
-  };
+  // Fetch categories from API
+  useEffect(() => {
+    fetchCategories()
+  }, [])
 
-  // Mouse leave handler
-  const handleMouseLeave = () => {
-    if (isDragging) {
-      setIsDragging(false);
-      setIsPlaying(true);
+  const fetchCategories = async () => {
+    try {
+      const response = await axios.get('http://localhost:5000/api/categories')
+      setCategories(response.data)
+      setLoading(false)
+    } catch (error) {
+      console.error('Error fetching categories:', error)
+      setLoading(false)
     }
-  };
+  }
 
-  // Mouse up handler
-  const handleMouseUp = () => {
-    setIsDragging(false);
-    setIsPlaying(true);
-  };
+  if (loading) {
+    return (
+      <section className='category'>
+        <div className="category-content">
+          <h2>Shop by Category</h2>
+          <div style={{ textAlign: 'center', padding: '3rem', color: '#718096' }}>
+            Loading categories...
+          </div>
+        </div>
+      </section>
+    )
+  }
 
-  // Mouse move handler
-  const handleMouseMove = (e) => {
-    if (!isDragging || !carouselRef.current) return;
-    e.preventDefault();
-    const carousel = carouselRef.current;
-    const x = e.pageX - carousel.offsetLeft;
-    const walk = (x - startX) * 1.5;
-    carousel.scrollLeft = scrollLeft - walk;
-  };
+  if (categories.length === 0) {
+    return (
+      <section className='category'>
+        <div className="category-content">
+          <h2>Shop by Category</h2>
+          <div style={{ textAlign: 'center', padding: '3rem', color: '#718096' }}>
+            No categories available. Add categories in the admin dashboard!
+          </div>
+        </div>
+      </section>
+    )
+  }
 
-  // Touch handlers for mobile
-  const handleTouchStart = (e) => {
-    if (!carouselRef.current) return;
-    setIsDragging(true);
-    setIsPlaying(false);
-    const carousel = carouselRef.current;
-    setStartX(e.touches[0].pageX - carousel.offsetLeft);
-    setScrollLeft(carousel.scrollLeft);
-  };
-
-  const handleTouchMove = (e) => {
-    if (!isDragging || !carouselRef.current) return;
-    const carousel = carouselRef.current;
-    const x = e.touches[0].pageX - carousel.offsetLeft;
-    const walk = (x - startX) * 1.5;
-    carousel.scrollLeft = scrollLeft - walk;
-  };
-
-  const handleTouchEnd = () => {
-    setIsDragging(false);
-    setIsPlaying(true);
-  };
+  // Format items for CircularGallery
+  const galleryItems = categories.map(cat => ({
+    image: cat.image.startsWith('http') ? cat.image : `http://localhost:5000/${cat.image}`,
+    text: cat.name
+  }));
 
   return (
     <section className='category'>
       <div className="category-content">
         <h2>Shop by Category</h2>
 
-        <div className="category-carousel-wrapper">
-          <div
-            className={`category-carousel ${isPlaying ? 'playing' : 'paused'} ${isDragging ? 'dragging' : ''}`}
-            ref={carouselRef}
-            onMouseDown={handleMouseDown}
-            onMouseLeave={handleMouseLeave}
-            onMouseUp={handleMouseUp}
-            onMouseMove={handleMouseMove}
-            onTouchStart={handleTouchStart}
-            onTouchMove={handleTouchMove}
-            onTouchEnd={handleTouchEnd}
-          >
-            {duplicatedData.map((item, index) => (
-              <div className="category-item" key={`${item.id}-${index}`}>
-                <Link
-                  to={`/allproducts?category=${encodeURIComponent(item.title)}`}
-                  onClick={(e) => isDragging && e.preventDefault()}
-                >
-                  <img src={item.image} alt={item.title} draggable="false" />
-                  <h3>{item.title}</h3>
-                  <p>{item.description}</p>
-                  <span className="shop-now-btn">Shop Now</span>
-                </Link>
-              </div>
-            ))}
-          </div>
+        <div style={{ height: '600px', width: '100%', position: 'relative' }}>
+          <CircularGallery
+            items={galleryItems}
+            bend={3}
+            textColor="#000000"
+            borderRadius={0.05}
+          />
         </div>
       </div>
     </section>

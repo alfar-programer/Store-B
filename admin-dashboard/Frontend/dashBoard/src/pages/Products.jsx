@@ -5,6 +5,7 @@ import './Products.css'
 
 const Products = () => {
     const [products, setProducts] = useState([])
+    const [categories, setCategories] = useState([])
     const [loading, setLoading] = useState(true)
     const [showForm, setShowForm] = useState(false)
     const [editingProduct, setEditingProduct] = useState(null)
@@ -21,10 +22,9 @@ const Products = () => {
     })
     const [notification, setNotification] = useState({ show: false, message: '', type: '' })
 
-    const categories = ['Electronics', 'Fashion & Apparel', 'Home & Garden', 'Sports & Outdoors', 'Beauty & Personal Care', 'Books & Media', 'Toys & Games', 'Food & Beverages']
-
     useEffect(() => {
         fetchProducts()
+        fetchCategories()
     }, [])
 
     const fetchProducts = async () => {
@@ -36,6 +36,15 @@ const Products = () => {
             console.error('Error fetching products:', error)
             showNotification('Error fetching products', 'error')
             setLoading(false)
+        }
+    }
+
+    const fetchCategories = async () => {
+        try {
+            const response = await axios.get('http://localhost:5000/api/categories')
+            setCategories(response.data)
+        } catch (error) {
+            console.error('Error fetching categories:', error)
         }
     }
 
@@ -244,7 +253,7 @@ const Products = () => {
                                 >
                                     <option value="">Select category</option>
                                     {categories.map(cat => (
-                                        <option key={cat} value={cat}>{cat}</option>
+                                        <option key={cat.id} value={cat.name}>{cat.name}</option>
                                     ))}
                                 </select>
                             </div>

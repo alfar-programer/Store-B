@@ -16,8 +16,8 @@ body {
 
 .main-content {
   flex: 1;
-  padding: 30px;
   margin-left: 260px;
+  width: 100%;
 }
 
 @media (max-width: 768px) {

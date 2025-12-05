@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { LayoutDashboard, Package, ShoppingCart } from 'lucide-react'
+import { LayoutDashboard, Package, ShoppingCart, FolderOpen } from 'lucide-react'
 import './Sidebar.css'
 
 const Sidebar = () => {
@@ -9,6 +9,7 @@ const Sidebar = () => {
     const menuItems = [
         { path: '/', icon: LayoutDashboard, label: 'Dashboard' },
         { path: '/products', icon: Package, label: 'Products' },
+        { path: '/categories', icon: FolderOpen, label: 'Categories' },
         { path: '/orders', icon: ShoppingCart, label: 'Orders' }
     ]
 

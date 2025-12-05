@@ -1,5 +1,6 @@
 .dashboard {
-    max-width: 1400px;
+    width: 100%;
+    padding: 2rem;
 }
 
 /* Welcome Section */

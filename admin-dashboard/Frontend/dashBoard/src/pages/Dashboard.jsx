@@ -33,32 +33,32 @@ const Dashboard = () => {
             label: 'Total Products',
             value: stats.products,
             color: '#667eea',
-            trend: '+5%',
-            trendUp: true
+            trend: stats.growth?.products ? `${stats.growth.products > 0 ? '+' : ''}${stats.growth.products}%` : '+0%',
+            trendUp: stats.growth?.products >= 0
         },
         {
             icon: ShoppingCart,
             label: 'Total Orders',
             value: stats.orders,
             color: '#764ba2',
-            trend: '+12%',
-            trendUp: true
+            trend: stats.growth?.orders ? `${stats.growth.orders > 0 ? '+' : ''}${stats.growth.orders}%` : '+0%',
+            trendUp: stats.growth?.orders >= 0
         },
         {
             icon: DollarSign,
             label: 'Total Revenue',
             value: `$${stats.revenue.toFixed(2)}`,
             color: '#f093fb',
-            trend: '+8%',
-            trendUp: true
+            trend: stats.growth?.revenue ? `${stats.growth.revenue > 0 ? '+' : ''}${stats.growth.revenue}%` : '+0%',
+            trendUp: stats.growth?.revenue >= 0
         },
         {
             icon: TrendingUp,
-            label: 'Growth',
-            value: '+12%',
+            label: 'Overall Growth',
+            value: stats.growth?.overall ? `${stats.growth.overall > 0 ? '+' : ''}${stats.growth.overall}%` : '+0%',
             color: '#4facfe',
             trend: 'This month',
-            trendUp: true
+            trendUp: stats.growth?.overall >= 0
         }
     ]
 
