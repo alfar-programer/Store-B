@@ -1,0 +1,180 @@
+import React, { useState, useEffect } from 'react'
+import axios from 'axios'
+import { TrendingUp, Package, ShoppingCart, DollarSign, Clock, CheckCircle } from 'lucide-react'
+import './Dashboard.css'
+
+const Dashboard = () => {
+    const [stats, setStats] = useState({ products: 0, orders: 0, revenue: 0 })
+    const [recentOrders, setRecentOrders] = useState([])
+    const [loading, setLoading] = useState(true)
+
+    useEffect(() => {
+        fetchDashboardData()
+    }, [])
+
+    const fetchDashboardData = async () => {
+        try {
+            const [statsRes, ordersRes] = await Promise.all([
+                axios.get('http://localhost:5000/api/stats'),
+                axios.get('http://localhost:5000/api/orders')
+            ])
+            setStats(statsRes.data)
+            setRecentOrders(ordersRes.data.slice(0, 5)) // Get last 5 orders
+            setLoading(false)
+        } catch (error) {
+            console.error('Error fetching dashboard data:', error)
+            setLoading(false)
+        }
+    }
+
+    const statCards = [
+        {
+            icon: Package,
+            label: 'Total Products',
+            value: stats.products,
+            color: '#667eea',
+            trend: '+5%',
+            trendUp: true
+        },
+        {
+            icon: ShoppingCart,
+            label: 'Total Orders',
+            value: stats.orders,
+            color: '#764ba2',
+            trend: '+12%',
+            trendUp: true
+        },
+        {
+            icon: DollarSign,
+            label: 'Total Revenue',
+            value: `$${stats.revenue.toFixed(2)}`,
+            color: '#f093fb',
+            trend: '+8%',
+            trendUp: true
+        },
+        {
+            icon: TrendingUp,
+            label: 'Growth',
+            value: '+12%',
+            color: '#4facfe',
+            trend: 'This month',
+            trendUp: true
+        }
+    ]
+
+    const getStatusColor = (status) => {
+        switch (status) {
+            case 'Pending': return '#f6ad55'
+            case 'Shipped': return '#4299e1'
+            case 'Delivered': return '#48bb78'
+            default: return '#718096'
+        }
+    }
+
+    if (loading) {
+        return <div className="dashboard-loading">Loading dashboard...</div>
+    }
+
+    return (
+        <div className="dashboard">
+            {/* Welcome Section */}
+            <div className="welcome-section">
+                <div>
+                    <h1 className="dashboard-title">Welcome back, Admin! 👋</h1>
+                    <p className="dashboard-subtitle">Here's what's happening with your store today</p>
+                </div>
+                <div className="quick-actions">
+                    <button className="quick-action-btn" onClick={() => window.location.href = '/products'}>
+                        <Package size={18} />
+                        Add Product
+                    </button>
+                </div>
+            </div>
+
+            {/* Stats Grid */}
+            <div className="stats-grid">
+                {statCards.map((card, index) => {
+                    const Icon = card.icon
+                    return (
+                        <div key={index} className="stat-card" style={{ borderTopColor: card.color }}>
+                            <div className="stat-header">
+                                <div className="stat-icon" style={{ background: card.color }}>
+                                    <Icon size={24} color="white" />
+                                </div>
+                                <div className={`stat-trend ${card.trendUp ? 'up' : 'down'}`}>
+                                    <TrendingUp size={14} />
+                                    {card.trend}
+                                </div>
+                            </div>
+                            <div className="stat-info">
+                                <h3 className="stat-value">{card.value}</h3>
+                                <p className="stat-label">{card.label}</p>
+                            </div>
+                        </div>
+                    )
+                })}
+            </div>
+
+            {/* Recent Orders Section */}
+            <div className="recent-section">
+                <div className="section-header">
+                    <h2>Recent Orders</h2>
+                    <a href="/orders" className="view-all-link">View All →</a>
+                </div>
+                <div className="recent-orders-list">
+                    {recentOrders.length > 0 ? (
+                        recentOrders.map((order) => (
+                            <div key={order.id} className="order-item">
+                                <div className="order-info">
+                                    <div className="order-id">
+                                        <ShoppingCart size={16} />
+                                        Order #{order.id}
+                                    </div>
+                                    <div className="order-customer">{order.customerName}</div>
+                                </div>
+                                <div className="order-details">
+                                    <span className="order-amount">${order.total.toFixed(2)}</span>
+                                    <span
+                                        className="order-status"
+                                        style={{ background: getStatusColor(order.status) }}
+                                    >
+                                        {order.status}
+                                    </span>
+                                </div>
+                            </div>
+                        ))
+                    ) : (
+                        <div className="empty-state">
+                            <Clock size={48} color="#cbd5e0" />
+                            <p>No orders yet</p>
+                        </div>
+                    )}
+                </div>
+            </div>
+
+            {/* Quick Stats */}
+            <div className="quick-stats-grid">
+                <div className="quick-stat-card">
+                    <Clock size={32} color="#667eea" />
+                    <div>
+                        <h4>Pending Orders</h4>
+                        <p className="quick-stat-value">
+                            {recentOrders.filter(o => o.status === 'Pending').length}
+                        </p>
+                    </div>
+                </div>
+                <div className="quick-stat-card">
+                    <CheckCircle size={32} color="#48bb78" />
+                    <div>
+                        <h4>Completed Today</h4>
+                        <p className="quick-stat-value">
+                            {recentOrders.filter(o => o.status === 'Delivered').length}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
+}
+
+export default Dashboard

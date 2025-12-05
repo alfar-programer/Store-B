@@ -6,6 +6,8 @@ import Header from './components/Header/Header'
 import SearchModal from './components/Search/SearchModal'
 import AllProducts from './components/AllProduct/AllProducts'
 import About from './components/About/About'
+import Checkout from './components/Checkout/Checkout'
+import OrderConfirmation from './components/OrderConfirmation/OrderConfirmation'
 
 const App = () => {
   return (
@@ -16,6 +18,8 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/cart" element={<Cart />} />
+          <Route path="/checkout" element={<Checkout />} />
+          <Route path="/order-confirmation" element={<OrderConfirmation />} />
           <Route path="/allproducts" element={<AllProducts />} />
           <Route path="/about" element={<About />} />
         </Routes>

@@ -223,7 +223,14 @@
     display: flex;
     flex-direction: column;
     align-items: flex-end;
-    gap: 5px;
+    gap: 8px;
+}
+
+.price-display {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
 }
 
 .item-total {
@@ -235,9 +242,30 @@
     background-clip: text;
 }
 
+.item-original-total {
+    font-size: 1.1rem;
+    color: #a0aec0;
+    text-decoration: line-through;
+    font-weight: 500;
+}
+
+.unit-price-display {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 2px;
+}
+
 .item-unit-price {
     font-size: 0.9rem;
-    color: #a0aec0;
+    color: #718096;
+    font-weight: 500;
+}
+
+.item-original-unit {
+    font-size: 0.8rem;
+    color: #cbd5e0;
+    text-decoration: line-through;
 }
 
 /* Remove Button */

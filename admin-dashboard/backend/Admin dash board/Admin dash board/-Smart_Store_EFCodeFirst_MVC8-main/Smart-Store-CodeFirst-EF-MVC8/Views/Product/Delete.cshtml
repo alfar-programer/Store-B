@@ -1,0 +1,13 @@
+﻿@model Smart_Store_CodeFirst_EF_MVC8.Models.Product
+
+@{
+    ViewData["Title"] = "Delete Product";
+}
+
+<div class="container mt-4">
+    <h2>Are you sure to delete @Model.ProductName?</h2>
+    <form method="post" asp-action="Delete" asp-route-id="@Model.ProductId">
+        <button class="btn btn-danger">Delete</button>
+        <a class="btn btn-secondary" href="/Product">Cancel</a>
+    </form>
+</div>

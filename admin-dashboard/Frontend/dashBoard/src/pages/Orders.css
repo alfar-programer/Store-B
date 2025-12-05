@@ -1,0 +1,81 @@
+.orders-page {
+    max-width: 1400px;
+}
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    color: black;
+}
+.page-header h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin: 0;
+}
+
+.orders-table{
+    padding:1rem;
+    margin: 1rem;
+}
+
+.orders-table {
+    background: #eee;
+    border-radius: 12px;
+    gap: 2rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    color: #000;
+}
+.orders-table table{
+    width: 100%;
+}
+
+.orders-table table td{
+    color: #4a5568;
+}
+.orders-table table tr:nth-child(even){
+    background: #f7fafc;
+}
+.orders-table table th,
+.orders-table table td {
+    padding: 12px;
+    text-align: left;
+}   
+.orders-table table th{
+    font-weight: 600;
+}
+.orders-table table td{
+    font-weight: 500;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 20px;
+    color: white;
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.status-select {
+    padding: 8px 12px;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: border-color 0.2s ease;
+}
+
+.status-select:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+tbody tr:hover{
+    background: #f7fafc;
+}

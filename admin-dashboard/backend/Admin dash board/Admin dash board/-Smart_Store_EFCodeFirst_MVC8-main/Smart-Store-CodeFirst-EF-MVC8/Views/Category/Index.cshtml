@@ -1,0 +1,114 @@
+﻿@model IEnumerable<Smart_Store_CodeFirst_EF_MVC8.Models.Category>
+
+@{
+    ViewData["Title"] = "Categories";
+}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+<style>
+    .page-header {
+        font-weight: 600;
+        color: #4b0082;
+        margin-bottom: 20px;
+    }
+
+    .btn-sm {
+        font-size: 0.85rem;
+        border-radius: 6px;
+    }
+
+    .btn-action i {
+        margin-right: 6px;
+    }
+
+    .table thead th {
+        background-color: #f3f3f3;
+        color: #333;
+        font-weight: 600;
+        border-bottom: 2px solid #dee2e6;
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: #f9f9f9;
+    }
+
+    .category-link {
+        text-decoration: none;
+        color: #333;
+        font-weight: 500;
+    }
+
+        .category-link:hover {
+            text-decoration: underline;
+            color: #4b0082;
+        }
+
+    .no-data-box {
+        background-color: #fff3cd;
+        padding: 15px;
+        border-radius: 10px;
+        border: 1px solid #ffeeba;
+        text-align: center;
+        font-style: italic;
+        color: #856404;
+    }
+</style>
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center">
+        <h3 class="page-header">
+            <i class="fa-solid fa-layer-group me-2"></i> Categories List
+        </h3>
+        <a asp-action="Create" class="btn btn-success btn-sm">
+            <i class="fa-solid fa-plus"></i> Add Category
+        </a>
+    </div>
+
+    <hr />
+
+    @if (!Model.Any())
+    {
+        <div class="no-data-box">
+            <i class="fa-solid fa-circle-info me-1"></i> No categories found. Add some to get started.
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-striped table-hover align-middle">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Category Name</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var category in Model)
+                    {
+                        <tr>
+                            <td>@category.CategoryId</td>
+                            <td>
+                                <a asp-action="Details" asp-route-id="@category.CategoryId" class="category-link">
+                                    <i class="fa-solid fa-tag me-1"></i> @category.CategoryName
+                                </a>
+                            </td>
+                            <td>
+                                <a asp-action="Edit" asp-route-id="@category.CategoryId" class="btn btn-warning btn-sm btn-action me-1">
+                                    <i class="fa-solid fa-pen"></i> Edit
+                                </a>
+                                <a asp-action="Details" asp-route-id="@category.CategoryId" class="btn btn-info btn-sm btn-action me-1">
+                                    <i class="fa-solid fa-eye"></i> Details
+                                </a>
+                                <a asp-action="Delete" asp-route-id="@category.CategoryId" class="btn btn-danger btn-sm btn-action">
+                                    <i class="fa-solid fa-trash"></i> Delete
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

@@ -1,0 +1,13 @@
+﻿@model Smart_Store_CodeFirst_EF_MVC8.Models.Product
+
+@{
+    ViewData["Title"] = "Product Details";
+}
+
+<div class="container mt-4">
+    <h2>@Model.ProductName</h2>
+    <p><strong>Category:</strong> @Model.Category?.CategoryName</p>
+    <p><strong>Description:</strong> @Model.Description</p>
+    <p><strong>Price:</strong> ₹@Model.Price</p>
+    <a class="btn btn-secondary" href="/Product">Back to List</a>
+</div>

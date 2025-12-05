@@ -1,0 +1,13 @@
+﻿@model Smart_Store_CodeFirst_EF_MVC8.Models.Category
+
+@{
+    ViewData["Title"] = "Delete Category";
+}
+
+<div class="container mt-4">
+    <h2>Are you sure to delete @Model.CategoryName?</h2>
+    <form method="post" asp-action="Delete" asp-route-id="@Model.CategoryId">
+        <button class="btn btn-danger">Delete</button>
+        <a class="btn btn-secondary" href="/Category">Cancel</a>
+    </form>
+</div>

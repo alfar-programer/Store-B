@@ -1,13 +1,30 @@
 
-import React, { useState } from 'react'
-import { productsData } from '../../../../data/Data'
+import React, { useState, useEffect } from 'react'
+import axios from 'axios'
 import { useCart } from '../../../../context/CartContext'
 import './products.css'
 
 const Products = () => {
+    const [products, setProducts] = useState([])
+    const [loading, setLoading] = useState(true)
     const [selectedProduct, setSelectedProduct] = useState(null)
     const [isModalOpen, setIsModalOpen] = useState(false)
     const { addToCart } = useCart()
+
+    useEffect(() => {
+        fetchFeaturedProducts()
+    }, [])
+
+    const fetchFeaturedProducts = async () => {
+        try {
+            const response = await axios.get('http://localhost:5000/api/products/featured')
+            setProducts(response.data)
+            setLoading(false)
+        } catch (error) {
+            console.error('Error fetching featured products:', error)
+            setLoading(false)
+        }
+    }
 
     const handleQuickView = (product) => {
         setSelectedProduct(product)
@@ -41,46 +58,56 @@ const Products = () => {
                     <p>Discover our handpicked selection of premium items</p>
                 </div>
                 <div className="products-grid">
-                    {productsData.map((product) => (
-                        <div className="product-card" key={product.id}>
-                            {product.discount > 0 && (
-                                <div className="discount-badge">-{product.discount}%</div>
-                            )}
-                            <div className="product-image-wrapper">
-                                <img src={product.image} alt={product.title} />
-                                <div className="product-overlay">
+                    {loading ? (
+                        <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '3rem', color: '#718096' }}>
+                            Loading featured products...
+                        </div>
+                    ) : products.length === 0 ? (
+                        <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '3rem', color: '#718096' }}>
+                            No featured products available. Add products in the dashboard and mark them as featured!
+                        </div>
+                    ) : (
+                        products.map((product) => (
+                            <div className="product-card" key={product.id}>
+                                {product.discount > 0 && (
+                                    <div className="discount-badge">-{product.discount}%</div>
+                                )}
+                                <div className="product-image-wrapper">
+                                    <img src={product.image} alt={product.title} />
+                                    <div className="product-overlay">
+                                        <button
+                                            className="quick-view-btn"
+                                            onClick={() => handleQuickView(product)}
+                                        >
+                                            Quick View
+                                        </button>
+                                    </div>
+                                </div>
+                                <div className="product-info">
+                                    <h3>{product.title}</h3>
+                                    <p className="product-description">{product.description}</p>
+                                    <div className="product-rating">
+                                        <span className="stars">★★★★★</span>
+                                        <span className="rating-value">{product.rating}</span>
+                                    </div>
+                                </div>
+                                <div className="product-footer">
+                                    <div className="price-wrapper">
+                                        <span className="price">${product.price}</span>
+                                        {product.discount > 0 && (
+                                            <span className="original-price">${(parseFloat(product.price) / (1 - product.discount / 100)).toFixed(2)}</span>
+                                        )}
+                                    </div>
                                     <button
-                                        className="quick-view-btn"
-                                        onClick={() => handleQuickView(product)}
+                                        className="add-to-cart-btn"
+                                        onClick={() => handleAddToCart(product)}
                                     >
-                                        Quick View
+                                        Add to Cart
                                     </button>
                                 </div>
                             </div>
-                            <div className="product-info">
-                                <h3>{product.title}</h3>
-                                <p className="product-description">{product.description}</p>
-                                <div className="product-rating">
-                                    <span className="stars">★★★★★</span>
-                                    <span className="rating-value">{product.rating}</span>
-                                </div>
-                            </div>
-                            <div className="product-footer">
-                                <div className="price-wrapper">
-                                    <span className="price">${product.price}</span>
-                                    {product.discount > 0 && (
-                                        <span className="original-price">${(parseFloat(product.price) / (1 - product.discount / 100)).toFixed(2)}</span>
-                                    )}
-                                </div>
-                                <button
-                                    className="add-to-cart-btn"
-                                    onClick={() => handleAddToCart(product)}
-                                >
-                                    Add to Cart
-                                </button>
-                            </div>
-                        </div>
-                    ))}
+                        ))
+                    )}
                 </div>
 
             </div>

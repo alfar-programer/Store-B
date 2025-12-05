@@ -77,8 +77,25 @@ const Cart = () => {
                                 </div>
 
                                 <div className="cart-item-price">
-                                    <span className="item-total">${calculateItemTotal(item.price, item.quantity)}</span>
-                                    <span className="item-unit-price">${item.price} each</span>
+                                    <div className="price-display">
+                                        <span className="item-total">${calculateItemTotal(item.price, item.quantity)}</span>
+                                        {item.discount > 0 && (
+                                            <span className="item-original-total">
+                                                ${calculateItemTotal(
+                                                    (parseFloat(item.price) / (1 - item.discount / 100)).toFixed(2),
+                                                    item.quantity
+                                                )}
+                                            </span>
+                                        )}
+                                    </div>
+                                    <div className="unit-price-display">
+                                        <span className="item-unit-price">${item.price} each</span>
+                                        {item.discount > 0 && (
+                                            <span className="item-original-unit">
+                                                ${(parseFloat(item.price) / (1 - item.discount / 100)).toFixed(2)}
+                                            </span>
+                                        )}
+                                    </div>
                                 </div>
 
                                 <button
@@ -117,7 +134,7 @@ const Cart = () => {
                             <span>${(getCartTotal() * 1.1).toFixed(2)}</span>
                         </div>
 
-                        <button className="checkout-btn">
+                        <button className="checkout-btn" onClick={() => navigate('/checkout')}>
                             Proceed to Checkout
                         </button>
 
@@ -125,7 +142,7 @@ const Cart = () => {
                             <ArrowLeft size={20} />
                             Continue Shopping
                         </button>
-                        
+
                         <button className="clear-cart-btn" onClick={clearCart}>
                             Clear Cart
                         </button>
