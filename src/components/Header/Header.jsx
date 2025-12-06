@@ -27,7 +27,7 @@ const Header = () => {
                     {/* Logo */}
                     <div className="logo-container">
                         <Link to="/" className="flex items-center">
-                            <img src="/svg/logo_black.png" alt="Aoura Living" className="h-12 w-auto" />
+                            <img src="/svg/logo_black.png" alt="Wafa Living" className="h-12 w-auto" />
                         </Link>
                     </div>
 

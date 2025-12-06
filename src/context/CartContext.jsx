@@ -64,7 +64,9 @@ export const CartProvider = ({ children }) => {
     const getCartTotal = () => {
         return cartItems.reduce((total, item) => {
             const price = parseFloat(item.price)
-            return total + price * item.quantity
+            const discount = item.discount ? parseFloat(item.discount) : 0
+            const discountedPrice = discount > 0 ? price * (1 - discount / 100) : price
+            return total + discountedPrice * item.quantity
         }, 0)
     }
 
@@ -72,7 +74,7 @@ export const CartProvider = ({ children }) => {
         return cartItems.reduce((count, item) => count + item.quantity, 0)
     }
 
-    const value = {
+    const value = React.useMemo(() => ({
         cartItems,
         addToCart,
         removeFromCart,
@@ -80,7 +82,7 @@ export const CartProvider = ({ children }) => {
         clearCart,
         getCartTotal,
         getCartCount,
-    }
+    }), [cartItems])
 
     return <CartContext.Provider value={value}>{children}</CartContext.Provider>
 }

@@ -4,8 +4,12 @@ const multer = require('multer');
 const path = require('path');
 const { Sequelize, DataTypes } = require('sequelize');
 
+const dotenv = require('dotenv');
+
+dotenv.config();
+
 const app = express();
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 
 // Middleware
 app.use(cors());
@@ -13,11 +17,16 @@ app.use(express.json());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Database setup
-const sequelize = new Sequelize({
-    dialect: 'sqlite',
-    storage: './database.sqlite',
-    logging: false
-});
+const sequelize = new Sequelize(
+    process.env.DB_NAME,
+    process.env.DB_USER,
+    process.env.DB_PASS,
+    {
+        host: process.env.DB_HOST,
+        dialect: 'mysql',
+        logging: false
+    }
+);
 
 // Product Model
 const Product = sequelize.define('Product', {

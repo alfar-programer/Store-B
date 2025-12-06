@@ -7,10 +7,10 @@ import { SearchProvider } from './context/SearchContext'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <CartProvider>
-      <SearchProvider>
-        <App />
-      </SearchProvider>
-    </CartProvider>
+      <CartProvider>
+        <SearchProvider>
+          <App />
+        </SearchProvider>
+      </CartProvider>
   </StrictMode>,
 )

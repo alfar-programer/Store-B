@@ -7,20 +7,16 @@ import SearchModal from './components/Search/SearchModal'
 import AllProducts from './components/AllProduct/AllProducts'
 import About from './components/About/About'
 import Checkout from './components/Checkout/Checkout'
+import Contact from './components/Contact/Contact'
 import OrderConfirmation from './components/OrderConfirmation/OrderConfirmation'
 import LoadingScreen from './components/LoadingScreen/LoadingScreen'
-import Contact from './components/Contact/Contact'
 
 const App = () => {
   const [loading, setLoading] = useState(true)
 
+  // Simulate app initialization
   useEffect(() => {
-    // Simulate app initialization
-    const timer = setTimeout(() => {
-      setLoading(false)
-    }, 2500) // 2.5 seconds loading time
-
-    return () => clearTimeout(timer)
+    setLoading(false)
   }, [])
 
   if (loading) {
