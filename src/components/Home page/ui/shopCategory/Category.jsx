@@ -14,7 +14,7 @@ const Category = () => {
 
   const fetchCategories = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/categories')
+      const response = await axios.get('https://store-b-backend-production.up.railway.app/api/categories')
       setCategories(response.data)
       setLoading(false)
     } catch (error) {
@@ -63,7 +63,7 @@ const Category = () => {
             >
               <div className="category-image-wrapper">
                 <img
-                  src={cat.image.startsWith('http') ? cat.image : `http://localhost:5000/${cat.image}`}
+                  src={cat.image.startsWith('http') ? cat.image : `https://store-b-backend-production.up.railway.app/${cat.image}`}
                   alt={cat.name}
                   className="category-image"
                 />
