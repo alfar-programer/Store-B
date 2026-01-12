@@ -14,6 +14,7 @@ const Products = () => {
         title: '',
         description: '',
         price: '',
+        stock: '',
         category: '',
         discount: 0,
         rating: 4.5,
@@ -114,6 +115,7 @@ const Products = () => {
             title: '',
             description: '',
             price: '',
+            stock: '',
             category: '',
             discount: 0,
             rating: 4.5,
@@ -137,6 +139,7 @@ const Products = () => {
         data.append('title', formData.title)
         data.append('description', formData.description)
         data.append('price', formData.price)
+        data.append('stock', formData.stock)
         data.append('category', formData.category)
         data.append('discount', formData.discount)
         data.append('rating', formData.rating)
@@ -173,6 +176,7 @@ const Products = () => {
             title: product.title,
             description: product.description,
             price: product.price,
+            stock: product.stock,
             category: product.category,
             discount: product.discount,
             rating: product.rating,
@@ -269,6 +273,19 @@ const Products = () => {
                                     step="0.01"
                                     min="0"
                                     placeholder="0.00"
+                                />
+                            </div>
+
+                            <div className="form-group">
+                                <label>Stock Amount *</label>
+                                <input
+                                    type="number"
+                                    name="stock"
+                                    value={formData.stock}
+                                    onChange={handleInputChange}
+                                    required
+                                    min="0"
+                                    placeholder="0"
                                 />
                             </div>
 
@@ -391,6 +408,7 @@ const Products = () => {
                                     <th>Title</th>
                                     <th>Category</th>
                                     <th>Price</th>
+                                    <th>Stock</th>
                                     <th>Discount</th>
                                     <th>Rating</th>
                                     <th>Featured</th>
@@ -410,6 +428,7 @@ const Products = () => {
                                         <td className="product-title">{product.title}</td>
                                         <td>{product.category}</td>
                                         <td className="product-price">${parseFloat(product.price).toFixed(2)}</td>
+                                        <td>{product.stock}</td>
                                         <td>{product.discount}%</td>
                                         <td>
                                             <span className="rating-badge">★ {product.rating}</span>

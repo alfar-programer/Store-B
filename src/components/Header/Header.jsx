@@ -1,15 +1,18 @@
 import React, { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { Search, ShoppingCart, User, Menu, X } from 'lucide-react'
 import { useCart } from '../../context/CartContext'
 import { useSearch } from '../../context/SearchContext'
+import { useAuth } from '../../context/AuthContext'
 import './header.css'
 
 const Header = () => {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const navigate = useNavigate();
+    const location = useLocation();
     const { getCartCount } = useCart();
     const { openSearch } = useSearch();
+    const { user, logout } = useAuth();
     const cartCount = getCartCount();
 
     const toggleMobileMenu = () => {
@@ -20,28 +23,44 @@ const Header = () => {
         setIsMobileMenuOpen(false);
     };
 
+    // Helper function to check if a nav item is active
+    const isActive = (path) => {
+        if (path === '/') return location.pathname === '/';
+        return location.pathname.startsWith(path);
+    };
+
     return (
         <>
             <header className="main-header fixed top-0 left-0 w-full z-[1000] bg-white/98 backdrop-blur-lg shadow-md py-5 transition-all duration-300">
-                <div className="max-w-[1400px] mx-auto px-10 flex justify-between items-center">
+                <div className="mx-auto px-10 flex justify-between items-center">
                     {/* Logo */}
                     <div className="logo-container">
                         <Link to="/" className="flex items-center">
-                            <img src="/svg/logo_black.png" alt="Wafa Living" className="h-12 w-auto" />
+                            {/* <img
+                                src="/svg/logo2.png"
+                                alt="Wafa Living"
+                                className="h-12 w-auto transition-all duration-300"
+                            /> */}
+                            <h1 className="text-2xl font-bold">Worm <span className="text-primary ">تاتش</span></h1>
                         </Link>
                     </div>
 
                     {/* Navigation */}
                     <nav className={isMobileMenuOpen ? 'active' : ''}>
                         <ul className="flex gap-10 list-none m-0 p-0">
-                            {['Home', 'AllProducts', 'About', 'Contact'].map((item) => (
-                                <li key={item}>
+                            {[
+                                { name: 'Home', path: '/' },
+                                { name: 'AllProducts', path: '/allproducts' },
+                                { name: 'About', path: '/about' },
+                                { name: 'Contact', path: '/contact' }
+                            ].map((item) => (
+                                <li key={item.name}>
                                     <Link
-                                        to={item === 'Home' ? '/' : `/${item.toLowerCase()}`}
-                                        className={`nav-link ${item === 'Home' ? 'active' : ''}`}
+                                        to={item.path}
+                                        className={`nav-link ${isActive(item.path) ? 'active' : ''}`}
                                         onClick={closeMobileMenu}
                                     >
-                                        {item}
+                                        {item.name}
                                     </Link>
                                 </li>
                             ))}
@@ -67,9 +86,48 @@ const Header = () => {
                                 <span className="cart-badge">{cartCount}</span>
                             )}
                         </button>
-                        <button className="icon-btn" aria-label="Profile">
-                            <User size={22} strokeWidth={2} />
-                        </button>
+
+                        <div className="relative group">
+                            <button
+                                className="icon-btn"
+                                aria-label="Profile"
+                                onClick={(e) => {
+                                    // Don't navigate if clicking inside dropdown
+                                    if (e.target.closest('.account-dropdown-menu')) return;
+                                    user ? navigate('/profile') : navigate('/login');
+                                }}
+                            >
+                                <User size={22} strokeWidth={2} />
+                            </button>
+
+                            {user && (
+                                <div 
+                                    className="account-dropdown-menu"
+                                    onClick={(e) => e.stopPropagation()}
+                                >
+                                    <div className="dropdown-header">
+                                        <p className="user-name">{user.name}</p>
+                                        <p className="user-email">{user.email}</p>
+                                    </div>
+                                    <div className="dropdown-divider"></div>
+                                    <Link to="/profile" className="dropdown-item">
+                                        My Profile
+                                    </Link>
+                                    {user.role === 'admin' && (
+                                        <a
+                                            href={`http://localhost:${import.meta.env.VITE_ADMIN_DASHBOARD_PORT || '5174'}`}
+                                            className="dropdown-item"
+                                        >
+                                            Admin Dashboard
+                                        </a>
+                                    )}
+                                    <div className="dropdown-divider"></div>
+                                    <button onClick={logout} className="dropdown-item text-red">
+                                        Logout
+                                    </button>
+                                </div>
+                            )}
+                        </div>
 
                         {/* Mobile Menu Button */}
                         <button

@@ -8,32 +8,60 @@
     font-family: 'Outfit', sans-serif;
 }
 
+html,
+body {
+    background-color: #ffffff;
+    color: #212529;
+}
+
 :root {
-    /* Primary Background */
+    /* ===== BACKGROUNDS ===== */
     --bg-primary: #ffffff;
-    /* White */
-
-    /* Secondary Background / Surface */
     --bg-secondary: #f8f9fa;
-    /* Light gray */
+    --bg-tertiary: #ffffff;
 
-    /* Primary Text */
+    /* ===== TEXT COLORS ===== */
     --text-primary: #212529;
-    /* Very dark gray (almost black) */
+    --text-secondary: #6c757d;
+    --text-muted: #adb5bd;
 
-    /* Secondary Text */
-    --text-secondary: #7A9C85;
-    /* Medium gray */
+    /* ===== ACCENT COLORS ===== */
+    --accent-primary: #667eea;
+    --accent-hover: #764ba2;
 
-    /* Primary Accent / Brand Color */
-    --accent-primary: #0d6efd;
-    /* Bright blue */
-
-    /* Hover or Active States */
-    --accent-hover: #0b5ed7;
-    /* Slightly darker blue */
-
-    /* Borders & Dividers */
+    /* ===== BORDERS ===== */
     --border-color: #dee2e6;
-    /* Light gray */
+
+    /* ===== SHADOWS ===== */
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+    --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.15);
+    --shadow-xl: 0 20px 60px rgba(0, 0, 0, 0.2);
+
+    /* ===== OVERLAYS ===== */
+    --overlay-bg: rgba(0, 0, 0, 0.85);
+    --card-overlay: rgba(255, 255, 255, 0.95);
+
+    /* ===== GRADIENTS ===== */
+    --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --gradient-card: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    --gradient-danger: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+
+    /* ===== SEMANTIC COLORS ===== */
+    --success-color: #48bb78;
+    --error-color: #e53e3e;
+    --warning-color: #ed8936;
+    --info-color: #4299e1;
+
+    /* ===== NEUTRAL GRAYS ===== */
+    --gray-50: #f9fafb;
+    --gray-100: #f3f4f6;
+    --gray-200: #e5e7eb;
+    --gray-300: #d1d5db;
+    --gray-400: #9ca3af;
+    --gray-500: #6b7280;
+    --gray-600: #4b5563;
+    --gray-700: #374151;
+    --gray-800: #1f2937;
+    --gray-900: #111827;
 }

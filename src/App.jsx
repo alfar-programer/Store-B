@@ -11,12 +11,24 @@ import Contact from './components/Contact/Contact'
 import OrderConfirmation from './components/OrderConfirmation/OrderConfirmation'
 import LoadingScreen from './components/LoadingScreen/LoadingScreen'
 
+import Footer from './components/Footer/Footer'
+import ScrollToTop from './components/ScrollToTop/ScrollToTop'
+
+import { AuthProvider } from './context/AuthContext'
+import Login from './pages/Login'
+import Register from './pages/Register'
+import Profile from './pages/Profile'
+
 const App = () => {
   const [loading, setLoading] = useState(true)
 
-  // Simulate app initialization
+  // Show loading screen for 1.5 seconds on initial load
   useEffect(() => {
-    setLoading(false)
+    const timer = setTimeout(() => {
+      setLoading(false)
+    }, 1500)
+
+    return () => clearTimeout(timer)
   }, [])
 
   if (loading) {
@@ -25,21 +37,28 @@ const App = () => {
 
   return (
     <Router>
-      <div>
-        <Header />
-        <SearchModal />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/cart" element={<Cart />} />
-          <Route path="/checkout" element={<Checkout />} />
-          <Route path="/order-confirmation" element={<OrderConfirmation />} />
-          <Route path="/allproducts" element={<AllProducts />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/contact" element={<Contact />} />
-        </Routes>
-      </div>
+      <AuthProvider>
+        <ScrollToTop />
+        <div>
+          <Header />
+          <SearchModal />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/cart" element={<Cart />} />
+            <Route path="/checkout" element={<Checkout />} />
+            <Route path="/order-confirmation" element={<OrderConfirmation />} />
+            <Route path="/allproducts" element={<AllProducts />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/profile" element={<Profile />} />
+          </Routes>
+          <Footer />
+        </div>
+      </AuthProvider>
     </Router>
   )
 }
 
-export default App 
+export default App

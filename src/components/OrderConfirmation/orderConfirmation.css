@@ -1,3 +1,5 @@
+x
+
 /* Order Confirmation Page */
 .confirmation-page {
     min-height: 100vh;
@@ -114,7 +116,7 @@
 .info-header {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 20px;
     margin-bottom: 20px;
     padding-bottom: 15px;
     border-bottom: 2px solid #f7fafc;
@@ -301,6 +303,30 @@
     background: #667eea;
     color: white;
     transform: translateY(-2px);
+}
+
+.whatsapp-btn {
+    flex: 1;
+    padding: 16px 32px;
+    border-radius: 30px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+    border: none;
+    background: #25D366;
+    color: white;
+    box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4);
+}
+
+.whatsapp-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(37, 211, 102, 0.6);
+    background: #128C7E;
 }
 
 /* Email Notification */

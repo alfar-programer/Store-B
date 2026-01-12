@@ -1,8 +1,11 @@
-import React, { useRef } from 'react'
+import React, { useRef, lazy, Suspense } from 'react'
 import './hero.css'
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 
+// Lazy load not strictly necessary for this lightweight component but consistent with previous structure if desired, 
+// or just standard import. Let's use standard import for simplicity and speed.
+import BubblesBackground from '../../../BubblesBackground/BubblesBackground';
 
 const Hero = () => {
   const heroRef = useRef(null);
@@ -36,6 +39,11 @@ const Hero = () => {
 
   return (
     <section className='hero' ref={heroRef}>
+      {/* CSS Bubbles Background */}
+      <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 0 }}>
+        <BubblesBackground />
+      </div>
+
       {/* Animated gradient overlays */}
       <div className="gradient-overlay gradient-1"></div>
       <div className="gradient-overlay gradient-2"></div>

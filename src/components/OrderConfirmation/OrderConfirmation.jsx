@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
-import { CheckCircle, Package, MapPin, CreditCard, ArrowRight, Home } from 'lucide-react'
+import { CheckCircle, Package, MapPin, CreditCard, ArrowRight, Home, MessageCircle } from 'lucide-react'
 import './orderConfirmation.css'
 
 const OrderConfirmation = () => {
@@ -17,6 +17,13 @@ const OrderConfirmation = () => {
 
     if (!order) {
         return null
+    }
+
+    const handleWhatsAppClick = () => {
+        const phoneNumber = '+201098165967' // Updated support number
+        const message = `Hello, I need help with my order #${order.orderId}`
+        const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`
+        window.open(whatsappUrl, '_blank')
     }
 
     return (
@@ -101,7 +108,7 @@ const OrderConfirmation = () => {
                                     <p>Quantity: {item.quantity}</p>
                                 </div>
                                 <div className="item-price">
-                                    <span>${(item.price * item.quantity).toFixed(2)}</span>
+                                    <span>{(item.price * item.quantity).toFixed(2)} <small>EGP</small></span>
                                 </div>
                             </div>
                         ))}
@@ -110,7 +117,7 @@ const OrderConfirmation = () => {
                     <div className="order-summary">
                         <div className="summary-row">
                             <span>Subtotal</span>
-                            <span>${order.subtotal.toFixed(2)}</span>
+                            <span>{order.subtotal.toFixed(2)} <small>EGP</small></span>
                         </div>
                         <div className="summary-row">
                             <span>Shipping</span>
@@ -118,12 +125,12 @@ const OrderConfirmation = () => {
                         </div>
                         <div className="summary-row">
                             <span>Tax</span>
-                            <span>${order.tax.toFixed(2)}</span>
+                            <span>{order.tax.toFixed(2)} <small>EGP</small></span>
                         </div>
                         <div className="summary-divider"></div>
                         <div className="summary-row total">
                             <span>Total</span>
-                            <span>${order.total.toFixed(2)}</span>
+                            <span>{order.total.toFixed(2)} <small>EGP</small></span>
                         </div>
                     </div>
                 </div>
@@ -137,6 +144,10 @@ const OrderConfirmation = () => {
                     <button className="primary-btn" onClick={() => navigate('/')}>
                         <Home size={20} />
                         Back to Home
+                    </button>
+                    <button className="whatsapp-btn" onClick={handleWhatsAppClick}>
+                        <MessageCircle size={20} />
+                        Contact Support
                     </button>
                 </div>
 

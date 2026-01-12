@@ -1,6 +1,6 @@
 .contact-page {
     min-height: 100vh;
-    background-color: #f8fafc;
+    background-color: var(--bg-primary);
     padding-top: 80px;
     /* Space for fixed header */
     overflow: hidden;
@@ -8,6 +8,7 @@
     flex-direction: column;
     position: relative;
     z-index: 1;
+    transition: background-color 0.3s ease;
 }
 
 /* Creative Background */
@@ -19,16 +20,21 @@
     height: 100%;
     overflow: hidden;
     z-index: -1;
-    background: #0f172a;
-    /* Dark base */
+    background: var(--bg-primary);
+    transition: background 0.3s ease;
 }
 
 .gradient-blob {
     position: absolute;
     filter: blur(80px);
-    opacity: 0.8;
+    opacity: 0.15;
     border-radius: 50%;
     animation: moveBlob 20s infinite alternate cubic-bezier(0.4, 0, 0.2, 1);
+    transition: opacity 0.3s ease;
+}
+
+[data-theme="dark"] .gradient-blob {
+    opacity: 0.8;
 }
 
 .blob-1 {
@@ -87,7 +93,7 @@
 
 .contact-hero {
     background: transparent;
-    color: white;
+    color: var(--text-primary);
     padding: 2rem 2rem 4rem;
     text-align: center;
     flex-shrink: 0;
@@ -97,15 +103,16 @@
     font-size: 3.5rem;
     font-weight: 800;
     margin-bottom: 0.5rem;
-    background: linear-gradient(to right, #fff, #cbd5e1);
+    background: var(--gradient-primary);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
     text-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 }
 
 .contact-hero p {
     font-size: 1.2rem;
-    color: #cbd5e1;
+    color: var(--text-secondary);
     max-width: 600px;
     margin: 0 auto;
 }
@@ -125,7 +132,7 @@
     display: grid;
     grid-template-columns: 1fr 1.5fr;
     gap: 2rem;
-    background: rgba(151, 121, 121, 0.1);
+    background: rgba(43, 32, 32, 0.1);
     /* Glassmorphism */
     backdrop-filter: blur(12px);
     border: 1px solid rgba(255, 255, 255, 0.2);
@@ -138,7 +145,7 @@
 
 /* Contact Info Card */
 .contact-info-card {
-    background: rgba(15, 23, 42, 0.6);
+    background: rgb(44, 71, 134);
     color: white;
     padding: 3rem;
     position: relative;
@@ -204,7 +211,8 @@
 /* Contact Form Card */
 .contact-form-card {
     padding: 3rem;
-    background: rgba(255, 255, 255, 0.95);
+    background: var(--bg-secondary);
+    border-radius: 0 24px 24px 0;
 }
 
 .form-group {
@@ -215,7 +223,7 @@
     display: block;
     font-size: 0.9rem;
     font-weight: 500;
-    color: #475569;
+    color: var(--text-secondary);
     margin-bottom: 0.5rem;
 }
 
@@ -223,18 +231,19 @@
 .form-group textarea {
     width: 100%;
     padding: 0.75rem 1rem;
-    border: 1px solid #e2e8f0;
+    border: 1px solid var(--border-color);
     border-radius: 8px;
     font-size: 1rem;
     transition: all 0.2s;
-    background: #f8fafc;
+    background: var(--bg-primary);
+    color: var(--text-primary);
 }
 
 .form-group input:focus,
 .form-group textarea:focus {
     outline: none;
-    border-color: #6366f1;
-    background: white;
+    border-color: var(--accent-primary);
+    background: var(--bg-secondary);
     box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
 }
 

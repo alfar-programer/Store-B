@@ -176,6 +176,13 @@
 
 .form-group input::placeholder {
     color: #a0aec0;
+    margin-right: 20px;
+    transition: all 0.3s ease;
+}
+
+.form-group input:focus::placeholder {
+    transform: translateX(10px);
+    opacity: 0;
 }
 
 /* Input with Icon */
@@ -192,8 +199,8 @@
     pointer-events: none;
 }
 
-.input-with-icon input {
-    padding-left: 48px;
+.form-group .input-with-icon input {
+    padding-left: 50px;
 }
 
 /* Error Messages */
@@ -234,7 +241,7 @@
     transform: translateY(-2px);
 }
 
-.submit-btn {
+.checkout-form .submit-btn {
     flex: 2;
     padding: 16px;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);

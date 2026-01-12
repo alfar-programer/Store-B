@@ -95,8 +95,9 @@
 /* Story Section */
 .story-section {
     padding: 120px 20px;
-    background: white;
+    background: var(--bg-primary);
     position: relative;
+    transition: background 0.3s ease;
 }
 
 .story-container {
@@ -111,7 +112,7 @@
 .story-content h2 {
     font-size: clamp(2.5rem, 5vw, 4rem);
     font-weight: 700;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: var(--gradient-primary);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -121,7 +122,7 @@
 .story-content p {
     font-size: 1.1rem;
     line-height: 1.8;
-    color: #4a5568;
+    color: var(--text-secondary);
     margin-bottom: 20px;
 }
 
@@ -144,14 +145,15 @@
 /* Values Section */
 .values-section {
     padding: 120px 20px;
-    background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+    background: var(--bg-secondary);
+    transition: background 0.3s ease;
 }
 
 .section-title {
     text-align: center;
     font-size: clamp(2.5rem, 5vw, 4rem);
     font-weight: 700;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: var(--gradient-primary);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -167,25 +169,25 @@
 }
 
 .value-card {
-    background: white;
+    background: var(--bg-primary);
     padding: 40px 30px;
     border-radius: 25px;
     text-align: center;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--shadow-lg);
     transition: all 0.3s ease;
     opacity: 0;
 }
 
 .value-card:hover {
     transform: translateY(-10px);
-    box-shadow: 2px 20px 60px rgba(25, 49, 160, 0.3);
+    box-shadow: var(--shadow-xl);
 }
 
 .value-icon {
     width: 80px;
     height: 80px;
     margin: 0 auto 25px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: var(--gradient-primary);
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -196,13 +198,13 @@
 .value-card h3 {
     font-size: 1.5rem;
     font-weight: 700;
-    color: #2d3748;
+    color: var(--text-primary);
     margin-bottom: 15px;
 }
 
 .value-card p {
     font-size: 1rem;
-    color: #718096;
+    color: var(--text-secondary);
     line-height: 1.6;
 }
 
@@ -245,7 +247,8 @@
 /* Team Section */
 .team-section {
     padding: 120px 20px;
-    background: white;
+    background: var(--bg-primary);
+    transition: background 0.3s ease;
 }
 
 .team-grid {
@@ -257,7 +260,7 @@
 }
 
 .team-card {
-    background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+    background: var(--bg-secondary);
     padding: 40px 30px;
     border-radius: 25px;
     text-align: center;
@@ -281,7 +284,7 @@
 .team-card h3 {
     font-size: 1.8rem;
     font-weight: 700;
-    color: #2d3748;
+    color: var(--text-primary);
     margin-bottom: 10px;
 }
 
@@ -294,7 +297,7 @@
 
 .team-bio {
     font-size: 1rem;
-    color: #718096;
+    color: var(--text-secondary);
     line-height: 1.6;
 }
 
@@ -337,6 +340,16 @@
 }
 
 /* Responsive Design */
+@media (max-width: 1024px) {
+    .story-container {
+        gap: 40px;
+    }
+
+    .hero-title {
+        font-size: 4rem;
+    }
+}
+
 @media (max-width: 768px) {
     .story-container {
         grid-template-columns: 1fr;
@@ -377,4 +390,10 @@
         padding: 15px 40px;
         font-size: 1.1rem;
     }
+}
+
+
+
+.image-placeholder img {
+    border-radius: 30px;
 }

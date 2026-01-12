@@ -1,10 +1,7 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
 import './category.css'
-
-
-import CircularGallery from '../../../CircularGallery/CircularGallery'
 
 const Category = () => {
   const [categories, setCategories] = useState([])
@@ -52,24 +49,28 @@ const Category = () => {
     )
   }
 
-  // Format items for CircularGallery
-  const galleryItems = categories.map(cat => ({
-    image: cat.image.startsWith('http') ? cat.image : `http://localhost:5000/${cat.image}`,
-    text: cat.name
-  }));
-
   return (
     <section className='category'>
       <div className="category-content">
         <h2>Shop by Category</h2>
 
-        <div style={{ height: '600px', width: '100%', position: 'relative' }}>
-          <CircularGallery
-            items={galleryItems}
-            bend={3}
-            textColor="#000000"
-            borderRadius={0.05}
-          />
+        <div className="category-grid">
+          {categories.map((cat) => (
+            <Link
+              key={cat._id}
+              to={`/allproducts?category=${cat.name}`}
+              className="category-card"
+            >
+              <div className="category-image-wrapper">
+                <img
+                  src={cat.image.startsWith('http') ? cat.image : `http://localhost:5000/${cat.image}`}
+                  alt={cat.name}
+                  className="category-image"
+                />
+              </div>
+              <h3 className="category-name">{cat.name}</h3>
+            </Link>
+          ))}
         </div>
       </div>
     </section>

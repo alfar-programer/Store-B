@@ -1,24 +1,37 @@
 import React, { useState, useEffect, useRef } from 'react'
+import axios from 'axios'
 import { Search, X } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { useSearch } from '../../context/SearchContext'
-import { productsData } from '../../data/Data'
 import { useCart } from '../../context/CartContext'
 import './searchModal.css'
 
 const SearchModal = () => {
     const { isSearchOpen, closeSearch } = useSearch()
     const [searchQuery, setSearchQuery] = useState('')
+    const [products, setProducts] = useState([])
     const [filteredProducts, setFilteredProducts] = useState([])
     const navigate = useNavigate()
     const { addToCart } = useCart()
     const inputRef = useRef(null)
 
     useEffect(() => {
-        if (isSearchOpen && inputRef.current) {
-            inputRef.current.focus()
+        if (isSearchOpen) {
+            fetchProducts()
+            if (inputRef.current) {
+                inputRef.current.focus()
+            }
         }
     }, [isSearchOpen])
+
+    const fetchProducts = async () => {
+        try {
+            const response = await axios.get('http://localhost:5000/api/products')
+            setProducts(response.data)
+        } catch (error) {
+            console.error('Error fetching products for search:', error)
+        }
+    }
 
     useEffect(() => {
         if (searchQuery.trim() === '') {
@@ -27,13 +40,13 @@ const SearchModal = () => {
         }
 
         const query = searchQuery.toLowerCase()
-        const filtered = productsData.filter(
+        const filtered = products.filter(
             (product) =>
                 product.title.toLowerCase().includes(query) ||
                 product.description.toLowerCase().includes(query)
         )
         setFilteredProducts(filtered)
-    }, [searchQuery])
+    }, [searchQuery, products])
 
     useEffect(() => {
         const handleKeyDown = (e) => {
@@ -140,7 +153,7 @@ const SearchModal = () => {
                                         <h4>{product.title}</h4>
                                         <p>{product.description}</p>
                                         <div className="search-result-footer">
-                                            <span className="search-result-price">${product.price}</span>
+                                            <span className="search-result-price">{parseFloat(product.price).toFixed(2)} <small>EGP</small></span>
                                             {product.discount > 0 && (
                                                 <span className="search-result-discount">-{product.discount}%</span>
                                             )}

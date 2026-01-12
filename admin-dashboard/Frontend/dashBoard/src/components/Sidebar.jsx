@@ -1,10 +1,11 @@
 import React from 'react'
-import { Link, useLocation } from 'react-router-dom'
-import { LayoutDashboard, Package, ShoppingCart, FolderOpen } from 'lucide-react'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { LayoutDashboard, Package, ShoppingCart, FolderOpen, LogOut } from 'lucide-react'
 import './Sidebar.css'
 
 const Sidebar = () => {
     const location = useLocation()
+    const navigate = useNavigate()
 
     const menuItems = [
         { path: '/', icon: LayoutDashboard, label: 'Dashboard' },
@@ -12,6 +13,11 @@ const Sidebar = () => {
         { path: '/categories', icon: FolderOpen, label: 'Categories' },
         { path: '/orders', icon: ShoppingCart, label: 'Orders' }
     ]
+
+    const handleLogout = () => {
+        localStorage.removeItem('adminToken')
+        navigate('/login')
+    }
 
     return (
         <div className="sidebar">
@@ -33,6 +39,10 @@ const Sidebar = () => {
                         </Link>
                     )
                 })}
+                <button onClick={handleLogout} className="nav-item logout-btn">
+                    <LogOut size={20} />
+                    <span>Logout</span>
+                </button>
             </nav>
         </div>
     )

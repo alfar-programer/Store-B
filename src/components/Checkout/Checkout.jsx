@@ -1,12 +1,20 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useCart } from '../../context/CartContext'
+import { useAuth } from '../../context/AuthContext'
 import { useNavigate } from 'react-router-dom'
 import { CreditCard, MapPin, User, Mail, Phone, Lock, ArrowLeft, ShoppingBag } from 'lucide-react'
 import './checkout.css'
 
 const Checkout = () => {
     const { cartItems, getCartTotal, clearCart } = useCart()
+    const { user, loading } = useAuth()
     const navigate = useNavigate()
+
+    useEffect(() => {
+        if (!loading && !user) {
+            navigate('/login')
+        }
+    }, [user, loading, navigate])
 
     const [formData, setFormData] = useState({
         // Personal Information
@@ -127,42 +135,54 @@ const Checkout = () => {
 
         setIsProcessing(true)
 
-        // Simulate payment processing
-        setTimeout(() => {
-            // Create order object
-            const order = {
-                orderId: 'ORD-' + Date.now(),
-                orderDate: new Date().toISOString(),
-                customerInfo: {
-                    fullName: formData.fullName,
-                    email: formData.email,
-                    phone: formData.phone
-                },
+        try {
+            const orderData = {
+                customerName: formData.fullName,
+                total: getCartTotal() * 1.1, // Including tax
+                items: cartItems.map(item => ({
+                    id: item.id,
+                    title: item.title,
+                    price: item.price,
+                    quantity: item.quantity
+                })),
+                userId: user ? user.id : null,
+                // Additional info if backend supports it
                 shippingAddress: {
                     address: formData.address,
                     city: formData.city,
                     state: formData.state,
                     postalCode: formData.postalCode,
-                    country: formData.country
+                    country: formData.country,
+                    phone: formData.phone
+                }
+            };
+
+            const response = await fetch('http://localhost:5000/api/orders', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
                 },
-                items: cartItems,
-                subtotal: getCartTotal(),
-                tax: getCartTotal() * 0.1,
-                total: getCartTotal() * 1.1,
-                paymentMethod: 'Card ending in ' + formData.cardNumber.slice(-4)
+                body: JSON.stringify(orderData)
+            });
+
+            if (response.ok) {
+                const newOrder = await response.json();
+
+                // Clear cart
+                clearCart()
+
+                // Navigate to confirmation page
+                navigate('/order-confirmation', { state: { order: newOrder } })
+            } else {
+                console.error('Order failed');
+                alert('Failed to place order. Please try again.');
             }
-
-            // Save order to localStorage
-            const existingOrders = JSON.parse(localStorage.getItem('orders') || '[]')
-            existingOrders.push(order)
-            localStorage.setItem('orders', JSON.stringify(existingOrders))
-
-            // Clear cart
-            clearCart()
-
-            // Navigate to confirmation page
-            navigate('/order-confirmation', { state: { order } })
-        }, 2000)
+        } catch (error) {
+            console.error('Error placing order:', error);
+            alert('An error occurred. Please try again.');
+        } finally {
+            setIsProcessing(false);
+        }
     }
 
     if (cartItems.length === 0) {
@@ -422,7 +442,7 @@ const Checkout = () => {
                                 Back to Cart
                             </button>
                             <button type="submit" className="submit-btn" disabled={isProcessing}>
-                                {isProcessing ? 'Processing...' : `Pay $${(getCartTotal() * 1.1).toFixed(2)}`}
+                                {isProcessing ? 'Processing...' : `Pay ${(getCartTotal() * 1.1).toFixed(2)} EGP`}
                             </button>
                         </div>
                     </form>
@@ -439,7 +459,7 @@ const Checkout = () => {
                                         <h4>{item.title}</h4>
                                         <p>Qty: {item.quantity}</p>
                                     </div>
-                                    <span className="item-price">${(item.price * item.quantity).toFixed(2)}</span>
+                                    <span className="item-price">{(item.price * item.quantity).toFixed(2)} <small>EGP</small></span>
                                 </div>
                             ))}
                         </div>
@@ -449,7 +469,7 @@ const Checkout = () => {
                         <div className="summary-totals">
                             <div className="summary-row">
                                 <span>Subtotal</span>
-                                <span>${getCartTotal().toFixed(2)}</span>
+                                <span>{getCartTotal().toFixed(2)} <small>EGP</small></span>
                             </div>
                             <div className="summary-row">
                                 <span>Shipping</span>
@@ -457,12 +477,12 @@ const Checkout = () => {
                             </div>
                             <div className="summary-row">
                                 <span>Tax (10%)</span>
-                                <span>${(getCartTotal() * 0.1).toFixed(2)}</span>
+                                <span>{(getCartTotal() * 0.1).toFixed(2)} <small>EGP</small></span>
                             </div>
                             <div className="summary-divider"></div>
                             <div className="summary-row total">
                                 <span>Total</span>
-                                <span>${(getCartTotal() * 1.1).toFixed(2)}</span>
+                                <span>{(getCartTotal() * 1.1).toFixed(2)} <small>EGP</small></span>
                             </div>
                         </div>
                     </div>

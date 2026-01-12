@@ -2,7 +2,8 @@
 .cart-page {
     min-height: 100vh;
     padding: 100px 20px 80px;
-    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    background: var(--gradient-card);
+    transition: background 0.3s ease;
 }
 
 .cart-container {
@@ -48,9 +49,9 @@
 .empty-cart {
     text-align: center;
     padding: 80px 20px;
-    background: white;
+    background: var(--bg-secondary);
     border-radius: 20px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--shadow-lg);
     animation: fadeInUp 0.6s ease-out;
 }
 
@@ -61,13 +62,13 @@
 
 .empty-cart h2 {
     font-size: 2rem;
-    color: #2d3748;
+    color: var(--text-primary);
     margin-bottom: 15px;
 }
 
 .empty-cart p {
     font-size: 1.1rem;
-    color: #718096;
+    color: var(--text-secondary);
     margin-bottom: 30px;
 }
 
@@ -99,20 +100,20 @@
 }
 
 .cart-item {
-    background: white;
+    background: var(--bg-secondary);
     border-radius: 15px;
     padding: 25px;
     display: grid;
     grid-template-columns: 120px 1fr auto auto auto;
     gap: 25px;
     align-items: center;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    box-shadow: var(--shadow-md);
     transition: all 0.3s ease;
     animation: slideIn 0.4s ease-out;
 }
 
 .cart-item:hover {
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    box-shadow: var(--shadow-lg);
     transform: translateY(-3px);
 }
 
@@ -156,20 +157,20 @@
 .cart-item-details h3 {
     font-size: 1.3rem;
     font-weight: 600;
-    color: #2d3748;
+    color: var(--text-primary);
     margin: 0;
 }
 
 .cart-item-description {
     font-size: 0.95rem;
-    color: #718096;
+    color: var(--text-secondary);
     margin: 0;
 }
 
 .cart-item-discount {
     display: inline-block;
     padding: 4px 10px;
-    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+    background: var(--gradient-danger);
     color: white;
     border-radius: 12px;
     font-size: 0.85rem;
@@ -182,7 +183,7 @@
     display: flex;
     align-items: center;
     gap: 12px;
-    background: #f7fafc;
+    background: var(--bg-tertiary);
     padding: 8px 12px;
     border-radius: 25px;
 }
@@ -213,7 +214,7 @@
 .quantity-value {
     font-size: 1.1rem;
     font-weight: 600;
-    color: #2d3748;
+    color: var(--text-primary);
     min-width: 30px;
     text-align: center;
 }
@@ -291,10 +292,10 @@
 
 /* Cart Summary */
 .cart-summary {
-    background: white;
+    background: var(--bg-secondary);
     border-radius: 20px;
     padding: 30px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--shadow-lg);
     height: fit-content;
     position: sticky;
     top: 100px;
@@ -316,7 +317,7 @@
 .cart-summary h2 {
     font-size: 1.8rem;
     font-weight: 700;
-    color: #2d3748;
+    color: var(--text-primary);
     margin-bottom: 25px;
 }
 
@@ -326,13 +327,13 @@
     align-items: center;
     padding: 15px 0;
     font-size: 1rem;
-    color: #4a5568;
+    color: var(--text-secondary);
 }
 
 .summary-row.total {
     font-size: 1.3rem;
     font-weight: 700;
-    color: #2d3748;
+    color: var(--text-primary);
 }
 
 .free-shipping {
@@ -412,6 +413,31 @@
 .clear-cart-btn:hover {
     background: #e53e3e;
     color: white;
+}
+
+.whatsapp-cart-btn {
+    width: 100%;
+    padding: 14px;
+    background: #25D366;
+    color: white;
+    border: none;
+    border-radius: 30px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+}
+
+.whatsapp-cart-btn:hover {
+    background: #128C7E;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(37, 211, 102, 0.5);
 }
 
 /* Responsive Design */

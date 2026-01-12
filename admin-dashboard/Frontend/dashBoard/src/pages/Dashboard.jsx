@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import axios from 'axios'
 import { TrendingUp, Package, ShoppingCart, DollarSign, Clock, CheckCircle } from 'lucide-react'
 import './Dashboard.css'
@@ -9,23 +9,30 @@ const Dashboard = () => {
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
-        fetchDashboardData()
+        console.log('Dashboard component mounted');
     }, [])
 
-    const fetchDashboardData = async () => {
+    const fetchDashboardData = useCallback(async () => {
         try {
             const [statsRes, ordersRes] = await Promise.all([
                 axios.get('http://localhost:5000/api/stats'),
                 axios.get('http://localhost:5000/api/orders')
             ])
-            setStats(statsRes.data)
-            setRecentOrders(ordersRes.data.slice(0, 5)) // Get last 5 orders
+            setStats(statsRes.data || { products: 0, orders: 0, revenue: 0 })
+            setRecentOrders(Array.isArray(ordersRes.data) ? ordersRes.data.slice(0, 5) : [])
             setLoading(false)
         } catch (error) {
             console.error('Error fetching dashboard data:', error)
+            // Set default values on error
+            setStats({ products: 0, orders: 0, revenue: 0 })
+            setRecentOrders([])
             setLoading(false)
         }
-    }
+    }, [])
+
+    useEffect(() => {
+        fetchDashboardData()
+    }, [fetchDashboardData])
 
     const statCards = [
         {
@@ -47,7 +54,7 @@ const Dashboard = () => {
         {
             icon: DollarSign,
             label: 'Total Revenue',
-            value: `$${stats.revenue.toFixed(2)}`,
+            value: `$${(Number(stats.revenue) || 0).toFixed(2)}`,
             color: '#f093fb',
             trend: stats.growth?.revenue ? `${stats.growth.revenue > 0 ? '+' : ''}${stats.growth.revenue}%` : '+0%',
             trendUp: stats.growth?.revenue >= 0
@@ -72,7 +79,18 @@ const Dashboard = () => {
     }
 
     if (loading) {
-        return <div className="dashboard-loading">Loading dashboard...</div>
+        return (
+            <div className="dashboard-loading" style={{ 
+                display: 'flex', 
+                justifyContent: 'center', 
+                alignItems: 'center', 
+                height: '400px',
+                fontSize: '1.2rem',
+                color: '#667eea'
+            }}>
+                Loading dashboard...
+            </div>
+        )
     }
 
     return (
@@ -133,12 +151,12 @@ const Dashboard = () => {
                                     <div className="order-customer">{order.customerName}</div>
                                 </div>
                                 <div className="order-details">
-                                    <span className="order-amount">${order.total.toFixed(2)}</span>
+                                    <span className="order-amount">${(Number(order.total) || 0).toFixed(2)}</span>
                                     <span
                                         className="order-status"
                                         style={{ background: getStatusColor(order.status) }}
                                     >
-                                        {order.status}
+                                        {order.status || 'Pending'}
                                     </span>
                                 </div>
                             </div>

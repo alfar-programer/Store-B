@@ -5,7 +5,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.75);
+    background: var(--overlay-bg);
     backdrop-filter: blur(8px);
     display: flex;
     align-items: flex-start;
@@ -23,14 +23,14 @@
 }
 
 .search-modal-content {
-    background: white;
+    background: var(--bg-primary);
     border-radius: 20px;
     max-width: 700px;
     width: 100%;
     max-height: 80vh;
     display: flex;
     flex-direction: column;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    box-shadow: var(--shadow-xl);
     animation: slideDown 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     overflow: hidden;
 }
@@ -53,7 +53,7 @@
     align-items: center;
     gap: 15px;
     padding: 20px 25px;
-    border-bottom: 2px solid #f0f0f0;
+    border-bottom: 2px solid var(--border-color);
 }
 
 .search-input-wrapper {
@@ -61,7 +61,7 @@
     display: flex;
     align-items: center;
     gap: 12px;
-    background: #f7fafc;
+    background: var(--bg-tertiary);
     padding: 12px 18px;
     border-radius: 30px;
     transition: all 0.3s ease;
@@ -82,12 +82,12 @@
     border: none;
     background: transparent;
     font-size: 1rem;
-    color: #2d3748;
+    color: var(--text-primary);
     outline: none;
 }
 
 .search-input::placeholder {
-    color: #a0aec0;
+    color: var(--text-muted);
 }
 
 .clear-search-btn {
@@ -104,16 +104,16 @@
 }
 
 .clear-search-btn:hover {
-    background: #e2e8f0;
-    color: #4a5568;
+    background: var(--bg-tertiary);
+    color: var(--text-secondary);
 }
 
 .close-search-modal {
     width: 40px;
     height: 40px;
     border: none;
-    background: #f7fafc;
-    color: #4a5568;
+    background: var(--bg-tertiary);
+    color: var(--text-secondary);
     border-radius: 50%;
     cursor: pointer;
     display: flex;
@@ -153,7 +153,7 @@
 
 .search-empty-state p {
     font-size: 1.1rem;
-    color: #4a5568;
+    color: var(--text-secondary);
     margin-bottom: 10px;
 }
 
@@ -182,7 +182,7 @@
 
 .results-count {
     font-size: 0.9rem;
-    color: #718096;
+    color: var(--text-secondary);
     margin-bottom: 10px;
     font-weight: 500;
 }
@@ -193,7 +193,7 @@
     grid-template-columns: 80px 1fr auto;
     gap: 15px;
     padding: 15px;
-    background: #f7fafc;
+    background: var(--bg-tertiary);
     border-radius: 15px;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -201,9 +201,9 @@
 }
 
 .search-result-item:hover {
-    background: #edf2f7;
+    background: var(--bg-secondary);
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    box-shadow: var(--shadow-md);
 }
 
 .search-result-image {

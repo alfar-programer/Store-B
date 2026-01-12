@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
-import { Mail, Phone, MapPin, Send, MessageSquare } from 'lucide-react'
+import { Mail, Phone, MapPin, Send } from 'lucide-react'
+import BubblesBackground from '../BubblesBackground/BubblesBackground'
 import './contact.css'
 
 const Contact = () => {
@@ -35,10 +36,7 @@ const Contact = () => {
         <div className="contact-page">
             {/* Creative Background */}
             <div className="creative-bg">
-                <div className="gradient-blob blob-1"></div>
-                <div className="gradient-blob blob-2"></div>
-                <div className="gradient-blob blob-3"></div>
-                <div className="gradient-blob blob-4"></div>
+                <BubblesBackground bubbleColor="rgba(79, 70, 229, 0.15)" />
             </div>
 
             {/* Hero Section */}
@@ -63,7 +61,7 @@ const Contact = () => {
                                 </div>
                                 <div>
                                     <h3>Phone</h3>
-                                    <p>+1 (555) 123-4567</p>
+                                    <p>+20- 109-816-5967</p>
                                 </div>
                             </div>
 
@@ -73,7 +71,7 @@ const Contact = () => {
                                 </div>
                                 <div>
                                     <h3>Email</h3>
-                                    <p>support@project-b.com</p>
+                                    <p>Wormtotch@gmail.com</p>
                                 </div>
                             </div>
 
@@ -83,7 +81,7 @@ const Contact = () => {
                                 </div>
                                 <div>
                                     <h3>Address</h3>
-                                    <p>123 Commerce St, Tech City, TC 90210</p>
+                                    <p>Egypt, GIZA  october garden 247</p>
                                 </div>
                             </div>
                         </div>

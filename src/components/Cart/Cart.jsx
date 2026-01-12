@@ -1,6 +1,6 @@
 import React from 'react'
 import { useCart } from '../../context/CartContext'
-import { Trash2, Plus, Minus, ShoppingBag, ArrowLeft } from 'lucide-react'
+import { Trash2, Plus, Minus, ShoppingBag, ArrowLeft, MessageCircle } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import './cart.css'
 
@@ -17,6 +17,13 @@ const Cart = () => {
     const calculateItemTotal = (price, quantity) => {
         return (parseFloat(price) * quantity).toFixed(2)
     } // function to calculate the total price of an item to 2 decimal places 
+
+    const handleWhatsAppClick = () => {
+        const phoneNumber = '+201098165967' // Support number
+        const message = `Hello, I need help with my cart containing ${cartItems.length} items.`
+        const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`
+        window.open(whatsappUrl, '_blank')
+    }
 
     if (cartItems.length === 0) {
         return (
@@ -80,28 +87,28 @@ const Cart = () => {
                                     <div className="price-display">
                                         {item.discount > 0 ? (
                                             <>
-                                                <span className="item-total">${calculateItemTotal(
+                                                <span className="item-total">{calculateItemTotal(
                                                     (parseFloat(item.price) * (1 - item.discount / 100)).toFixed(2),
                                                     item.quantity
-                                                )}</span>
+                                                )} <small>EGP</small></span>
                                                 <span className="item-original-total">
-                                                    ${calculateItemTotal(item.price, item.quantity)}
+                                                    {calculateItemTotal(item.price, item.quantity)} <small>EGP</small>
                                                 </span>
                                             </>
                                         ) : (
-                                            <span className="item-total">${calculateItemTotal(item.price, item.quantity)}</span>
+                                            <span className="item-total">{calculateItemTotal(item.price, item.quantity)} <small>EGP</small></span>
                                         )}
                                     </div>
                                     <div className="unit-price-display">
                                         {item.discount > 0 ? (
                                             <>
-                                                <span className="item-unit-price">${(parseFloat(item.price) * (1 - item.discount / 100)).toFixed(2)} each</span>
+                                                <span className="item-unit-price">{(parseFloat(item.price) * (1 - item.discount / 100)).toFixed(2)} <small>EGP</small> each</span>
                                                 <span className="item-original-unit">
-                                                    ${parseFloat(item.price).toFixed(2)}
+                                                    {parseFloat(item.price).toFixed(2)} <small>EGP</small>
                                                 </span>
                                             </>
                                         ) : (
-                                            <span className="item-unit-price">${parseFloat(item.price).toFixed(2)} each</span>
+                                            <span className="item-unit-price">{parseFloat(item.price).toFixed(2)} <small>EGP</small> each</span>
                                         )}
                                     </div>
                                 </div>
@@ -122,7 +129,7 @@ const Cart = () => {
 
                         <div className="summary-row">
                             <span>Subtotal</span>
-                            <span>${getCartTotal().toFixed(2)}</span>
+                            <span>{getCartTotal().toFixed(2)} <small>EGP</small></span>
                         </div>
 
                         <div className="summary-row">
@@ -132,14 +139,14 @@ const Cart = () => {
 
                         <div className="summary-row">
                             <span>Tax (estimated)</span>
-                            <span>${(getCartTotal() * 0.1).toFixed(2)}</span>
+                            <span>{(getCartTotal() * 0.1).toFixed(2)} <small>EGP</small></span>
                         </div>
 
                         <div className="summary-divider"></div>
 
                         <div className="summary-row total">
                             <span>Total</span>
-                            <span>${(getCartTotal() * 1.1).toFixed(2)}</span>
+                            <span>{(getCartTotal() * 1.1).toFixed(2)} <small>EGP</small></span>
                         </div>
 
                         <button className="checkout-btn" onClick={() => navigate('/checkout')}>
@@ -149,6 +156,11 @@ const Cart = () => {
                         <button className="continue-shopping-btn" onClick={() => navigate('/allproducts')}>
                             <ArrowLeft size={20} />
                             Continue Shopping
+                        </button>
+
+                        <button className="whatsapp-cart-btn" onClick={handleWhatsAppClick}>
+                            <MessageCircle size={20} />
+                            Contact Support
                         </button>
 
                         <button className="clear-cart-btn" onClick={clearCart}>

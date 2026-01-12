@@ -150,11 +150,11 @@ const AllProducts = () => {
                                         <div className="price-wrapper">
                                             {product.discount > 0 ? (
                                                 <>
-                                                    <span className="price">${(parseFloat(product.price) * (1 - product.discount / 100)).toFixed(2)}</span>
-                                                    <span className="original-price">${parseFloat(product.price).toFixed(2)}</span>
+                                                    <span className="price">{(parseFloat(product.price) * (1 - product.discount / 100)).toFixed(2)} <small>EGP</small></span>
+                                                    <span className="original-price">{parseFloat(product.price).toFixed(2)} <small>EGP</small></span>
                                                 </>
                                             ) : (
-                                                <span className="price">${parseFloat(product.price).toFixed(2)}</span>
+                                                <span className="price">{parseFloat(product.price).toFixed(2)} <small>EGP</small></span>
                                             )}
                                         </div>
                                         <button
@@ -186,12 +186,12 @@ const AllProducts = () => {
                                         <div className="modal-price-section">
                                             {selectedProduct.discount > 0 ? (
                                                 <>
-                                                    <span className="modal-price">${(parseFloat(selectedProduct.price) * (1 - selectedProduct.discount / 100)).toFixed(2)}</span>
-                                                    <span className="modal-original-price">${parseFloat(selectedProduct.price).toFixed(2)}</span>
+                                                    <span className="modal-price">{(parseFloat(selectedProduct.price) * (1 - selectedProduct.discount / 100)).toFixed(2)} <small>EGP</small></span>
+                                                    <span className="modal-original-price">{parseFloat(selectedProduct.price).toFixed(2)} <small>EGP</small></span>
                                                     <span className="modal-discount-badge">-{selectedProduct.discount}% OFF</span>
                                                 </>
                                             ) : (
-                                                <span className="modal-price">${parseFloat(selectedProduct.price).toFixed(2)}</span>
+                                                <span className="modal-price">{parseFloat(selectedProduct.price).toFixed(2)} <small>EGP</small></span>
                                             )}
                                         </div>
                                         <button

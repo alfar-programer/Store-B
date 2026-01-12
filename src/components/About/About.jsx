@@ -175,7 +175,7 @@ const About = () => {
                     </div>
                     <div className="story-image">
                         <div className="image-placeholder">
-                            <img src="\svg\logo-no-background.svg" width={400} height={400} alt="" />
+                            <img src="\svg\logo.jpg" width={600} height={600} alt="loading image" />
 
                         </div>
                     </div>
