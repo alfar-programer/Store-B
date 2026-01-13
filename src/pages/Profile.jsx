@@ -44,7 +44,7 @@ const Profile = () => {
             if (!token) {
                 return;
             }
-            const response = await fetch('https://store-b-backend-production.up.railway.app/api/user/profile', {
+            const response = await fetch('http://localhost:5000/api/user/profile', {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -75,7 +75,7 @@ const Profile = () => {
             if (!token) {
                 return;
             }
-            const response = await fetch('https://store-b-backend-production.up.railway.app/api/user/orders', {
+            const response = await fetch('http://localhost:5000/api/user/orders', {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -104,7 +104,7 @@ const Profile = () => {
         setUploading(true);
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch('https://store-b-backend-production.up.railway.app/api/user/profile/image', {
+            const response = await fetch('http://localhost:5000/api/user/profile/image', {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -131,7 +131,7 @@ const Profile = () => {
                 return;
             }
 
-            const response = await fetch('https://store-b-backend-production.up.railway.app/api/user/profile', {
+            const response = await fetch('http://localhost:5000/api/user/profile', {
                 method: 'PUT',
                 headers: {
                     'Authorization': `Bearer ${token}`,

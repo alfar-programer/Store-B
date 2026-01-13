@@ -14,7 +14,7 @@ const Category = () => {
 
   const fetchCategories = async () => {
     try {
-      const response = await axios.get('https://store-b-backend-production.up.railway.app/api/categories')
+      const response = await axios.get('http://localhost:5000/api/categories')
       setCategories(response.data)
       setLoading(false)
     } catch (error) {
@@ -57,18 +57,15 @@ const Category = () => {
         <div className="category-grid">
           {categories.map((cat) => (
             <Link
-              key={cat._id}
+              key={cat.id}
               to={`/allproducts?category=${cat.name}`}
               className="category-card"
             >
-              <div className="category-image-wrapper">
-                <img
-                  src={cat.image.startsWith('http') ? cat.image : `https://store-b-backend-production.up.railway.app/${cat.image}`}
-                  alt={cat.name}
-                  className="category-image"
-                />
+              <div className="category-icon-wrapper">
+                <span className="category-icon">📦</span>
               </div>
               <h3 className="category-name">{cat.name}</h3>
+              {cat.description && <p className="category-description">{cat.description}</p>}
             </Link>
           ))}
         </div>

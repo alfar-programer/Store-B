@@ -26,7 +26,7 @@ const SearchModal = () => {
 
     const fetchProducts = async () => {
         try {
-            const response = await axios.get('https://store-b-backend-production.up.railway.app/api/products')
+            const response = await axios.get('http://localhost:5000/api/products')
             setProducts(response.data)
         } catch (error) {
             console.error('Error fetching products for search:', error)

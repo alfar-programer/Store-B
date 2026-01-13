@@ -17,7 +17,7 @@ const Products = () => {
 
     const fetchFeaturedProducts = async () => {
         try {
-            const response = await axios.get('https://store-b-backend-production.up.railway.app/api/products/featured')
+            const response = await axios.get('http://localhost:5000/api/products/featured')
             setProducts(response.data)
             setLoading(false)
         } catch (error) {

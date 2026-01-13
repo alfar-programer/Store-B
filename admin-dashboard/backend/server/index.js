@@ -9,6 +9,12 @@ const jwt = require('jsonwebtoken');
 
 dotenv.config();
 
+// Set default JWT_SECRET if not provided
+if (!process.env.JWT_SECRET) {
+  process.env.JWT_SECRET = 'your-secret-key-change-in-production';
+}
+
+
 const app = express();
 const PORT = process.env.PORT || 5000;
 
@@ -20,14 +26,14 @@ app.use(express.json());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 /* ======================
-   DATABASE POOL (WITH FALLBACK)
+   DATABASE POOL
 ====================== */
-const DB_CONFIG_REMOTE = {
-  host: process.env.DB_HOST,
-  port: Number(process.env.DB_PORT || 3306),
-  user: process.env.DB_USER,
+const DB_CONFIG = {
+  host: process.env.DB_HOST || 'mysql-73b2b04-mazenalfar01.h.aivencloud.com',
+  port: Number(process.env.DB_PORT || 23199),
+  user: process.env.DB_USER || 'avnadmin',
   password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
+  database: process.env.DB_NAME || 'defaultdb',
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
@@ -37,47 +43,18 @@ const DB_CONFIG_REMOTE = {
   },
 };
 
-const DB_CONFIG_LOCAL = {
-  host: "127.0.0.1",
-  port: 3306,
-  user: "root",
-  password: process.env.LOCAL_DB_PASSWORD || "your_local_password",
-  database: "ecommerce_db",
-  waitForConnections: true,
-  connectionLimit: 10,
-  queueLimit: 0,
-  ssl: {
-    rejectUnauthorized: false,
-  },
-};
-
 let pool;
 
 async function getDatabaseConnection() {
-  if (process.env.DB_HOST) {
-    console.log(`🔄 Attempting to connect to Remote DB (${process.env.DB_HOST})...`);
-    const remotePool = mysql.createPool(DB_CONFIG_REMOTE);
-    try {
-      const connection = await remotePool.getConnection();
-      connection.release();
-      console.log(`✅ Connected to Remote DB: ${DB_CONFIG_REMOTE.database}`);
-      return remotePool;
-    } catch (err) {
-      console.error(`❌ Remote DB connection failed: ${err.message}`);
-      console.log('⚠️ Switching to Local Fallback...');
-      await remotePool.end();
-    }
-  }
-
-  console.log(`� Attempting to connect to Local DB (127.0.0.1)...`);
-  const localPool = mysql.createPool(DB_CONFIG_LOCAL);
+  console.log(`🔄 Attempting to connect to DB (${DB_CONFIG.host})...`);
+  const dbPool = mysql.createPool(DB_CONFIG);
   try {
-    const connection = await localPool.getConnection();
+    const connection = await dbPool.getConnection();
     connection.release();
-    console.log(`✅ Connected to Local DB: ${DB_CONFIG_LOCAL.database}`);
-    return localPool;
+    console.log(`✅ Connected to DB: ${DB_CONFIG.database}`);
+    return dbPool;
   } catch (err) {
-    console.error(`❌ Local DB connection failed: ${err.message}`);
+    console.error(`❌ DB connection failed: ${err.message}`);
     throw err;
   }
 }
@@ -218,10 +195,19 @@ app.post('/api/auth/login', async (req, res) => {
       { expiresIn: '1d' }
     );
 
-    res.json({ token, role: user.role });
+    res.json({
+      success: true,
+      token,
+      role: user.role,
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email
+      }
+    });
   } catch (error) {
     console.error('Login error:', error);
-    res.status(500).json({ message: 'Server error' });
+    res.status(500).json({ success: false, message: 'Server error' });
   }
 });
 
@@ -234,6 +220,16 @@ app.get('/api/products', async (req, res) => {
     res.json(products);
   } catch (error) {
     console.error('Get products error:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+app.get('/api/products/featured', async (req, res) => {
+  try {
+    const [products] = await pool.query('SELECT * FROM Products WHERE isFeatured = true');
+    res.json(products);
+  } catch (error) {
+    console.error('Get featured products error:', error);
     res.status(500).json({ message: 'Server error' });
   }
 });
