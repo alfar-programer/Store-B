@@ -18,16 +18,9 @@ const Login = () => {
 
         if (result.success) {
             if (result.role === 'admin') {
-                // Store tokens in main store's localStorage
-                localStorage.setItem('token', result.token);
-                localStorage.setItem('userRole', result.role);
-
-                // Redirect to admin dashboard with tokens as URL parameters
-                // This allows the admin dashboard to receive and store the tokens in its own localStorage
-                // Use environment variable or default to port 5174 (Vite default is 5173, but can be configured)
-                const adminDashboardPort = import.meta.env.VITE_ADMIN_DASHBOARD_PORT || '5174';
-                const adminDashboardUrl = `http://localhost:${adminDashboardPort}/login?token=${encodeURIComponent(result.token)}&role=${encodeURIComponent(result.role)}`;
-                window.location.href = adminDashboardUrl;
+                // Redirect admin to dashboard
+                console.log('Admin logged in successfully');
+                window.location.href = 'https://store-b-dashboard-production.up.railway.app';
             } else {
                 navigate('/');
             }
