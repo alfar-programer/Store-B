@@ -11,7 +11,7 @@ const Orders = () => {
 
     const fetchOrders = async () => {
         try {
-            const response = await axios.get('http://localhost:5000/api/orders')
+            const response = await axios.get('https://store-b-backend-production.up.railway.app/api/orders')
             setOrders(response.data)
         } catch (error) {
             console.error('Error fetching orders:', error)
@@ -20,7 +20,7 @@ const Orders = () => {
 
     const updateOrderStatus = async (id, newStatus) => {
         try {
-            await axios.put(`http://localhost:5000/api/orders/${id}`, { status: newStatus })
+            await axios.put(`https://store-b-backend-production.up.railway.app/api/orders/${id}`, { status: newStatus })
             fetchOrders()
         } catch (error) {
             console.error('Error updating order:', error)

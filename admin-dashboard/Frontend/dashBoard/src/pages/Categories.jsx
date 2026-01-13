@@ -22,7 +22,7 @@ const Categories = () => {
 
     const fetchCategories = async () => {
         try {
-            const response = await axios.get('http://localhost:5000/api/categories')
+            const response = await axios.get('https://store-b-backend-production.up.railway.app/api/categories')
             setCategories(response.data)
         } catch (error) {
             console.error('Error fetching categories:', error)
@@ -91,11 +91,11 @@ const Categories = () => {
 
         try {
             if (editingCategory) {
-                await axios.put(`http://localhost:5000/api/categories/${editingCategory.id}`, data, {
+                await axios.put(`https://store-b-backend-production.up.railway.app/api/categories/${editingCategory.id}`, data, {
                     headers: { 'Content-Type': 'multipart/form-data' }
                 })
             } else {
-                await axios.post('http://localhost:5000/api/categories', data, {
+                await axios.post('https://store-b-backend-production.up.railway.app/api/categories', data, {
                     headers: { 'Content-Type': 'multipart/form-data' }
                 })
             }
@@ -115,7 +115,7 @@ const Categories = () => {
         }
 
         try {
-            await axios.delete(`http://localhost:5000/api/categories/${id}`)
+            await axios.delete(`https://store-b-backend-production.up.railway.app/api/categories/${id}`)
             fetchCategories()
         } catch (error) {
             setError(error.response?.data?.error || 'Failed to delete category')
@@ -129,7 +129,7 @@ const Categories = () => {
             description: category.description || '',
             image: null
         })
-        setImagePreview(category.image ? `http://localhost:5000/${category.image}` : null)
+        setImagePreview(category.image ? `https://store-b-backend-production.up.railway.app/${category.image}` : null)
         setShowModal(true)
     }
 
@@ -158,7 +158,7 @@ const Categories = () => {
                     <div key={category.id} className="category-card">
                         {category.image && (
                             <div className="category-image">
-                                <img src={`http://localhost:5000/${category.image}`} alt={category.name} />
+                                <img src={`https://store-b-backend-production.up.railway.app/${category.image}`} alt={category.name} />
                             </div>
                         )}
                         <div className="category-content">

@@ -19,12 +19,12 @@ const Login = () => {
             // Store tokens in admin dashboard's localStorage
             localStorage.setItem('adminToken', token);
             localStorage.setItem('userRole', role);
-            
+
             console.log('Token stored, redirecting to dashboard...');
 
             // Clear URL parameters and redirect to dashboard
             window.history.replaceState({}, document.title, window.location.pathname);
-            
+
             // Small delay to ensure localStorage is set
             setTimeout(() => {
                 navigate('/', { replace: true });
@@ -46,7 +46,7 @@ const Login = () => {
         e.preventDefault();
 
         try {
-            const response = await fetch('http://localhost:5000/api/auth/login', {
+            const response = await fetch('https://store-b-backend-production.up.railway.app/api/auth/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

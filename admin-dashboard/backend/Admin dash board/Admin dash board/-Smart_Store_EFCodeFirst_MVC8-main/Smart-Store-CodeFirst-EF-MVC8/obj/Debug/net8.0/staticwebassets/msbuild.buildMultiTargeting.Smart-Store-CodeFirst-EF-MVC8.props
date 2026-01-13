@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="..\build\Smart-Store-CodeFirst-EF-MVC8.props" />
-</Project>

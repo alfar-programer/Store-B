@@ -30,7 +30,7 @@ const Products = () => {
 
     const fetchProducts = async () => {
         try {
-            const response = await axios.get('http://localhost:5000/api/products')
+            const response = await axios.get('https://store-b-backend-production.up.railway.app/api/products')
             setProducts(response.data)
             setLoading(false)
         } catch (error) {
@@ -42,7 +42,7 @@ const Products = () => {
 
     const fetchCategories = async () => {
         try {
-            const response = await axios.get('http://localhost:5000/api/categories')
+            const response = await axios.get('https://store-b-backend-production.up.railway.app/api/categories')
             setCategories(response.data)
         } catch (error) {
             console.error('Error fetching categories:', error)
@@ -151,12 +151,12 @@ const Products = () => {
 
         try {
             if (editingProduct) {
-                await axios.put(`http://localhost:5000/api/products/${editingProduct.id}`, data, {
+                await axios.put(`https://store-b-backend-production.up.railway.app/api/products/${editingProduct.id}`, data, {
                     headers: { 'Content-Type': 'multipart/form-data' }
                 })
                 showNotification('Product updated successfully!', 'success')
             } else {
-                await axios.post('http://localhost:5000/api/products', data, {
+                await axios.post('https://store-b-backend-production.up.railway.app/api/products', data, {
                     headers: { 'Content-Type': 'multipart/form-data' }
                 })
                 showNotification('Product created successfully!', 'success')
@@ -190,7 +190,7 @@ const Products = () => {
     const handleDelete = async (id) => {
         if (window.confirm('Are you sure you want to delete this product?')) {
             try {
-                await axios.delete(`http://localhost:5000/api/products/${id}`)
+                await axios.delete(`https://store-b-backend-production.up.railway.app/api/products/${id}`)
                 showNotification('Product deleted successfully!', 'success')
                 fetchProducts()
             } catch (error) {

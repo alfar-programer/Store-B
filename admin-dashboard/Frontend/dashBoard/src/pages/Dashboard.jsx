@@ -15,8 +15,8 @@ const Dashboard = () => {
     const fetchDashboardData = useCallback(async () => {
         try {
             const [statsRes, ordersRes] = await Promise.all([
-                axios.get('http://localhost:5000/api/stats'),
-                axios.get('http://localhost:5000/api/orders')
+                axios.get('https://store-b-backend-production.up.railway.app/api/stats'),
+                axios.get('https://store-b-backend-production.up.railway.app/api/orders')
             ])
             setStats(statsRes.data || { products: 0, orders: 0, revenue: 0 })
             setRecentOrders(Array.isArray(ordersRes.data) ? ordersRes.data.slice(0, 5) : [])
@@ -80,10 +80,10 @@ const Dashboard = () => {
 
     if (loading) {
         return (
-            <div className="dashboard-loading" style={{ 
-                display: 'flex', 
-                justifyContent: 'center', 
-                alignItems: 'center', 
+            <div className="dashboard-loading" style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
                 height: '400px',
                 fontSize: '1.2rem',
                 color: '#667eea'

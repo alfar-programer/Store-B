@@ -157,7 +157,7 @@ const Checkout = () => {
                 }
             };
 
-            const response = await fetch('http://localhost:5000/api/orders', {
+            const response = await fetch('https://store-b-backend-production.up.railway.app/api/orders', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
