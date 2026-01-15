@@ -24,7 +24,12 @@ const AllProducts = () => {
     const fetchProducts = async () => {
         try {
             const response = await api.products.getAll()
-            setProducts(response.data)
+            if (response.ok) {
+                const data = await response.json()
+                setProducts(data)
+            } else {
+                console.error('Failed to fetch products')
+            }
             setLoading(false)
         } catch (error) {
             console.error('Error fetching products:', error)
