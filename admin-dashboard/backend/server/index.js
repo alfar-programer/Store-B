@@ -11,7 +11,13 @@ dotenv.config();
 
 // Set default JWT_SECRET if not provided
 if (!process.env.JWT_SECRET) {
-  process.env.JWT_SECRET = 'your-secret-key-change-in-production';
+  if (process.env.NODE_ENV === 'production') {
+    console.error('❌ FATAL ERROR: JWT_SECRET is not set in production environment!');
+    process.exit(1);
+  } else {
+    console.warn('⚠️ WARNING: JWT_SECRET not set, using unsafe default for development only.');
+    process.env.JWT_SECRET = 'dev-secret-key-do-not-use-in-production';
+  }
 }
 
 
@@ -65,7 +71,7 @@ const limiter = rateLimit({
 // Stricter rate limit for auth endpoints
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 5, // Limit each IP to 5 login attempts per windowMs
+  max: 30, // Limit each IP to 30 login attempts per windowMs
   message: {
     success: false,
     message: 'Too many login attempts, please try again later.'
@@ -105,9 +111,15 @@ app.use(cors({
     // Allow requests with no origin (mobile apps, Postman, etc.)
     if (!origin) return callback(null, true);
 
+    // Allow any localhost origin for development
+    if (origin && origin.startsWith('http://localhost:')) {
+      return callback(null, true);
+    }
+
     if (allowedOrigins.indexOf(origin) !== -1) {
       callback(null, true);
     } else {
+      console.log('❌ CORS Blocked Origin:', origin);
       callback(new Error('Not allowed by CORS'));
     }
   },

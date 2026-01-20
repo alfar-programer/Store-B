@@ -73,7 +73,7 @@ const Login = () => {
                 setError(data.message || 'Invalid email or password');
             }
         } catch (err) {
-            setError('Server connection failed. Please try again.');
+            setError(`Connection failed: ${err.message || 'Unknown error'}`);
             console.error('Login error:', err);
         }
     };
