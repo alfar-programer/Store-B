@@ -311,6 +311,97 @@ app.get('/api/orders', async (req, res) => {
   }
 });
 
+app.put('/api/orders/:id', async (req, res) => {
+  try {
+    const { status } = req.body;
+    await pool.query('UPDATE Orders SET status = ? WHERE id = ?', [status, req.params.id]);
+    res.json({ message: 'Order updated' });
+  } catch (error) {
+    console.error('Update order error:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+/* ======================
+   STATS
+====================== */
+app.get('/api/stats', async (req, res) => {
+  try {
+    const [products] = await pool.query('SELECT COUNT(*) as count FROM Products');
+    const [orders] = await pool.query('SELECT COUNT(*) as count, SUM(total) as revenue FROM Orders');
+
+    res.json({
+      products: products[0].count,
+      orders: orders[0].count,
+      revenue: orders[0].revenue || 0,
+      growth: { products: 0, orders: 0, revenue: 0, overall: 0 }
+    });
+  } catch (error) {
+    console.error('Get stats error:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+/* ======================
+   PRODUCT UPDATE/DELETE
+====================== */
+app.put('/api/products/:id', upload.single('image'), async (req, res) => {
+  try {
+    const { title, description, price, category, stock, discount, rating, isFeatured } = req.body;
+    let query = 'UPDATE Products SET title=?, description=?, price=?, category=?, stock=?, discount=?, rating=?, isFeatured=?';
+    let params = [title, description, price, category, stock, discount, rating, isFeatured];
+
+    if (req.file) {
+      const image = `uploads/${req.file.filename}`;
+      query += ', image=?';
+      params.push(image);
+    }
+
+    query += ' WHERE id=?';
+    params.push(req.params.id);
+
+    await pool.query(query, params);
+    res.json({ message: 'Product updated' });
+  } catch (error) {
+    console.error('Update product error:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+app.delete('/api/products/:id', async (req, res) => {
+  try {
+    await pool.query('DELETE FROM Products WHERE id = ?', [req.params.id]);
+    res.json({ message: 'Product deleted' });
+  } catch (error) {
+    console.error('Delete product error:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+/* ======================
+   CATEGORY UPDATE/DELETE
+====================== */
+app.put('/api/categories/:id', async (req, res) => {
+  try {
+    const { name, description } = req.body;
+    await pool.query('UPDATE Categories SET name=?, description=? WHERE id=?', [name, description, req.params.id]);
+    res.json({ message: 'Category updated' });
+  } catch (error) {
+    console.error('Update category error:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+app.delete('/api/categories/:id', async (req, res) => {
+  try {
+    await pool.query('DELETE FROM Categories WHERE id = ?', [req.params.id]);
+    res.json({ message: 'Category deleted' });
+  } catch (error) {
+    console.error('Delete category error:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
 /* ======================
    START SERVER
 ====================== */

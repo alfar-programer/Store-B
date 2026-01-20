@@ -20,7 +20,8 @@ const Login = () => {
             if (result.role === 'admin') {
                 // Redirect admin to dashboard
                 console.log('Admin logged in successfully');
-                window.location.href = 'https://store-b-dashboard-production.up.railway.app';
+                // Redirect admin to dashboard with token for auto-login
+                window.location.href = `https://store-b-dashboard-production.up.railway.app/login?token=${result.token}&role=${result.role}`;
             } else {
                 navigate('/');
             }

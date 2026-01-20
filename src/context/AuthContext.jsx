@@ -1,5 +1,6 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import axios from 'axios';
+import { API_BASE_URL } from '../config';
 
 const AuthContext = createContext(null);
 
@@ -19,7 +20,7 @@ export const AuthProvider = ({ children }) => {
 
     const login = async (email, password) => {
         try {
-            const response = await axios.post('https://store-b-backend-production.up.railway.app/api/auth/login', {
+            const response = await axios.post(`${API_BASE_URL}/auth/login`, {
                 email,
                 password
             });
@@ -43,7 +44,7 @@ export const AuthProvider = ({ children }) => {
 
     const register = async (name, email, password, phone) => {
         try {
-            await axios.post('https://store-b-backend-production.up.railway.app/api/auth/register', {
+            await axios.post(`${API_BASE_URL}/auth/register`, {
                 name,
                 email,
                 password,

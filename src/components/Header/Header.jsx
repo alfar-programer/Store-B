@@ -101,7 +101,7 @@ const Header = () => {
                             </button>
 
                             {user && (
-                                <div 
+                                <div
                                     className="account-dropdown-menu"
                                     onClick={(e) => e.stopPropagation()}
                                 >
