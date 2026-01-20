@@ -15,8 +15,13 @@ const DB_CONFIG = {
     },
 };
 
-const TEST_EMAIL = process.env.ADMIN_EMAIL || 'mazenaboelelaelfar@gmail.com';
-const TEST_PASSWORD = process.env.ADMIN_PASSWORD || 'Mazen198165967#';
+const TEST_EMAIL = process.env.ADMIN_EMAIL;
+const TEST_PASSWORD = process.env.ADMIN_PASSWORD;
+
+if (!TEST_EMAIL || !TEST_PASSWORD) {
+    console.error('❌ Error: ADMIN_EMAIL and ADMIN_PASSWORD must be set in .env file');
+    process.exit(1);
+}
 
 async function diagnoseAdminLogin() {
     let connection;
