@@ -1,12 +1,40 @@
+
 import React from 'react'
 import { useCart } from '../../context/CartContext'
 import { Trash2, Plus, Minus, ShoppingBag, ArrowLeft, MessageCircle } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
+import { API_BASE_URL } from '../../config'
 import './cart.css'
 
 const Cart = () => {
     const { cartItems, removeFromCart, updateQuantity, getCartTotal, clearCart } = useCart()
     const navigate = useNavigate() // Import useNavigate to navigate to the home page
+
+    const parseImage = (imageField) => {
+        if (!imageField) return 'https://via.placeholder.com/300?text=No+Image'
+
+        let imageUrl = imageField
+
+        try {
+            if (typeof imageField === 'string' && (imageField.startsWith('[') || imageField.startsWith('{'))) {
+                const parsed = JSON.parse(imageField)
+                if (Array.isArray(parsed) && parsed.length > 0) {
+                    imageUrl = parsed[0]
+                }
+            }
+        } catch (e) {
+            console.warn('Image parsing error:', e)
+        }
+
+        if (imageUrl && !imageUrl.startsWith('http') && !imageUrl.startsWith('data:')) {
+            const rootUrl = API_BASE_URL.replace('/api', '')
+            const cleanRoot = rootUrl.endsWith('/') ? rootUrl.slice(0, -1) : rootUrl
+            const cleanPath = imageUrl.startsWith('/') ? imageUrl.slice(1) : imageUrl
+            return `${cleanRoot}/${cleanPath}`
+        }
+
+        return imageUrl || 'https://via.placeholder.com/300?text=No+Image'
+    }
 
     const handleQuantityChange = (productId, newQuantity) => {
         if (newQuantity >= 1) {
@@ -56,7 +84,7 @@ const Cart = () => {
                         {cartItems.map((item) => (
                             <div className="cart-item" key={item.id}>
                                 <div className="cart-item-image">
-                                    <img src={item.image} alt={item.title} />
+                                    <img src={parseImage(item.image)} alt={item.title} />
                                 </div>
 
                                 <div className="cart-item-details">

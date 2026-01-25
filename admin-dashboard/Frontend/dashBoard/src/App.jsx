@@ -4,6 +4,7 @@ import Sidebar from './components/Sidebar'
 import Dashboard from './pages/Dashboard'
 import Products from './pages/Products'
 import Orders from './pages/Orders'
+import OrderDetails from './pages/OrderDetails'
 import Categories from './pages/Categories'
 import Login from './pages/Login'
 import ProtectedRoute from './components/ProtectedRoute'
@@ -14,7 +15,7 @@ const AdminLayout = ({ children }) => {
   React.useEffect(() => {
     console.log('AdminLayout rendered');
   }, []);
-  
+
   return (
     <div className="admin-container">
       <Sidebar />
@@ -64,37 +65,45 @@ function App() {
 
           {/* Protected Routes */}
           <Route element={<ProtectedRoute />}>
-            <Route 
-              path="/" 
+            <Route
+              path="/"
               element={
                 <AdminLayout>
                   <Dashboard />
                 </AdminLayout>
-              } 
+              }
             />
-            <Route 
-              path="/products" 
+            <Route
+              path="/products"
               element={
                 <AdminLayout>
                   <Products />
                 </AdminLayout>
-              } 
+              }
             />
-            <Route 
-              path="/categories" 
+            <Route
+              path="/categories"
               element={
                 <AdminLayout>
                   <Categories />
                 </AdminLayout>
-              } 
+              }
             />
-            <Route 
-              path="/orders" 
+            <Route
+              path="/orders"
               element={
                 <AdminLayout>
                   <Orders />
                 </AdminLayout>
-              } 
+              }
+            />
+            <Route
+              path="/orders/:id"
+              element={
+                <AdminLayout>
+                  <OrderDetails />
+                </AdminLayout>
+              }
             />
           </Route>
         </Routes>

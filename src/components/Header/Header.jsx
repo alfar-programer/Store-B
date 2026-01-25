@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
-import { Search, ShoppingCart, User, Menu, X } from 'lucide-react'
+import { Search, ShoppingCart, User, Menu, X, Sparkles } from 'lucide-react'
 import { useCart } from '../../context/CartContext'
 import { useSearch } from '../../context/SearchContext'
 import { useAuth } from '../../context/AuthContext'
@@ -35,13 +35,17 @@ const Header = () => {
                 <div className="mx-auto px-10 flex justify-between items-center">
                     {/* Logo */}
                     <div className="logo-container">
-                        <Link to="/" className="flex items-center">
-                            {/* <img
-                                src="/svg/logo2.png"
-                                alt="Wafa Living"
-                                className="h-12 w-auto transition-all duration-300"
-                            /> */}
-                            <h1 className="text-2xl font-bold">Worm <span className="text-primary ">تاتش</span></h1>
+                        <Link to="/" className="logo-professional group">
+                            <div className="logo-icon-box">
+                                <Sparkles size={22} className="logo-sparkle" />
+                            </div>
+                            <div className="logo-text-group">
+                                <div className="flex items-center gap-1.5">
+                                    <span className="logo-main-text">WORM</span>
+                                    <span className="logo-sub-text">TOUCH</span>
+                                </div>
+                                <span className="logo-arabic">تاتش</span>
+                            </div>
                         </Link>
                     </div>
 
@@ -52,7 +56,8 @@ const Header = () => {
                                 { name: 'Home', path: '/' },
                                 { name: 'AllProducts', path: '/allproducts' },
                                 { name: 'About', path: '/about' },
-                                { name: 'Contact', path: '/contact' }
+                                { name: 'Contact', path: '/contact' },
+                                { name: 'My Orders', path: '/my-orders' }
                             ].map((item) => (
                                 <li key={item.name}>
                                     <Link
@@ -112,6 +117,9 @@ const Header = () => {
                                     <div className="dropdown-divider"></div>
                                     <Link to="/profile" className="dropdown-item">
                                         My Profile
+                                    </Link>
+                                    <Link to="/my-orders" className="dropdown-item">
+                                        My Orders
                                     </Link>
                                     {user.role === 'admin' && (
                                         <a

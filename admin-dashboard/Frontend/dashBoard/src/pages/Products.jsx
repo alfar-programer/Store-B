@@ -4,12 +4,14 @@ import { Package, Upload, Edit, Trash2, X, Check } from 'lucide-react'
 import './Products.css'
 
 const Products = () => {
+    // API URL - Uses environment variable in dev, falls back to production URL
+    const API_URL = import.meta.env.VITE_API_URL || 'https://store-b-backend-production.up.railway.app';
     const [products, setProducts] = useState([])
     const [categories, setCategories] = useState([])
     const [loading, setLoading] = useState(true)
     const [showForm, setShowForm] = useState(false)
     const [editingProduct, setEditingProduct] = useState(null)
-    const [imagePreview, setImagePreview] = useState(null)
+    const [imagePreviews, setImagePreviews] = useState([])
     const [formData, setFormData] = useState({
         title: '',
         description: '',
@@ -18,7 +20,7 @@ const Products = () => {
         category: '',
         discount: 0,
         rating: 4.5,
-        image: null,
+        images: [],
         isFeatured: false
     })
     const [notification, setNotification] = useState({ show: false, message: '', type: '' })
@@ -30,7 +32,10 @@ const Products = () => {
 
     const fetchProducts = async () => {
         try {
-            const response = await axios.get('https://store-b-backend-production.up.railway.app/api/products')
+            const token = localStorage.getItem('adminToken');
+            const response = await axios.get(`${API_URL}/api/products`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            })
             setProducts(response.data)
             setLoading(false)
         } catch (error) {
@@ -42,7 +47,10 @@ const Products = () => {
 
     const fetchCategories = async () => {
         try {
-            const response = await axios.get('https://store-b-backend-production.up.railway.app/api/categories')
+            const token = localStorage.getItem('adminToken');
+            const response = await axios.get(`${API_URL}/api/categories`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            })
             setCategories(response.data)
         } catch (error) {
             console.error('Error fetching categories:', error)
@@ -65,20 +73,29 @@ const Products = () => {
     }
 
     const handleImageChange = (e) => {
-        const file = e.target.files[0]
-        if (file) {
+        const files = Array.from(e.target.files)
+        if (files.length > 0) {
             setFormData(prev => ({
                 ...prev,
-                image: file
+                images: [...prev.images, ...files]
             }))
 
-            // Create preview
-            const reader = new FileReader()
-            reader.onloadend = () => {
-                setImagePreview(reader.result)
-            }
-            reader.readAsDataURL(file)
+            files.forEach(file => {
+                const reader = new FileReader()
+                reader.onloadend = () => {
+                    setImagePreviews(prev => [...prev, reader.result])
+                }
+                reader.readAsDataURL(file)
+            })
         }
+    }
+
+    const removeImage = (index) => {
+        setFormData(prev => ({
+            ...prev,
+            images: prev.images.filter((_, i) => i !== index)
+        }))
+        setImagePreviews(prev => prev.filter((_, i) => i !== index))
     }
 
     const handleDragOver = (e) => {
@@ -95,18 +112,21 @@ const Products = () => {
         e.preventDefault()
         e.currentTarget.classList.remove('drag-over')
 
-        const file = e.dataTransfer.files[0]
-        if (file && file.type.startsWith('image/')) {
+        const files = Array.from(e.dataTransfer.files).filter(file => file.type.startsWith('image/'))
+
+        if (files.length > 0) {
             setFormData(prev => ({
                 ...prev,
-                image: file
+                images: [...prev.images, ...files]
             }))
 
-            const reader = new FileReader()
-            reader.onloadend = () => {
-                setImagePreview(reader.result)
-            }
-            reader.readAsDataURL(file)
+            files.forEach(file => {
+                const reader = new FileReader()
+                reader.onloadend = () => {
+                    setImagePreviews(prev => [...prev, reader.result])
+                }
+                reader.readAsDataURL(file)
+            })
         }
     }
 
@@ -119,10 +139,10 @@ const Products = () => {
             category: '',
             discount: 0,
             rating: 4.5,
-            image: null,
+            images: [],
             isFeatured: false
         })
-        setImagePreview(null)
+        setImagePreviews([])
         setEditingProduct(null)
         setShowForm(false)
     }
@@ -130,8 +150,8 @@ const Products = () => {
     const handleSubmit = async (e) => {
         e.preventDefault()
 
-        if (!formData.image && !editingProduct) {
-            showNotification('Please select an image', 'error')
+        if (formData.images.length === 0 && !editingProduct) {
+            showNotification('Please select at least one image', 'error')
             return
         }
 
@@ -145,20 +165,36 @@ const Products = () => {
         data.append('rating', formData.rating)
         data.append('isFeatured', formData.isFeatured)
 
-        if (formData.image) {
-            data.append('image', formData.image)
-        }
+        // Append all images with the same key 'images'
+        formData.images.forEach(file => {
+            // For new files
+            if (file instanceof File) {
+                data.append('images', file)
+            }
+            // Logic for existing images (urls) could be added here if we supported mixing new+old.
+            // But simpler for now: Only send files. If files sent, backend replaces.
+        })
 
         try {
+            const token = localStorage.getItem('adminToken');
+            const config = {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    'Authorization': `Bearer ${token}`
+                }
+            };
+
+            console.log('📦 Submitting Product Data:', {
+                title: formData.title,
+                imagesCount: formData.images.length,
+                isEditing: !!editingProduct
+            });
+
             if (editingProduct) {
-                await axios.put(`https://store-b-backend-production.up.railway.app/api/products/${editingProduct.id}`, data, {
-                    headers: { 'Content-Type': 'multipart/form-data' }
-                })
+                await axios.put(`${API_URL}/api/products/${editingProduct.id}`, data, config)
                 showNotification('Product updated successfully!', 'success')
             } else {
-                await axios.post('https://store-b-backend-production.up.railway.app/api/products', data, {
-                    headers: { 'Content-Type': 'multipart/form-data' }
-                })
+                await axios.post(`${API_URL}/api/products`, data, config)
                 showNotification('Product created successfully!', 'success')
             }
 
@@ -166,12 +202,15 @@ const Products = () => {
             resetForm()
         } catch (error) {
             console.error('Error saving product:', error)
-            showNotification('Error saving product', 'error')
+            const errorMsg = error.response?.data?.message || error.message || 'Unknown error occurred';
+            showNotification('Error saving product: ' + errorMsg, 'error')
         }
     }
 
     const handleEdit = (product) => {
         setEditingProduct(product)
+        const parsedImages = getProductImages(product.image);
+
         setFormData({
             title: product.title,
             description: product.description,
@@ -180,17 +219,29 @@ const Products = () => {
             category: product.category,
             discount: product.discount,
             rating: product.rating,
-            image: null,
+            images: [], // We start empty for files. Ideally store existing URLs separately.
             isFeatured: product.isFeatured || false
         })
-        setImagePreview(product.image)
+        setImagePreviews(parsedImages)
         setShowForm(true)
+    }
+
+    const getProductImages = (imageString) => {
+        try {
+            const parsed = JSON.parse(imageString);
+            return Array.isArray(parsed) ? parsed : [imageString];
+        } catch (e) {
+            return [imageString];
+        }
     }
 
     const handleDelete = async (id) => {
         if (window.confirm('Are you sure you want to delete this product?')) {
             try {
-                await axios.delete(`https://store-b-backend-production.up.railway.app/api/products/${id}`)
+                const token = localStorage.getItem('adminToken');
+                await axios.delete(`${API_URL}/api/products/${id}`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                })
                 showNotification('Product deleted successfully!', 'success')
                 fetchProducts()
             } catch (error) {
@@ -342,41 +393,98 @@ const Products = () => {
                         </div>
 
                         <div className="form-group full-width">
-                            <label>Product Image *</label>
+                            <label>Product Images *</label>
                             <div
                                 className="image-upload-area"
                                 onDragOver={handleDragOver}
                                 onDragLeave={handleDragLeave}
                                 onDrop={handleDrop}
                             >
-                                {imagePreview ? (
-                                    <div className="image-preview">
-                                        <img src={imagePreview} alt="Preview" />
-                                        <button
-                                            type="button"
-                                            className="remove-image-btn"
-                                            onClick={() => {
-                                                setImagePreview(null)
-                                                setFormData(prev => ({ ...prev, image: null }))
-                                            }}
-                                        >
-                                            <X size={20} />
-                                        </button>
-                                    </div>
-                                ) : (
-                                    <div className="upload-placeholder">
-                                        <Upload size={48} />
-                                        <p>Drag & drop an image here or click to browse</p>
-                                        <span>Supported formats: JPG, PNG, GIF, WEBP (Max 5MB)</span>
-                                    </div>
-                                )}
+                                <div className="upload-placeholder">
+                                    <Upload size={48} />
+                                    <p>Drag & drop images here or click to browse</p>
+                                    <span>Supported formats: JPG, PNG, GIF, WEBP (Max 5MB)</span>
+                                </div>
                                 <input
                                     type="file"
                                     accept="image/*"
                                     onChange={handleImageChange}
                                     className="file-input"
+                                    multiple
                                 />
                             </div>
+
+                            {imagePreviews.length > 0 && (
+                                <div className="image-previews-grid">
+                                    {imagePreviews.map((preview, index) => (
+                                        <div key={index} className="image-preview-item" style={{ borderColor: index === 0 ? '#4299e1' : '#e2e8f0', borderWidth: index === 0 ? '2px' : '1px' }}>
+                                            <img src={preview} alt={`Preview ${index}`} />
+                                            {index === 0 && (
+                                                <span className="main-image-badge" style={{
+                                                    position: 'absolute',
+                                                    top: '5px',
+                                                    left: '5px',
+                                                    background: '#4299e1',
+                                                    color: 'white',
+                                                    padding: '2px 6px',
+                                                    borderRadius: '4px',
+                                                    fontSize: '10px',
+                                                    fontWeight: 'bold',
+                                                    zIndex: 10
+                                                }}>Main</span>
+                                            )}
+                                            <div className="image-actions" style={{
+                                                position: 'absolute',
+                                                top: '5px',
+                                                right: '5px',
+                                                display: 'flex',
+                                                gap: '5px'
+                                            }}>
+                                                {index !== 0 && (
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => {
+                                                            const newImages = [...formData.images];
+                                                            const newPreviews = [...imagePreviews];
+
+                                                            // Move selected item to front
+                                                            const [selectedImage] = newImages.splice(index, 1);
+                                                            const [selectedPreview] = newPreviews.splice(index, 1);
+
+                                                            newImages.unshift(selectedImage);
+                                                            newPreviews.unshift(selectedPreview);
+
+                                                            setFormData(prev => ({ ...prev, images: newImages }));
+                                                            setImagePreviews(newPreviews);
+                                                        }}
+                                                        style={{
+                                                            background: 'rgba(255, 255, 255, 0.9)',
+                                                            border: 'none',
+                                                            borderRadius: '4px',
+                                                            cursor: 'pointer',
+                                                            padding: '4px',
+                                                            fontSize: '10px',
+                                                            color: '#2d3748',
+                                                            fontWeight: '600'
+                                                        }}
+                                                        title="Set as Main Image"
+                                                    >
+                                                        ★ Main
+                                                    </button>
+                                                )}
+                                                <button
+                                                    type="button"
+                                                    className="remove-image-btn"
+                                                    style={{ position: 'static' }}
+                                                    onClick={() => removeImage(index)}
+                                                >
+                                                    <X size={16} />
+                                                </button>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
                         </div>
 
                         <div className="form-actions">
@@ -420,7 +528,7 @@ const Products = () => {
                                     <tr key={product.id}>
                                         <td>
                                             <img
-                                                src={product.image}
+                                                src={getProductImages(product.image)[0]}
                                                 alt={product.title}
                                                 className="product-thumbnail"
                                             />

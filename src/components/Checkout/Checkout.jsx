@@ -3,6 +3,9 @@ import { useCart } from '../../context/CartContext'
 import { useAuth } from '../../context/AuthContext'
 import { useNavigate } from 'react-router-dom'
 import { CreditCard, MapPin, User, Mail, Phone, Lock, ArrowLeft, ShoppingBag } from 'lucide-react'
+import { API_BASE_URL } from '../../config'
+import { ordersAPI } from '../../services/api'
+import CustomAlert from '../ui/Alert/CustomAlert'
 import './checkout.css'
 
 const Checkout = () => {
@@ -19,25 +22,49 @@ const Checkout = () => {
     const [formData, setFormData] = useState({
         // Personal Information
         fullName: '',
-        email: '',
         phone: '',
 
         // Shipping Address
         address: '',
         city: '',
         state: '',
-        postalCode: '',
         country: '',
-
-        // Payment Information
-        cardNumber: '',
-        cardName: '',
-        expiryDate: '',
-        cvv: ''
     })
 
     const [errors, setErrors] = useState({})
     const [isProcessing, setIsProcessing] = useState(false)
+    const [alert, setAlert] = useState(null)
+
+    // Helper to parse product images
+    const parseImage = (imageField) => {
+        if (!imageField) return 'https://via.placeholder.com/300?text=No+Image'
+
+        let imageUrl = imageField
+
+        try {
+            if (typeof imageField === 'string' && (imageField.startsWith('[') || imageField.startsWith('{'))) {
+                const parsed = JSON.parse(imageField)
+                if (Array.isArray(parsed) && parsed.length > 0) {
+                    imageUrl = parsed[0]
+                }
+            }
+        } catch (e) {
+            console.warn('Image parsing error, using raw value:', e)
+        }
+
+        if (imageUrl && !imageUrl.startsWith('http') && !imageUrl.startsWith('data:')) {
+            const rootUrl = API_BASE_URL.replace('/api', '')
+            const cleanRoot = rootUrl.endsWith('/') ? rootUrl.slice(0, -1) : rootUrl
+            const cleanPath = imageUrl.startsWith('/') ? imageUrl.slice(1) : imageUrl
+            return `${cleanRoot}/${cleanPath}`
+        }
+
+        return imageUrl || 'https://via.placeholder.com/300?text=No+Image'
+    }
+
+    const subtotal = getCartTotal()
+    const shippingCost = subtotal < 500 ? 30 : 0
+    const total = subtotal + shippingCost
 
     // Handle input changes
     const handleChange = (e) => {
@@ -55,41 +82,12 @@ const Checkout = () => {
         }
     }
 
-    // Format card number with spaces
-    const handleCardNumberChange = (e) => {
-        let value = e.target.value.replace(/\s/g, '')
-        value = value.replace(/\D/g, '')
-        value = value.substring(0, 16)
-        value = value.match(/.{1,4}/g)?.join(' ') || value
-        setFormData(prev => ({
-            ...prev,
-            cardNumber: value
-        }))
-    }
-
-    // Format expiry date
-    const handleExpiryChange = (e) => {
-        let value = e.target.value.replace(/\D/g, '')
-        if (value.length >= 2) {
-            value = value.substring(0, 2) + '/' + value.substring(2, 4)
-        }
-        setFormData(prev => ({
-            ...prev,
-            expiryDate: value
-        }))
-    }
-
     // Validate form
     const validateForm = () => {
         const newErrors = {}
 
         // Personal Information
         if (!formData.fullName.trim()) newErrors.fullName = 'Full name is required'
-        if (!formData.email.trim()) {
-            newErrors.email = 'Email is required'
-        } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-            newErrors.email = 'Email is invalid'
-        }
         if (!formData.phone.trim()) {
             newErrors.phone = 'Phone number is required'
         } else if (!/^\+?[\d\s-()]{10,}$/.test(formData.phone)) {
@@ -100,26 +98,7 @@ const Checkout = () => {
         if (!formData.address.trim()) newErrors.address = 'Address is required'
         if (!formData.city.trim()) newErrors.city = 'City is required'
         if (!formData.state.trim()) newErrors.state = 'State is required'
-        if (!formData.postalCode.trim()) newErrors.postalCode = 'Postal code is required'
         if (!formData.country.trim()) newErrors.country = 'Country is required'
-
-        // Payment Information
-        if (!formData.cardNumber.trim()) {
-            newErrors.cardNumber = 'Card number is required'
-        } else if (formData.cardNumber.replace(/\s/g, '').length !== 16) {
-            newErrors.cardNumber = 'Card number must be 16 digits'
-        }
-        if (!formData.cardName.trim()) newErrors.cardName = 'Cardholder name is required'
-        if (!formData.expiryDate.trim()) {
-            newErrors.expiryDate = 'Expiry date is required'
-        } else if (!/^\d{2}\/\d{2}$/.test(formData.expiryDate)) {
-            newErrors.expiryDate = 'Invalid format (MM/YY)'
-        }
-        if (!formData.cvv.trim()) {
-            newErrors.cvv = 'CVV is required'
-        } else if (!/^\d{3,4}$/.test(formData.cvv)) {
-            newErrors.cvv = 'CVV must be 3-4 digits'
-        }
 
         setErrors(newErrors)
         return Object.keys(newErrors).length === 0
@@ -136,50 +115,46 @@ const Checkout = () => {
         setIsProcessing(true)
 
         try {
+            const token = localStorage.getItem('token');
             const orderData = {
                 customerName: formData.fullName,
-                total: getCartTotal() * 1.1, // Including tax
+                total: total,
                 items: cartItems.map(item => ({
                     id: item.id,
                     title: item.title,
                     price: item.price,
-                    quantity: item.quantity
+                    quantity: item.quantity,
+                    image: parseImage(item.image)
                 })),
                 userId: user ? user.id : null,
-                // Additional info if backend supports it
                 shippingAddress: {
+                    fullName: formData.fullName,
                     address: formData.address,
                     city: formData.city,
                     state: formData.state,
-                    postalCode: formData.postalCode,
                     country: formData.country,
                     phone: formData.phone
                 }
             };
 
-            const response = await fetch('https://store-b-backend-production.up.railway.app/api/orders', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(orderData)
-            });
+            const response = await ordersAPI.create(orderData, token);
 
             if (response.ok) {
-                const newOrder = await response.json();
+                const result = await response.json();
+                const newOrder = result.data || result;
 
                 // Clear cart
                 clearCart()
 
-                // Navigate to confirmation page
-                navigate('/order-confirmation', { state: { order: newOrder } })
+                // Navigate to My Orders page with success message
+                navigate('/my-orders', { state: { orderSuccess: true } })
             } else {
                 console.error('Order failed');
-                alert('Failed to place order. Please try again.');
+                setAlert({ message: 'Failed to place order. Please try again.', type: 'error' });
             }
         } catch (error) {
             console.error('Error placing order:', error);
-            alert('An error occurred. Please try again.');
+            setAlert({ message: 'An error occurred. Please try again.', type: 'error' });
         } finally {
             setIsProcessing(false);
         }
@@ -234,25 +209,6 @@ const Checkout = () => {
                                     />
                                     {errors.fullName && <span className="error-message">{errors.fullName}</span>}
                                 </div>
-                            </div>
-
-                            <div className="form-row">
-                                <div className="form-group">
-                                    <label htmlFor="email">Email Address *</label>
-                                    <div className="input-with-icon">
-                                        <Mail size={20} />
-                                        <input
-                                            type="email"
-                                            id="email"
-                                            name="email"
-                                            value={formData.email}
-                                            onChange={handleChange}
-                                            className={errors.email ? 'error' : ''}
-                                            placeholder="john@example.com"
-                                        />
-                                    </div>
-                                    {errors.email && <span className="error-message">{errors.email}</span>}
-                                </div>
 
                                 <div className="form-group">
                                     <label htmlFor="phone">Phone Number *</label>
@@ -265,7 +221,7 @@ const Checkout = () => {
                                             value={formData.phone}
                                             onChange={handleChange}
                                             className={errors.phone ? 'error' : ''}
-                                            placeholder="+1 (555) 123-4567"
+                                            placeholder="+20 123 456 7890"
                                         />
                                     </div>
                                     {errors.phone && <span className="error-message">{errors.phone}</span>}
@@ -306,7 +262,7 @@ const Checkout = () => {
                                         value={formData.city}
                                         onChange={handleChange}
                                         className={errors.city ? 'error' : ''}
-                                        placeholder="New York"
+                                        placeholder="Cairo"
                                     />
                                     {errors.city && <span className="error-message">{errors.city}</span>}
                                 </div>
@@ -320,27 +276,13 @@ const Checkout = () => {
                                         value={formData.state}
                                         onChange={handleChange}
                                         className={errors.state ? 'error' : ''}
-                                        placeholder="NY"
+                                        placeholder="Giza"
                                     />
                                     {errors.state && <span className="error-message">{errors.state}</span>}
                                 </div>
                             </div>
 
                             <div className="form-row">
-                                <div className="form-group">
-                                    <label htmlFor="postalCode">Postal Code *</label>
-                                    <input
-                                        type="text"
-                                        id="postalCode"
-                                        name="postalCode"
-                                        value={formData.postalCode}
-                                        onChange={handleChange}
-                                        className={errors.postalCode ? 'error' : ''}
-                                        placeholder="10001"
-                                    />
-                                    {errors.postalCode && <span className="error-message">{errors.postalCode}</span>}
-                                </div>
-
                                 <div className="form-group">
                                     <label htmlFor="country">Country *</label>
                                     <input
@@ -350,88 +292,9 @@ const Checkout = () => {
                                         value={formData.country}
                                         onChange={handleChange}
                                         className={errors.country ? 'error' : ''}
-                                        placeholder="United States"
+                                        placeholder="Egypt"
                                     />
                                     {errors.country && <span className="error-message">{errors.country}</span>}
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Payment Information Section */}
-                        <div className="form-section">
-                            <div className="section-header">
-                                <CreditCard size={24} />
-                                <h2>Payment Information</h2>
-                            </div>
-
-                            <div className="form-row">
-                                <div className="form-group full-width">
-                                    <label htmlFor="cardNumber">Card Number *</label>
-                                    <div className="input-with-icon">
-                                        <CreditCard size={20} />
-                                        <input
-                                            type="text"
-                                            id="cardNumber"
-                                            name="cardNumber"
-                                            value={formData.cardNumber}
-                                            onChange={handleCardNumberChange}
-                                            className={errors.cardNumber ? 'error' : ''}
-                                            placeholder="1234 5678 9012 3456"
-                                            maxLength="19"
-                                        />
-                                    </div>
-                                    {errors.cardNumber && <span className="error-message">{errors.cardNumber}</span>}
-                                </div>
-                            </div>
-
-                            <div className="form-row">
-                                <div className="form-group full-width">
-                                    <label htmlFor="cardName">Cardholder Name *</label>
-                                    <input
-                                        type="text"
-                                        id="cardName"
-                                        name="cardName"
-                                        value={formData.cardName}
-                                        onChange={handleChange}
-                                        className={errors.cardName ? 'error' : ''}
-                                        placeholder="John Doe"
-                                    />
-                                    {errors.cardName && <span className="error-message">{errors.cardName}</span>}
-                                </div>
-                            </div>
-
-                            <div className="form-row">
-                                <div className="form-group">
-                                    <label htmlFor="expiryDate">Expiry Date *</label>
-                                    <input
-                                        type="text"
-                                        id="expiryDate"
-                                        name="expiryDate"
-                                        value={formData.expiryDate}
-                                        onChange={handleExpiryChange}
-                                        className={errors.expiryDate ? 'error' : ''}
-                                        placeholder="MM/YY"
-                                        maxLength="5"
-                                    />
-                                    {errors.expiryDate && <span className="error-message">{errors.expiryDate}</span>}
-                                </div>
-
-                                <div className="form-group">
-                                    <label htmlFor="cvv">CVV *</label>
-                                    <div className="input-with-icon">
-                                        <Lock size={20} />
-                                        <input
-                                            type="text"
-                                            id="cvv"
-                                            name="cvv"
-                                            value={formData.cvv}
-                                            onChange={handleChange}
-                                            className={errors.cvv ? 'error' : ''}
-                                            placeholder="123"
-                                            maxLength="4"
-                                        />
-                                    </div>
-                                    {errors.cvv && <span className="error-message">{errors.cvv}</span>}
                                 </div>
                             </div>
                         </div>
@@ -442,7 +305,7 @@ const Checkout = () => {
                                 Back to Cart
                             </button>
                             <button type="submit" className="submit-btn" disabled={isProcessing}>
-                                {isProcessing ? 'Processing...' : `Pay ${(getCartTotal() * 1.1).toFixed(2)} EGP`}
+                                {isProcessing ? 'Processing...' : `Order Now (${total.toFixed(2)} EGP)`}
                             </button>
                         </div>
                     </form>
@@ -454,7 +317,7 @@ const Checkout = () => {
                         <div className="summary-items">
                             {cartItems.map((item) => (
                                 <div className="summary-item" key={item.id}>
-                                    <img src={item.image} alt={item.title} />
+                                    <img src={parseImage(item.image)} alt={item.title} />
                                     <div className="item-details">
                                         <h4>{item.title}</h4>
                                         <p>Qty: {item.quantity}</p>
@@ -469,25 +332,34 @@ const Checkout = () => {
                         <div className="summary-totals">
                             <div className="summary-row">
                                 <span>Subtotal</span>
-                                <span>{getCartTotal().toFixed(2)} <small>EGP</small></span>
+                                <span>{subtotal.toFixed(2)} <small>EGP</small></span>
                             </div>
                             <div className="summary-row">
                                 <span>Shipping</span>
-                                <span className="free-shipping">Free</span>
+                                <span className={shippingCost === 0 ? 'free-shipping' : ''}>
+                                    {shippingCost === 0 ? 'Free' : `${shippingCost.toFixed(2)} EGP`}
+                                </span>
                             </div>
                             <div className="summary-row">
-                                <span>Tax (10%)</span>
-                                <span>{(getCartTotal() * 0.1).toFixed(2)} <small>EGP</small></span>
+                                <span>Tax</span>
+                                <span className="free-shipping">Free</span>
                             </div>
                             <div className="summary-divider"></div>
                             <div className="summary-row total">
                                 <span>Total</span>
-                                <span>{(getCartTotal() * 1.1).toFixed(2)} <small>EGP</small></span>
+                                <span>{total.toFixed(2)} <small>EGP</small></span>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+            {alert && (
+                <CustomAlert
+                    message={alert.message}
+                    type={alert.type}
+                    onClose={() => setAlert(null)}
+                />
+            )}
         </div>
     )
 }

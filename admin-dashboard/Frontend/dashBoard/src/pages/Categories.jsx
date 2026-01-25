@@ -16,13 +16,20 @@ const Categories = () => {
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState('')
 
+    // API URL - Uses environment variable
+    // API URL - Uses environment variable in dev, falls back to production URL
+    const API_URL = import.meta.env.VITE_API_URL || 'https://store-b-backend-production.up.railway.app';
+
     useEffect(() => {
         fetchCategories()
     }, [])
 
     const fetchCategories = async () => {
         try {
-            const response = await axios.get('https://store-b-backend-production.up.railway.app/api/categories')
+            const token = localStorage.getItem('adminToken');
+            const response = await axios.get(`${API_URL}/api/categories`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            })
             setCategories(response.data)
         } catch (error) {
             console.error('Error fetching categories:', error)
@@ -90,14 +97,18 @@ const Categories = () => {
         }
 
         try {
+            const token = localStorage.getItem('adminToken');
+            const config = {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    'Authorization': `Bearer ${token}`
+                }
+            };
+
             if (editingCategory) {
-                await axios.put(`https://store-b-backend-production.up.railway.app/api/categories/${editingCategory.id}`, data, {
-                    headers: { 'Content-Type': 'multipart/form-data' }
-                })
+                await axios.put(`${API_URL}/api/categories/${editingCategory.id}`, data, config)
             } else {
-                await axios.post('https://store-b-backend-production.up.railway.app/api/categories', data, {
-                    headers: { 'Content-Type': 'multipart/form-data' }
-                })
+                await axios.post(`${API_URL}/api/categories`, data, config)
             }
 
             fetchCategories()
@@ -115,7 +126,10 @@ const Categories = () => {
         }
 
         try {
-            await axios.delete(`https://store-b-backend-production.up.railway.app/api/categories/${id}`)
+            const token = localStorage.getItem('adminToken');
+            await axios.delete(`${API_URL}/api/categories/${id}`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            })
             fetchCategories()
         } catch (error) {
             setError(error.response?.data?.error || 'Failed to delete category')
@@ -129,7 +143,12 @@ const Categories = () => {
             description: category.description || '',
             image: null
         })
-        setImagePreview(category.image ? `https://store-b-backend-production.up.railway.app/${category.image}` : null)
+        // If image is an absolute URL (Cloudinary), use it directly. Otherwise prepend API_URL.
+        const imageUrl = category.image?.startsWith('http')
+            ? category.image
+            : (category.image ? `${API_URL}/${category.image}` : null);
+
+        setImagePreview(imageUrl)
         setShowModal(true)
     }
 
@@ -158,7 +177,7 @@ const Categories = () => {
                     <div key={category.id} className="category-card">
                         {category.image && (
                             <div className="category-image">
-                                <img src={`https://store-b-backend-production.up.railway.app/${category.image}`} alt={category.name} />
+                                <img src={category.image.startsWith('http') ? category.image : `${API_URL}/${category.image}`} alt={category.name} />
                             </div>
                         )}
                         <div className="category-content">

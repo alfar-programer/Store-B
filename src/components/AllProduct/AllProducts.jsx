@@ -3,11 +3,13 @@ import React, { useState, useMemo, useEffect } from 'react'
 import { useCart } from '../../context/CartContext'
 import { useSearchParams, useNavigate } from 'react-router-dom'
 import api from '../../services/api'
+import { API_BASE_URL } from '../../config'
 import './allproducts.css'
 
 const AllProducts = () => {
     const [products, setProducts] = useState([])
     const [loading, setLoading] = useState(true)
+    const [error, setError] = useState(null)
     const [selectedProduct, setSelectedProduct] = useState(null)
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [searchParams] = useSearchParams()
@@ -23,18 +25,52 @@ const AllProducts = () => {
 
     const fetchProducts = async () => {
         try {
+            setError(null)
             const response = await api.products.getAll()
             if (response.ok) {
                 const data = await response.json()
                 setProducts(data)
             } else {
                 console.error('Failed to fetch products')
+                setError('Failed to load products. Please try again later.')
             }
             setLoading(false)
         } catch (error) {
             console.error('Error fetching products:', error)
+            setError('Unable to connect to the server. Please check your connection.')
             setLoading(false)
         }
+    }
+
+    const parseImage = (imageField) => {
+        if (!imageField) return 'https://via.placeholder.com/300?text=No+Image'
+
+        let imageUrl = imageField
+
+        try {
+            // Check if it's a JSON string array
+            if (typeof imageField === 'string' && (imageField.startsWith('[') || imageField.startsWith('{'))) {
+                const parsed = JSON.parse(imageField)
+                if (Array.isArray(parsed) && parsed.length > 0) {
+                    imageUrl = parsed[0]
+                }
+            }
+        } catch (e) {
+            // If parsing fails, treat as simple string
+            console.warn('Image parsing error, using raw value:', e)
+        }
+
+        // Handle relative paths
+        if (imageUrl && !imageUrl.startsWith('http') && !imageUrl.startsWith('data:')) {
+            // Remove /api from base URL to get root
+            const rootUrl = API_BASE_URL.replace('/api', '')
+            // Ensure no double slashes
+            const cleanRoot = rootUrl.endsWith('/') ? rootUrl.slice(0, -1) : rootUrl
+            const cleanPath = imageUrl.startsWith('/') ? imageUrl.slice(1) : imageUrl
+            return `${cleanRoot}/${cleanPath}`
+        }
+
+        return imageUrl || 'https://via.placeholder.com/300?text=No+Image'
     }
 
     // Update selected category when URL parameter changes
@@ -58,14 +94,57 @@ const AllProducts = () => {
         return products.filter(product => product.category === selectedCategory)
     }, [selectedCategory, products])
 
+    // Helper to get all images
+    const getImages = (imageField) => {
+        if (!imageField) return ['https://via.placeholder.com/300?text=No+Image'];
+
+        try {
+            if (typeof imageField === 'string' && (imageField.startsWith('[') || imageField.startsWith('{'))) {
+                const parsed = JSON.parse(imageField)
+                if (Array.isArray(parsed) && parsed.length > 0) {
+                    return parsed.map(img => {
+                        if (!img) return 'https://via.placeholder.com/300?text=No+Image';
+                        if (img.startsWith('http') || img.startsWith('data:')) return img;
+                        const rootUrl = API_BASE_URL.replace('/api', '')
+                        const cleanRoot = rootUrl.endsWith('/') ? rootUrl.slice(0, -1) : rootUrl
+                        const cleanPath = img.startsWith('/') ? img.slice(1) : img
+                        return `${cleanRoot}/${cleanPath}`
+                    });
+                }
+            }
+        } catch (e) {
+            console.warn('Image parsing error', e)
+        }
+
+        // Single image fallback
+        let imageUrl = imageField;
+        if (imageUrl && !imageUrl.startsWith('http') && !imageUrl.startsWith('data:')) {
+            const rootUrl = API_BASE_URL.replace('/api', '')
+            const cleanRoot = rootUrl.endsWith('/') ? rootUrl.slice(0, -1) : rootUrl
+            const cleanPath = imageUrl.startsWith('/') ? imageUrl.slice(1) : imageUrl
+            imageUrl = `${cleanRoot}/${cleanPath}`
+        }
+        return [imageUrl || 'https://via.placeholder.com/300?text=No+Image'];
+    }
+
+    const [modalImages, setModalImages] = useState([]);
+    const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
     const handleQuickView = (product) => {
         setSelectedProduct(product)
+        const images = getImages(product.image);
+        setModalImages(images);
+        setCurrentImageIndex(0);
         setIsModalOpen(true)
     }
 
     const closeModal = () => {
         setIsModalOpen(false)
-        setTimeout(() => setSelectedProduct(null), 300) // Delay to allow fade-out animation
+        setTimeout(() => {
+            setSelectedProduct(null)
+            setModalImages([])
+            setCurrentImageIndex(0)
+        }, 3000) // Delay to allow fade-out animation
     }
 
     const handleAddToCart = (product) => {
@@ -100,6 +179,25 @@ const AllProducts = () => {
                         <div className="loading-spinner"></div>
                         <p>Loading products...</p>
                     </div>
+                ) : error ? (
+                    <div className="error-state" style={{ textAlign: 'center', padding: '2rem', color: '#e53e3e' }}>
+                        <h3>Oops! Something went wrong.</h3>
+                        <p>{error}</p>
+                        <button
+                            onClick={fetchProducts}
+                            style={{
+                                marginTop: '1rem',
+                                padding: '0.5rem 1rem',
+                                background: '#3182ce',
+                                color: 'white',
+                                border: 'none',
+                                borderRadius: '4px',
+                                cursor: 'pointer'
+                            }}
+                        >
+                            Try Again
+                        </button>
+                    </div>
                 ) : (
                     <>
                         <div className="products-header">
@@ -133,7 +231,7 @@ const AllProducts = () => {
                                         <div className="discount-badge">-{product.discount}%</div>
                                     )}
                                     <div className="product-image-wrapper">
-                                        <img src={product.image} alt={product.title} />
+                                        <img src={parseImage(product.image)} alt={product.title} />
                                         <div className="product-overlay">
                                             <button
                                                 className="quick-view-btn"
@@ -179,7 +277,32 @@ const AllProducts = () => {
                                 <div className="modal-content" onClick={(e) => e.stopPropagation()}>
                                     <button className="modal-close" onClick={closeModal}>×</button>
                                     <div className="modal-image-wrapper">
-                                        <img src={selectedProduct.image} alt={selectedProduct.title} />
+                                        <div className="modal-gallery-container">
+                                            <div className="modal-main-image">
+                                                <img
+                                                    src={modalImages[currentImageIndex] || parseImage(selectedProduct.image)}
+                                                    alt={selectedProduct.title}
+                                                />
+                                            </div>
+
+                                            {/* Image Gallery Thumbnails */}
+                                            {modalImages.length > 1 && (
+                                                <div className="modal-thumbnails-track">
+                                                    {modalImages.map((img, idx) => (
+                                                        <div
+                                                            key={idx}
+                                                            className={`gallery-thumbnail ${currentImageIndex === idx ? 'active' : ''}`}
+                                                            onClick={() => setCurrentImageIndex(idx)}
+                                                        >
+                                                            <img
+                                                                src={img}
+                                                                alt={`Thumbnail ${idx}`}
+                                                            />
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            )}
+                                        </div>
                                     </div>
                                     <div className="modal-details">
                                         <h2>{selectedProduct.title}</h2>

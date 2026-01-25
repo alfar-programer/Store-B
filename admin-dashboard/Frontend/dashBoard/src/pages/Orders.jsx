@@ -1,9 +1,22 @@
 import React, { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import { X, Check } from 'lucide-react'
 import './Orders.css'
 
 const Orders = () => {
+    // API URL - Uses environment variable in dev, falls back to production URL
+    const API_URL = import.meta.env.VITE_API_URL || 'https://store-b-backend-production.up.railway.app';
     const [orders, setOrders] = useState([])
+    const [notification, setNotification] = useState({ show: false, message: '', type: '' })
+    const navigate = useNavigate()
+
+    const showNotification = (message, type) => {
+        setNotification({ show: true, message, type })
+        setTimeout(() => {
+            setNotification({ show: false, message: '', type: '' })
+        }, 3000)
+    }
 
     useEffect(() => {
         fetchOrders()
@@ -11,19 +24,34 @@ const Orders = () => {
 
     const fetchOrders = async () => {
         try {
-            const response = await axios.get('https://store-b-backend-production.up.railway.app/api/orders')
-            setOrders(response.data)
+            const token = localStorage.getItem('adminToken');
+            const response = await axios.get(`${API_URL}/api/orders`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            })
+            if (response.data && response.data.success) {
+                setOrders(response.data.data)
+            } else if (Array.isArray(response.data)) {
+                setOrders(response.data)
+            } else {
+                setOrders([])
+            }
         } catch (error) {
             console.error('Error fetching orders:', error)
+            showNotification('Error fetching orders', 'error')
         }
     }
 
     const updateOrderStatus = async (id, newStatus) => {
         try {
-            await axios.put(`https://store-b-backend-production.up.railway.app/api/orders/${id}`, { status: newStatus })
+            const token = localStorage.getItem('adminToken');
+            await axios.put(`${API_URL}/api/orders/${id}`, { status: newStatus }, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            })
+            showNotification(`Order status updated to ${newStatus}`, 'success')
             fetchOrders()
         } catch (error) {
             console.error('Error updating order:', error)
+            showNotification('Error updating order', 'error')
         }
     }
 
@@ -31,17 +59,32 @@ const Orders = () => {
         switch (status) {
             case 'Pending':
                 return '#f6ad55'
+            case 'Processing':
+                return '#4fd1c5'
             case 'Shipped':
                 return '#4299e1'
             case 'Delivered':
                 return '#48bb78'
+            case 'Cancelled':
+                return '#e53e3e'
             default:
                 return '#718096'
         }
     }
 
+    const openOrderDetails = (id) => {
+        navigate(`/orders/${id}`)
+    }
+
     return (
         <div className="orders-page">
+            {/* Notification */}
+            {notification.show && (
+                <div className={`notification ${notification.type}`}>
+                    {notification.type === 'success' ? <Check size={20} /> : <X size={20} />}
+                    {notification.message}
+                </div>
+            )}
             <div className="page-header">
                 <h1>Orders Management</h1>
             </div>
@@ -73,16 +116,27 @@ const Orders = () => {
                                     </span>
                                 </td>
                                 <td>{new Date(order.createdAt).toLocaleDateString()}</td>
-                                <td>
+                                <td className="actions-cell">
                                     <select
                                         value={order.status}
                                         onChange={(e) => updateOrderStatus(order.id, e.target.value)}
                                         className="status-select"
+                                        disabled={order.status === 'Cancelled'}
                                     >
                                         <option value="Pending">Pending</option>
+                                        <option value="Processing">Processing</option>
                                         <option value="Shipped">Shipped</option>
                                         <option value="Delivered">Delivered</option>
+                                        {(order.status === 'Pending' || order.status === 'Cancelled') && (
+                                            <option value="Cancelled">Cancelled</option>
+                                        )}
                                     </select>
+                                    <button
+                                        className="btn-details"
+                                        onClick={() => openOrderDetails(order.id)}
+                                    >
+                                        View Details
+                                    </button>
                                 </td>
                             </tr>
                         ))}

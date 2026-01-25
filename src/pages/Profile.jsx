@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { User, Camera, Package, Calendar, DollarSign, ShoppingBag, Edit2, Save, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import CustomAlert from '../components/ui/Alert/CustomAlert';
 import './profile.css';
 
 const Profile = () => {
@@ -13,6 +14,7 @@ const Profile = () => {
     const [uploading, setUploading] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
     const [editForm, setEditForm] = useState({ name: '', email: '' });
+    const [alertState, setAlertState] = useState(null);
 
     useEffect(() => {
         if (!user) {
@@ -165,7 +167,7 @@ const Profile = () => {
             }
         } catch (error) {
             console.error('Error updating profile:', error);
-            alert(error.message || 'Failed to update profile. Please try again.');
+            setAlertState({ message: error.message || 'Failed to update profile. Please try again.', type: 'error' });
         }
     };
 
@@ -329,6 +331,13 @@ const Profile = () => {
                     )}
                 </div>
             </div>
+            {alertState && (
+                <CustomAlert
+                    message={alertState.message}
+                    type={alertState.type}
+                    onClose={() => setAlertState(null)}
+                />
+            )}
         </div>
     );
 };

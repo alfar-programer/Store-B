@@ -1,0 +1,152 @@
+.custom-alert-overlay {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    pointer-events: none;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.custom-alert-box {
+    min-width: 320px;
+    max-width: 450px;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 12px;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1), 0 4px 10px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    pointer-events: auto;
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    position: relative;
+    overflow: hidden;
+}
+
+.custom-alert-box.visible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
+.alert-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+}
+
+.alert-icon {
+    flex-shrink: 0;
+}
+
+.alert-icon.error {
+    color: #ff4d4f;
+}
+
+.alert-icon.success {
+    color: #52c41a;
+}
+
+.alert-icon.warning {
+    color: #faad14;
+}
+
+.alert-icon.info {
+    color: #1890ff;
+}
+
+.alert-message {
+    margin: 0;
+    color: #262626;
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 1.4;
+}
+
+.alert-close-btn {
+    background: transparent;
+    border: none;
+    color: #8c8c8c;
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    transition: all 0.2s;
+    margin-left: 12px;
+}
+
+.alert-close-btn:hover {
+    background: rgba(0, 0, 0, 0.05);
+    color: #595959;
+}
+
+/* Progress Bar */
+.alert-progress-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.alert-progress-fill {
+    height: 100%;
+    width: 100%;
+    transform-origin: left;
+    animation: alert-progress linear forwards;
+}
+
+.error .alert-progress-fill {
+    background: #ff4d4f;
+}
+
+.success .alert-progress-fill {
+    background: #52c41a;
+}
+
+.warning .alert-progress-fill {
+    background: #faad14;
+}
+
+.info .alert-progress-fill {
+    background: #1890ff;
+}
+
+@keyframes alert-progress {
+    from {
+        transform: scaleX(1);
+    }
+
+    to {
+        transform: scaleX(0);
+    }
+}
+
+/* Specific Types */
+.custom-alert-box.error {
+    border-left: 4px solid #ff4d4f;
+}
+
+.custom-alert-box.success {
+    border-left: 4px solid #52c41a;
+}
+
+.custom-alert-box.warning {
+    border-left: 4px solid #faad14;
+}
+
+.custom-alert-box.info {
+    border-left: 4px solid #1890ff;
+}

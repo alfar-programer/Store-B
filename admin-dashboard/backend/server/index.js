@@ -6,8 +6,21 @@ const mysql = require('mysql2/promise');
 const dotenv = require('dotenv');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const cloudinary = require('cloudinary').v2;
 
 dotenv.config();
+
+// Configure Cloudinary
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET
+});
+
+if (!process.env.CLOUDINARY_CLOUD_NAME || process.env.CLOUDINARY_CLOUD_NAME === 'your_cloud_name_here') {
+  console.warn('⚠️  WARNING: Cloudinary credentials are not set or are invalid placeholders. Image uploads will fail.');
+  console.warn('⚠️  Please set CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, and CLOUDINARY_API_SECRET in your .env file.');
+}
 
 // Set default JWT_SECRET if not provided
 if (!process.env.JWT_SECRET) {
@@ -50,9 +63,11 @@ app.use(helmet({
       defaultSrc: ["'self'"],
       styleSrc: ["'self'", "'unsafe-inline'"],
       scriptSrc: ["'self'"],
-      imgSrc: ["'self'", "data:", "https:"],
+      imgSrc: ["'self'", "data:", "https:", "blob:", "http:"], // Added blob: and http: for flexibility
+      connectSrc: ["'self'", "https:", "http:"], // Allow connecting to other origins
     },
   },
+  crossOriginResourcePolicy: { policy: "cross-origin" }, // Allow images to be loaded by other domains
   crossOriginEmbedderPolicy: false,
 }));
 
@@ -102,6 +117,8 @@ const allowedOrigins = [
   'http://localhost:5174',
   'https://store-b-frontend.vercel.app',
   'https://store-b-admin.vercel.app',
+  'https://store-b-production.up.railway.app',
+  'https://store-b-dashboard-production.up.railway.app',
   process.env.FRONTEND_URL,
   process.env.ADMIN_URL
 ].filter(Boolean);
@@ -182,7 +199,7 @@ async function initDatabase() {
         price DECIMAL(10, 2) NOT NULL,
         category VARCHAR(255) NOT NULL,
         stock INT DEFAULT 0,
-        image VARCHAR(255) NOT NULL,
+        image TEXT NOT NULL,
         discount INT DEFAULT 0,
         rating DECIMAL(2, 1) DEFAULT 4.5,
         isFeatured BOOLEAN DEFAULT false,
@@ -197,6 +214,7 @@ async function initDatabase() {
         id INT AUTO_INCREMENT PRIMARY KEY,
         name VARCHAR(255) UNIQUE NOT NULL,
         description TEXT,
+        image TEXT,
         createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
       )
@@ -224,12 +242,20 @@ async function initDatabase() {
         total DECIMAL(10, 2) NOT NULL,
         status VARCHAR(255) DEFAULT 'Pending',
         items TEXT NOT NULL,
+        shippingAddress TEXT,
         UserId INT,
         createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
         FOREIGN KEY (UserId) REFERENCES Users(id) ON DELETE SET NULL
       )
     `);
+
+    // Ensure shippingAddress column exists (if table was already created)
+    try {
+      await connection.query('ALTER TABLE Orders ADD COLUMN shippingAddress TEXT AFTER items');
+    } catch (e) {
+      // Column might already exist
+    }
 
     console.log('✅ Database tables initialized');
   } finally {
@@ -238,15 +264,48 @@ async function initDatabase() {
 }
 
 /* ======================
-   MULTER
+   MULTER & CLOUDINARY
 ====================== */
-const storage = multer.diskStorage({
-  destination: 'uploads/',
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname));
+// Use memory storage for Cloudinary uploads
+const storage = multer.memoryStorage();
+const upload = multer({
+  storage,
+  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB limit
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype.startsWith('image/')) {
+      cb(null, true);
+    } else {
+      cb(new Error('Only image files are allowed'), false);
+    }
   }
 });
-const upload = multer({ storage });
+
+// Helper function to upload to Cloudinary
+// Helper function to upload to Cloudinary with retry logic
+async function uploadToCloudinary(fileBuffer, folder = 'categories') {
+  return new Promise((resolve, reject) => {
+    const uploadStream = cloudinary.uploader.upload_stream(
+      {
+        folder,
+        resource_type: 'auto',
+        timeout: 60000 // 60 seconds timeout
+      },
+      (error, result) => {
+        if (error) {
+          console.error('❌ Cloudinary upload error:', error);
+          if (error.http_code === 499 || error.message.includes('Timeout')) {
+            console.log('⚠️ Upload timed out, but proceeding with error. Consider increasing timeout.');
+          }
+          reject(error);
+        } else {
+          console.log(`✅ Cloudinary upload successful: ${result.secure_url}`);
+          resolve(result);
+        }
+      }
+    );
+    uploadStream.end(fileBuffer);
+  });
+}
 
 /* ======================
    HEALTH CHECK
@@ -331,7 +390,7 @@ app.post('/api/auth/login', authLimiter, validateLogin, async (req, res) => {
     console.error('Login error:', error);
     res.status(500).json({
       success: false,
-      message: 'Server error'
+      message: 'Server error: ' + error.message
     });
   }
 });
@@ -345,7 +404,7 @@ app.get('/api/products', async (req, res) => {
     res.json(products);
   } catch (error) {
     console.error('Get products error:', error);
-    res.status(500).json({ message: 'Server error' });
+    res.status(500).json({ message: 'Server error: ' + error.message });
   }
 });
 
@@ -355,27 +414,51 @@ app.get('/api/products/featured', async (req, res) => {
     res.json(products);
   } catch (error) {
     console.error('Get featured products error:', error);
-    res.status(500).json({ message: 'Server error' });
+    res.status(500).json({ message: 'Server error: ' + error.message });
   }
 });
 
-app.post('/api/products', adminOnly, upload.single('image'), validateProduct, async (req, res) => {
+app.post('/api/products', adminOnly, upload.array('images', 10), validateProduct, async (req, res) => {
   try {
+    console.log('📦 Received Product Creation Request');
+    console.log('Files:', req.files ? req.files.length : '0');
+    console.log('Body:', JSON.stringify(req.body, null, 2));
+
     const { title, description, price, category, stock, discount, rating, isFeatured } = req.body;
 
-    if (!req.file) {
+    let imageUrls = [];
+
+    // Process uploaded files
+    if (req.files && req.files.length > 0) {
+      console.log(`☁️ Uploading ${req.files.length} images to Cloudinary...`);
+      try {
+        const uploadPromises = req.files.map(file => uploadToCloudinary(file.buffer, 'products'));
+        const results = await Promise.all(uploadPromises);
+        imageUrls = results.map(r => r.secure_url);
+        console.log('✅ All images uploaded successfully:', imageUrls);
+      } catch (uploadError) {
+        console.error('❌ One or more image uploads failed:', uploadError);
+        return res.status(500).json({
+          success: false,
+          message: 'Image upload failed: ' + uploadError.message
+        });
+      }
+    } else {
+      // If no files uploaded, allow creation if it's not strictly required by business logic,
+      // but schema is NOT NULL. So we must have something.
+      console.warn('⚠️ No images uploaded for product.');
       return res.status(400).json({
         success: false,
-        message: 'Product image is required'
+        message: 'At least one product image is required'
       });
     }
 
-    const image = `uploads/${req.file.filename}`;
+    const imageJson = JSON.stringify(imageUrls);
 
     const [result] = await pool.query(
       `INSERT INTO Products (title, description, price, category, stock, image, discount, rating, isFeatured) 
        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      [title, description, price, category, stock || 0, image, discount || 0, rating || 4.5, isFeatured || false]
+      [title, description, price, category, stock || 0, imageJson, discount || 0, rating || 4.5, isFeatured === 'true' || isFeatured === true ? 1 : 0]
     );
 
     const [products] = await pool.query('SELECT * FROM Products WHERE id = ?', [result.insertId]);
@@ -387,7 +470,7 @@ app.post('/api/products', adminOnly, upload.single('image'), validateProduct, as
     console.error('Create product error:', error);
     res.status(500).json({
       success: false,
-      message: 'Server error'
+      message: 'Server error: ' + error.message
     });
   }
 });
@@ -401,25 +484,54 @@ app.get('/api/categories', async (req, res) => {
     res.json(categories);
   } catch (error) {
     console.error('Get categories error:', error);
-    res.status(500).json({ message: 'Server error' });
+    res.status(500).json({ message: 'Server error: ' + error.message });
   }
 });
 
-app.post('/api/categories', adminOnly, validateCategory, async (req, res) => {
+app.post('/api/categories', adminOnly, upload.single('image'), validateCategory, async (req, res) => {
   try {
     const { name, description } = req.body;
+
+    console.log('📝 Creating category:', name);
+    console.log('📎 File received:', req.file ? 'Yes' : 'No');
+
+    if (!req.file) {
+      console.warn('⚠️ Category creation failed: No image file provided');
+      return res.status(400).json({
+        success: false,
+        message: 'Category image is required'
+      });
+    }
+
+    // Upload to Cloudinary
+    console.log('☁️ Uploading category image to Cloudinary...');
+    let imageUrl;
+    try {
+      const cloudinaryResult = await uploadToCloudinary(req.file.buffer, 'categories');
+      imageUrl = cloudinaryResult.secure_url;
+      console.log('✅ Category image uploaded:', imageUrl);
+    } catch (uploadError) {
+      console.error('❌ Category image upload failed:', uploadError);
+      return res.status(500).json({
+        success: false,
+        message: 'Image upload failed: ' + uploadError.message
+      });
+    }
+
     const [result] = await pool.query(
-      'INSERT INTO Categories (name, description) VALUES (?, ?)',
-      [name, description]
+      'INSERT INTO Categories (name, description, image) VALUES (?, ?, ?)',
+      [name, description, imageUrl]
     );
 
     const [categories] = await pool.query('SELECT * FROM Categories WHERE id = ?', [result.insertId]);
+    console.log('✅ Category created:', categories[0]);
+
     res.json({
       success: true,
       data: categories[0]
     });
   } catch (error) {
-    console.error('Create category error:', error);
+    console.error('❌ Create category error:', error);
     if (error.code === 'ER_DUP_ENTRY') {
       return res.status(400).json({
         success: false,
@@ -428,7 +540,7 @@ app.post('/api/categories', adminOnly, validateCategory, async (req, res) => {
     }
     res.status(500).json({
       success: false,
-      message: 'Server error'
+      message: 'Server error: ' + error.message
     });
   }
 });
@@ -438,12 +550,23 @@ app.post('/api/categories', adminOnly, validateCategory, async (req, res) => {
 ====================== */
 app.post('/api/orders', authOnly, validateOrder, async (req, res) => {
   try {
-    const { customerName, total, status, items } = req.body;
+    const { customerName, total, status, items, shippingAddress } = req.body;
     const UserId = req.user.id; // Use authenticated user's ID
 
+    console.log('📝 New Order Received:', {
+      customer: customerName,
+      total: total,
+      hasItems: !!items,
+      hasShipping: !!shippingAddress
+    });
+
+    if (shippingAddress) {
+      console.log('📍 Shipping Address details:', JSON.stringify(shippingAddress, null, 2));
+    }
+
     const [result] = await pool.query(
-      'INSERT INTO Orders (customerName, total, status, items, UserId) VALUES (?, ?, ?, ?, ?)',
-      [customerName, total, status || 'Pending', JSON.stringify(items), UserId]
+      'INSERT INTO Orders (customerName, total, status, items, UserId, shippingAddress) VALUES (?, ?, ?, ?, ?, ?)',
+      [customerName, total, status || 'Pending', JSON.stringify(items), UserId, JSON.stringify(shippingAddress)]
     );
 
     const [orders] = await pool.query('SELECT * FROM Orders WHERE id = ?', [result.insertId]);
@@ -455,21 +578,27 @@ app.post('/api/orders', authOnly, validateOrder, async (req, res) => {
     console.error('Create order error:', error);
     res.status(500).json({
       success: false,
-      message: 'Server error'
+      message: 'Server error: ' + error.message
     });
   }
 });
 
 app.get('/api/orders', authenticateToken, async (req, res) => {
   try {
-    let query = 'SELECT * FROM Orders';
+    let query = `
+      SELECT o.*, u.email as userEmail, u.phone as userPhone, u.name as userName 
+      FROM Orders o 
+      LEFT JOIN Users u ON o.UserId = u.id
+    `;
     let params = [];
 
     // Non-admin users can only see their own orders
     if (req.user.role !== 'admin') {
-      query += ' WHERE UserId = ?';
+      query += ' WHERE o.UserId = ?';
       params.push(req.user.id);
     }
+
+    query += ' ORDER BY o.createdAt DESC';
 
     const [orders] = await pool.query(query, params);
     res.json({
@@ -480,14 +609,16 @@ app.get('/api/orders', authenticateToken, async (req, res) => {
     console.error('Get orders error:', error);
     res.status(500).json({
       success: false,
-      message: 'Server error'
+      message: 'Server error: ' + error.message
     });
   }
 });
 
-app.put('/api/orders/:id', adminOnly, validateId, async (req, res) => {
+app.put('/api/orders/:id', authenticateToken, validateId, async (req, res) => {
   try {
     const { status } = req.body;
+    const orderId = req.params.id;
+    const user = req.user;
 
     if (!status) {
       return res.status(400).json({
@@ -504,16 +635,49 @@ app.put('/api/orders/:id', adminOnly, validateId, async (req, res) => {
       });
     }
 
-    await pool.query('UPDATE Orders SET status = ? WHERE id = ?', [status, req.params.id]);
+    // Fetch order to check ownership and current status
+    const [orders] = await pool.query('SELECT * FROM Orders WHERE id = ?', [orderId]);
+    if (orders.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: 'Order not found'
+      });
+    }
+    const order = orders[0];
+
+    // Authorization check
+    if (user.role !== 'admin') {
+      // Non-admins can ONLY cancel their own orders that are currently Pending
+      if (order.UserId !== user.id) {
+        return res.status(403).json({
+          success: false,
+          message: 'You are not authorized to update this order'
+        });
+      }
+      if (status !== 'Cancelled') {
+        return res.status(403).json({
+          success: false,
+          message: 'Users can only cancel their orders'
+        });
+      }
+      if (order.status !== 'Pending') {
+        return res.status(400).json({
+          success: false,
+          message: 'Only pending orders can be cancelled'
+        });
+      }
+    }
+
+    await pool.query('UPDATE Orders SET status = ? WHERE id = ?', [status, orderId]);
     res.json({
       success: true,
-      message: 'Order updated successfully'
+      message: `Order status updated to ${status}`
     });
   } catch (error) {
     console.error('Update order error:', error);
     res.status(500).json({
       success: false,
-      message: 'Server error'
+      message: 'Server error: ' + error.message
     });
   }
 });
@@ -525,7 +689,7 @@ app.get('/api/stats', adminOnly, async (req, res) => {
   try {
     const [products] = await pool.query('SELECT COUNT(*) as count FROM Products');
     const [orders] = await pool.query('SELECT COUNT(*) as count, SUM(total) as revenue FROM Orders');
-    const [users] = await pool.query('SELECT COUNT(*) as count FROM Users WHERE role = "customer"');
+    const [users] = await pool.query("SELECT COUNT(*) as count FROM Users WHERE role = 'customer'");
 
     res.json({
       success: true,
@@ -541,7 +705,7 @@ app.get('/api/stats', adminOnly, async (req, res) => {
     console.error('Get stats error:', error);
     res.status(500).json({
       success: false,
-      message: 'Server error'
+      message: 'Server error: ' + error.message
     });
   }
 });
@@ -549,16 +713,25 @@ app.get('/api/stats', adminOnly, async (req, res) => {
 /* ======================
    PRODUCT UPDATE/DELETE
 ====================== */
-app.put('/api/products/:id', adminOnly, validateId, upload.single('image'), async (req, res) => {
+app.put('/api/products/:id', adminOnly, validateId, upload.array('images', 10), async (req, res) => {
   try {
     const { title, description, price, category, stock, discount, rating, isFeatured } = req.body;
     let query = 'UPDATE Products SET title=?, description=?, price=?, category=?, stock=?, discount=?, rating=?, isFeatured=?';
-    let params = [title, description, price, category, stock, discount, rating, isFeatured];
+    let params = [title, description, price, category, stock, discount, rating, isFeatured === 'true' || isFeatured === true ? 1 : 0];
 
-    if (req.file) {
-      const image = `uploads/${req.file.filename}`;
+    // Handle Image Updates
+    // Strategy: If new images are uploaded, we replace the existing ones (simple approach).
+    // Ideally, frontend should provide "existingImages" to keep.
+    // For now, if files are provided, we update the image column.
+
+    if (req.files && req.files.length > 0) {
+      console.log(`☁️ Uploading ${req.files.length} new images to Cloudinary...`);
+      const uploadPromises = req.files.map(file => uploadToCloudinary(file.buffer, 'products'));
+      const results = await Promise.all(uploadPromises);
+      const imageUrls = results.map(r => r.secure_url);
+
       query += ', image=?';
-      params.push(image);
+      params.push(JSON.stringify(imageUrls));
     }
 
     query += ' WHERE id=?';
@@ -573,7 +746,7 @@ app.put('/api/products/:id', adminOnly, validateId, upload.single('image'), asyn
     console.error('Update product error:', error);
     res.status(500).json({
       success: false,
-      message: 'Server error'
+      message: 'Server error: ' + error.message
     });
   }
 });
@@ -589,7 +762,7 @@ app.delete('/api/products/:id', adminOnly, validateId, async (req, res) => {
     console.error('Delete product error:', error);
     res.status(500).json({
       success: false,
-      message: 'Server error'
+      message: 'Server error: ' + error.message
     });
   }
 });
@@ -597,16 +770,36 @@ app.delete('/api/products/:id', adminOnly, validateId, async (req, res) => {
 /* ======================
    CATEGORY UPDATE/DELETE
 ====================== */
-app.put('/api/categories/:id', adminOnly, validateId, validateCategory, async (req, res) => {
+app.put('/api/categories/:id', adminOnly, validateId, upload.single('image'), validateCategory, async (req, res) => {
   try {
     const { name, description } = req.body;
-    await pool.query('UPDATE Categories SET name=?, description=? WHERE id=?', [name, description, req.params.id]);
+    let query = 'UPDATE Categories SET name=?, description=?';
+    let params = [name, description];
+
+    console.log('📝 Updating category:', req.params.id);
+    console.log('📎 New file received:', req.file ? 'Yes' : 'No');
+
+    if (req.file) {
+      console.log('☁️ Uploading to Cloudinary...');
+      const cloudinaryResult = await uploadToCloudinary(req.file.buffer, 'categories');
+      const imageUrl = cloudinaryResult.secure_url;
+
+      query += ', image=?';
+      params.push(imageUrl);
+    }
+
+    query += ' WHERE id=?';
+    params.push(req.params.id);
+
+    await pool.query(query, params);
+    console.log('✅ Category updated');
+
     res.json({
       success: true,
       message: 'Category updated successfully'
     });
   } catch (error) {
-    console.error('Update category error:', error);
+    console.error('❌ Update category error:', error);
     if (error.code === 'ER_DUP_ENTRY') {
       return res.status(400).json({
         success: false,
@@ -615,7 +808,7 @@ app.put('/api/categories/:id', adminOnly, validateId, validateCategory, async (r
     }
     res.status(500).json({
       success: false,
-      message: 'Server error'
+      message: 'Server error: ' + error.message
     });
   }
 });
@@ -631,7 +824,7 @@ app.delete('/api/categories/:id', adminOnly, validateId, async (req, res) => {
     console.error('Delete category error:', error);
     res.status(500).json({
       success: false,
-      message: 'Server error'
+      message: 'Server error: ' + error.message
     });
   }
 });

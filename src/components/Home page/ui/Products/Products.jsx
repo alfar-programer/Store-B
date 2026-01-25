@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import { useCart } from '../../../../context/CartContext'
+import { API_BASE_URL, PLACEHOLDER_IMAGE } from '../../../../config'
 import './products.css'
 
 const Products = () => {
@@ -25,6 +26,38 @@ const Products = () => {
             setLoading(false)
         }
     }
+
+    const parseImage = (imageField) => {
+        if (!imageField) return PLACEHOLDER_IMAGE
+
+        let imageUrl = imageField
+
+        try {
+            // Check if it's a JSON string array
+            if (typeof imageField === 'string' && (imageField.startsWith('[') || imageField.startsWith('{'))) {
+                const parsed = JSON.parse(imageField)
+                if (Array.isArray(parsed) && parsed.length > 0) {
+                    imageUrl = parsed[0]
+                }
+            }
+        } catch (e) {
+            console.warn('Image parsing error, using raw value:', e)
+        }
+
+        // Handle relative paths
+        if (imageUrl && !imageUrl.startsWith('http') && !imageUrl.startsWith('data:')) {
+            // For featured products we might need a more robust check if we don't have API_BASE_URL imported
+            // But usually we can assume the configured API URL
+            const rootUrl = API_BASE_URL.replace('/api', '')
+            const cleanRoot = rootUrl.endsWith('/') ? rootUrl.slice(0, -1) : rootUrl
+            const cleanPath = imageUrl.startsWith('/') ? imageUrl.slice(1) : imageUrl
+            return `${cleanRoot}/${cleanPath}`
+        }
+
+        return imageUrl || PLACEHOLDER_IMAGE
+    }
+
+    // ... (quick view handlers)
 
     const handleQuickView = (product) => {
         setSelectedProduct(product)
@@ -73,7 +106,7 @@ const Products = () => {
                                     <div className="discount-badge">-{product.discount}%</div>
                                 )}
                                 <div className="product-image-wrapper">
-                                    <img src={product.image} alt={product.title} />
+                                    <img src={parseImage(product.image)} alt={product.title} />
                                     <div className="product-overlay">
                                         <button
                                             className="quick-view-btn"

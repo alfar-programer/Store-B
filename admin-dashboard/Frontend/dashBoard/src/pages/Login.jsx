@@ -45,8 +45,10 @@ const Login = () => {
     const handleLogin = async (e) => {
         e.preventDefault();
 
+        const API_URL = import.meta.env.VITE_API_URL;
+
         try {
-            const response = await fetch('https://store-b-backend-production.up.railway.app/api/auth/login', {
+            const response = await fetch(`${API_URL}/api/auth/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

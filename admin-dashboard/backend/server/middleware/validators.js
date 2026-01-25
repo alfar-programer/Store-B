@@ -77,7 +77,7 @@ const validateProduct = [
     body('description')
         .trim()
         .notEmpty().withMessage('Description is required')
-        .isLength({ min: 10, max: 5000 }).withMessage('Description must be 10-5000 characters'),
+        .isLength({ min: 1, max: 5000 }).withMessage('Description must be 1-5000 characters'),
 
     body('price')
         .notEmpty().withMessage('Price is required')
@@ -144,6 +144,9 @@ const validateOrder = [
         .optional()
         .isIn(['Pending', 'Processing', 'Shipped', 'Delivered', 'Cancelled'])
         .withMessage('Invalid order status'),
+
+    body('shippingAddress')
+        .optional(),
 
     handleValidationErrors
 ];

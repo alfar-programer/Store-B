@@ -6,7 +6,7 @@ import { API_BASE_URL } from '../config'
  */
 export async function apiFetch(url, options = {}) {
     const defaultHeaders = {
-        'ngrok-skip-browser-warning': 'true',
+        // 'ngrok-skip-browser-warning': 'true', // Processed by Railway, causing CORS issues
         ...options.headers
     }
 
@@ -100,9 +100,9 @@ export const productsAPI = {
 
 // Orders API
 export const ordersAPI = {
-    getAll: () => apiGet('/orders'),
-    create: (data) => apiPost('/orders', data),
-    update: (id, data) => apiPut(`/orders/${id}`, data)
+    getAll: (token) => apiGet('/orders', token),
+    create: (data, token) => apiPost('/orders', data, token),
+    update: (id, data, token) => apiPut(`/orders/${id}`, data, token)
 };
 
 // Stats API

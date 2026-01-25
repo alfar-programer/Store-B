@@ -1,9 +1,11 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
 import { Mail, Phone, MapPin, Send } from 'lucide-react'
 import BubblesBackground from '../BubblesBackground/BubblesBackground'
 import './contact.css'
 
 const Contact = () => {
+    const location = useLocation()
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -11,6 +13,15 @@ const Contact = () => {
         message: ''
     })
     const [status, setStatus] = useState('')
+
+    useEffect(() => {
+        if (location.state?.orderId) {
+            setFormData(prev => ({
+                ...prev,
+                subject: `Order Support: #${location.state.orderId}`
+            }))
+        }
+    }, [location.state])
 
     const handleChange = (e) => {
         const { name, value } = e.target
