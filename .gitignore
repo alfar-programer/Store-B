@@ -13,6 +13,8 @@ npm-debug.log*
 # Dependencies
 node_modules
 **/node_modules/
+admin-dashboard/
+**/admin-dashboard/
 
 # Production
 dist
