@@ -9,19 +9,33 @@ const Register = () => {
     const [password, setPassword] = useState('');
     const [phone, setPhone] = useState('');
     const [error, setError] = useState('');
-    const { register } = useAuth();
+    const [fieldErrors, setFieldErrors] = useState({});
+    const { register, login } = useAuth();
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
+        setFieldErrors({});
 
         const result = await register(name, email, password, phone);
 
         if (result.success) {
-            navigate('/login');
+            // Auto-login after successful registration
+            const loginResult = await login(email, password);
+            if (loginResult.success) {
+                navigate('/');
+            } else {
+                // If auto-login fails, show error but registration was successful
+                setError('Registration successful! Please login manually.');
+            }
         } else {
-            setError(result.message);
+            // Set field-specific errors if available
+            if (result.fieldErrors && Object.keys(result.fieldErrors).length > 0) {
+                setFieldErrors(result.fieldErrors);
+            } else {
+                setError(result.message);
+            }
         }
     };
 
@@ -41,8 +55,10 @@ const Register = () => {
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                             placeholder="Enter your full name"
+                            className={fieldErrors.name ? 'input-error' : ''}
                             required
                         />
+                        {fieldErrors.name && <div className="field-error">{fieldErrors.name}</div>}
                     </div>
 
                     <div className="form-group">
@@ -52,8 +68,10 @@ const Register = () => {
                             value={phone}
                             onChange={(e) => setPhone(e.target.value)}
                             placeholder="Enter your phone number"
+                            className={fieldErrors.phone ? 'input-error' : ''}
                             required
                         />
+                        {fieldErrors.phone && <div className="field-error">{fieldErrors.phone}</div>}
                     </div>
 
                     <div className="form-group">
@@ -63,8 +81,10 @@ const Register = () => {
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             placeholder="Enter your email"
+                            className={fieldErrors.email ? 'input-error' : ''}
                             required
                         />
+                        {fieldErrors.email && <div className="field-error">{fieldErrors.email}</div>}
                     </div>
 
                     <div className="form-group">
@@ -74,8 +94,10 @@ const Register = () => {
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             placeholder="Create a password"
+                            className={fieldErrors.password ? 'input-error' : ''}
                             required
                         />
+                        {fieldErrors.password && <div className="field-error">{fieldErrors.password}</div>}
                     </div>
 
                     <button type="submit" className="auth-btn">Sign Up</button>

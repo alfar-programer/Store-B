@@ -155,7 +155,7 @@ const Products = () => {
                     <div className="modal-content" onClick={(e) => e.stopPropagation()}>
                         <button className="modal-close" onClick={closeModal}>×</button>
                         <div className="modal-image-wrapper">
-                            <img src={selectedProduct.image} alt={selectedProduct.title} />
+                            <img src={parseImage(selectedProduct.image)} alt={selectedProduct.title} />
                         </div>
                         <div className="modal-details">
                             <h2>{selectedProduct.title}</h2>

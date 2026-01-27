@@ -57,18 +57,50 @@ const Header = () => {
                                 { name: 'AllProducts', path: '/allproducts' },
                                 { name: 'About', path: '/about' },
                                 { name: 'Contact', path: '/contact' },
-                                { name: 'My Orders', path: '/my-orders' }
+                                // Show My Orders primarily if logged in, but also in list generally
+                                ...(user ? [{ name: 'My Orders', path: '/my-orders' }] : []),
+                                // Mobile Only: Profile Links (since hidden in header)
+                                ...(isMobileMenuOpen && user ? [
+                                    { name: 'My Profile', path: '/profile' },
+                                    ...(user.role === 'admin' ? [{ name: 'Admin Dashboard', path: `http://localhost:${import.meta.env.VITE_ADMIN_DASHBOARD_PORT || '5174'}`, external: true }] : [])
+                                ] : []),
+                                // Mobile Only: Login if not logged in
+                                ...(isMobileMenuOpen && !user ? [
+                                    { name: 'Login', path: '/login' },
+                                    { name: 'Register', path: '/register' }
+                                ] : [])
                             ].map((item) => (
                                 <li key={item.name}>
-                                    <Link
-                                        to={item.path}
-                                        className={`nav-link ${isActive(item.path) ? 'active' : ''}`}
-                                        onClick={closeMobileMenu}
-                                    >
-                                        {item.name}
-                                    </Link>
+                                    {item.external ? (
+                                        <a href={item.path} className="nav-link" onClick={closeMobileMenu}>
+                                            {item.name}
+                                        </a>
+                                    ) : (
+                                        <Link
+                                            to={item.path}
+                                            className={`nav-link ${isActive(item.path) ? 'active' : ''}`}
+                                            onClick={closeMobileMenu}
+                                        >
+                                            {item.name}
+                                        </Link>
+                                    )}
                                 </li>
                             ))}
+                            {/* Mobile Only: Logout */}
+                            {isMobileMenuOpen && user && (
+                                <li>
+                                    <button
+                                        onClick={() => {
+                                            logout();
+                                            closeMobileMenu();
+                                        }}
+                                        className="nav-link text-red-500 w-full text-left"
+                                        style={{ color: '#e53e3e' }}
+                                    >
+                                        Logout
+                                    </button>
+                                </li>
+                            )}
                         </ul>
                     </nav>
 
@@ -92,7 +124,7 @@ const Header = () => {
                             )}
                         </button>
 
-                        <div className="relative group">
+                        <div className="relative group hidden lg:block">
                             <button
                                 className="icon-btn"
                                 aria-label="Profile"
@@ -147,13 +179,14 @@ const Header = () => {
                         </button>
                     </div>
                 </div>
-            </header>
+            </header >
 
             {/* Mobile Overlay */}
-            <div
-                className={`mobile-overlay ${isMobileMenuOpen ? 'active' : ''}`}
+            < div
+                className={`mobile-overlay ${isMobileMenuOpen ? 'active' : ''}`
+                }
                 onClick={closeMobileMenu}
-            ></div>
+            ></div >
         </>
     )
 }

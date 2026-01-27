@@ -3,7 +3,7 @@ import React, { useState, useMemo, useEffect } from 'react'
 import { useCart } from '../../context/CartContext'
 import { useSearchParams, useNavigate } from 'react-router-dom'
 import api from '../../services/api'
-import { API_BASE_URL } from '../../config'
+import { API_BASE_URL, PLACEHOLDER_IMAGE } from '../../config'
 import './allproducts.css'
 
 const AllProducts = () => {
@@ -43,7 +43,7 @@ const AllProducts = () => {
     }
 
     const parseImage = (imageField) => {
-        if (!imageField) return 'https://via.placeholder.com/300?text=No+Image'
+        if (!imageField) return PLACEHOLDER_IMAGE
 
         let imageUrl = imageField
 
@@ -70,7 +70,7 @@ const AllProducts = () => {
             return `${cleanRoot}/${cleanPath}`
         }
 
-        return imageUrl || 'https://via.placeholder.com/300?text=No+Image'
+        return imageUrl || PLACEHOLDER_IMAGE
     }
 
     // Update selected category when URL parameter changes
@@ -96,14 +96,14 @@ const AllProducts = () => {
 
     // Helper to get all images
     const getImages = (imageField) => {
-        if (!imageField) return ['https://via.placeholder.com/300?text=No+Image'];
+        if (!imageField) return [PLACEHOLDER_IMAGE];
 
         try {
             if (typeof imageField === 'string' && (imageField.startsWith('[') || imageField.startsWith('{'))) {
                 const parsed = JSON.parse(imageField)
                 if (Array.isArray(parsed) && parsed.length > 0) {
                     return parsed.map(img => {
-                        if (!img) return 'https://via.placeholder.com/300?text=No+Image';
+                        if (!img) return PLACEHOLDER_IMAGE;
                         if (img.startsWith('http') || img.startsWith('data:')) return img;
                         const rootUrl = API_BASE_URL.replace('/api', '')
                         const cleanRoot = rootUrl.endsWith('/') ? rootUrl.slice(0, -1) : rootUrl
@@ -124,7 +124,7 @@ const AllProducts = () => {
             const cleanPath = imageUrl.startsWith('/') ? imageUrl.slice(1) : imageUrl
             imageUrl = `${cleanRoot}/${cleanPath}`
         }
-        return [imageUrl || 'https://via.placeholder.com/300?text=No+Image'];
+        return [imageUrl || PLACEHOLDER_IMAGE];
     }
 
     const [modalImages, setModalImages] = useState([]);

@@ -7,12 +7,14 @@ const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const [fieldErrors, setFieldErrors] = useState({});
     const { login } = useAuth();
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
+        setFieldErrors({});
 
         const result = await login(email, password);
 
@@ -26,7 +28,12 @@ const Login = () => {
                 navigate('/');
             }
         } else {
-            setError(result.message);
+            // Set field-specific errors if available
+            if (result.fieldErrors && Object.keys(result.fieldErrors).length > 0) {
+                setFieldErrors(result.fieldErrors);
+            } else {
+                setError(result.message);
+            }
         }
     };
 
@@ -46,8 +53,10 @@ const Login = () => {
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             placeholder="Enter your email"
+                            className={fieldErrors.email ? 'input-error' : ''}
                             required
                         />
+                        {fieldErrors.email && <div className="field-error">{fieldErrors.email}</div>}
                     </div>
 
                     <div className="form-group">
@@ -57,8 +66,10 @@ const Login = () => {
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             placeholder="Enter your password"
+                            className={fieldErrors.password ? 'input-error' : ''}
                             required
                         />
+                        {fieldErrors.password && <div className="field-error">{fieldErrors.password}</div>}
                     </div>
 
                     <button type="submit" className="auth-btn">Login</button>

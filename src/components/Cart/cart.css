@@ -21,7 +21,7 @@
 .cart-header h1 {
     font-size: clamp(2.5rem, 5vw, 3.5rem);
     font-weight: 700;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: var(--gradient-primary);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -192,7 +192,7 @@
     width: 32px;
     height: 32px;
     border: none;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: var(--gradient-primary);
     color: white;
     border-radius: 50%;
     cursor: pointer;
@@ -237,7 +237,7 @@
 .item-total {
     font-size: 1.5rem;
     font-weight: 700;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: var(--gradient-primary);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -351,7 +351,7 @@
 .checkout-btn {
     width: 100%;
     padding: 16px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: var(--gradient-primary);
     color: white;
     border: none;
     border-radius: 30px;
@@ -376,8 +376,8 @@
     width: 100%;
     padding: 14px;
     background: white;
-    color: #667eea;
-    border: 2px solid #667eea;
+    color: var(--accent-primary);
+    border: 2px solid var(--accent-primary);
     border-radius: 30px;
     font-size: 1rem;
     font-weight: 600;
@@ -391,7 +391,7 @@
 }
 
 .continue-shopping-btn:hover {
-    background: #667eea;
+    background: var(--accent-primary);
     color: white;
     transform: translateY(-2px);
 }

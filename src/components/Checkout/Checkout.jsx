@@ -3,7 +3,7 @@ import { useCart } from '../../context/CartContext'
 import { useAuth } from '../../context/AuthContext'
 import { useNavigate } from 'react-router-dom'
 import { CreditCard, MapPin, User, Mail, Phone, Lock, ArrowLeft, ShoppingBag } from 'lucide-react'
-import { API_BASE_URL } from '../../config'
+import { API_BASE_URL, PLACEHOLDER_IMAGE } from '../../config'
 import { ordersAPI } from '../../services/api'
 import CustomAlert from '../ui/Alert/CustomAlert'
 import './checkout.css'
@@ -37,7 +37,7 @@ const Checkout = () => {
 
     // Helper to parse product images
     const parseImage = (imageField) => {
-        if (!imageField) return 'https://via.placeholder.com/300?text=No+Image'
+        if (!imageField) return PLACEHOLDER_IMAGE
 
         let imageUrl = imageField
 
@@ -59,7 +59,7 @@ const Checkout = () => {
             return `${cleanRoot}/${cleanPath}`
         }
 
-        return imageUrl || 'https://via.placeholder.com/300?text=No+Image'
+        return imageUrl || PLACEHOLDER_IMAGE
     }
 
     const subtotal = getCartTotal()

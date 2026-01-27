@@ -179,7 +179,7 @@
     cursor: pointer;
     color: var(--text-primary);
     padding: 0.5rem;
-    z-index: 1001;
+    z-index: 2001;
 }
 
 /* Cart Badge */
@@ -235,19 +235,20 @@
     nav {
         position: fixed;
         top: 0;
-        right: -100%;
+        right: 0;
         width: 280px;
         height: 100vh;
         background: var(--bg-primary);
         box-shadow: -5px 0 25px rgba(0, 0, 0, 0.1);
-        transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        z-index: 1000;
+        transform: translateX(100%);
+        transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        z-index: 2000;
         padding: 5rem 2rem 2rem;
         display: block !important;
     }
 
     nav.active {
-        right: 0;
+        transform: translateX(0);
     }
 
     nav ul {
@@ -274,9 +275,11 @@
 
     /* Show mobile menu button */
     .mobile-menu-btn {
-        display: flex;
+        display: flex !important;
         align-items: center;
         justify-content: center;
+        flex-shrink: 0;
+        color: var(--text-primary);
     }
 
     /* Overlay for mobile menu */
@@ -309,6 +312,18 @@
 }
 
 @media (max-width: 480px) {
+
+    .logo-main-text {
+        font-size: .85rem;
+        font-weight: 900;
+        color: var(--text-primary);
+        letter-spacing: -0.01em;
+        background: linear-gradient(135deg, var(--text-primary) 30%, var(--accent-primary) 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent
+    }
+
     .main-header {
         padding: 0.5rem 0.75rem;
     }
@@ -320,7 +335,19 @@
     }
 
     .logo-container a {
-        font-size: 1.25rem !important;
+        font-size: 1rem !important;
+        gap: 0.5rem;
+    }
+
+    .logo-icon-box {
+        width: 32px;
+        height: 32px;
+        border-radius: 10px;
+    }
+
+    .logo-sparkle {
+        width: 16px;
+        height: 16px;
     }
 
     .icon-btn {
@@ -329,7 +356,7 @@
 
     nav {
         width: 100%;
-        right: -100%;
+        /* right: 0; Inherited */
     }
 }
 

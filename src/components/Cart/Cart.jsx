@@ -3,7 +3,7 @@ import React from 'react'
 import { useCart } from '../../context/CartContext'
 import { Trash2, Plus, Minus, ShoppingBag, ArrowLeft, MessageCircle } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
-import { API_BASE_URL } from '../../config'
+import { API_BASE_URL, PLACEHOLDER_IMAGE } from '../../config'
 import './cart.css'
 
 const Cart = () => {
@@ -11,7 +11,7 @@ const Cart = () => {
     const navigate = useNavigate() // Import useNavigate to navigate to the home page
 
     const parseImage = (imageField) => {
-        if (!imageField) return 'https://via.placeholder.com/300?text=No+Image'
+        if (!imageField) return PLACEHOLDER_IMAGE
 
         let imageUrl = imageField
 
@@ -33,7 +33,7 @@ const Cart = () => {
             return `${cleanRoot}/${cleanPath}`
         }
 
-        return imageUrl || 'https://via.placeholder.com/300?text=No+Image'
+        return imageUrl || PLACEHOLDER_IMAGE
     }
 
     const handleQuantityChange = (productId, newQuantity) => {

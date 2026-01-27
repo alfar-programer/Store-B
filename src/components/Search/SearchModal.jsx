@@ -4,6 +4,7 @@ import { Search, X } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { useSearch } from '../../context/SearchContext'
 import { useCart } from '../../context/CartContext'
+import { API_BASE_URL, PLACEHOLDER_IMAGE } from '../../config'
 import './searchModal.css'
 
 const SearchModal = () => {
@@ -31,6 +32,34 @@ const SearchModal = () => {
         } catch (error) {
             console.error('Error fetching products for search:', error)
         }
+    }
+
+    const parseImage = (imageField) => {
+        if (!imageField) return PLACEHOLDER_IMAGE
+
+        let imageUrl = imageField
+
+        try {
+            // Check if it's a JSON string array
+            if (typeof imageField === 'string' && (imageField.startsWith('[') || imageField.startsWith('{'))) {
+                const parsed = JSON.parse(imageField)
+                if (Array.isArray(parsed) && parsed.length > 0) {
+                    imageUrl = parsed[0]
+                }
+            }
+        } catch (e) {
+            console.warn('Image parsing error, using raw value:', e)
+        }
+
+        // Handle relative paths
+        if (imageUrl && !imageUrl.startsWith('http') && !imageUrl.startsWith('data:')) {
+            const rootUrl = API_BASE_URL.replace('/api', '')
+            const cleanRoot = rootUrl.endsWith('/') ? rootUrl.slice(0, -1) : rootUrl
+            const cleanPath = imageUrl.startsWith('/') ? imageUrl.slice(1) : imageUrl
+            return `${cleanRoot}/${cleanPath}`
+        }
+
+        return imageUrl || PLACEHOLDER_IMAGE
     }
 
     useEffect(() => {
@@ -147,15 +176,20 @@ const SearchModal = () => {
                                     onClick={handleProductClick}
                                 >
                                     <div className="search-result-image">
-                                        <img src={product.image} alt={product.title} />
+                                        <img src={parseImage(product.image)} alt={product.title} />
                                     </div>
                                     <div className="search-result-details">
                                         <h4>{product.title}</h4>
                                         <p>{product.description}</p>
                                         <div className="search-result-footer">
-                                            <span className="search-result-price">{parseFloat(product.price).toFixed(2)} <small>EGP</small></span>
-                                            {product.discount > 0 && (
-                                                <span className="search-result-discount">-{product.discount}%</span>
+                                            {product.discount > 0 ? (
+                                                <>
+                                                    <span className="search-result-price">{(parseFloat(product.price) * (1 - product.discount / 100)).toFixed(2)} <small>EGP</small></span>
+                                                    <span className="search-result-original-price">{parseFloat(product.price).toFixed(2)} <small>EGP</small></span>
+                                                    <span className="search-result-discount">-{product.discount}%</span>
+                                                </>
+                                            ) : (
+                                                <span className="search-result-price">{parseFloat(product.price).toFixed(2)} <small>EGP</small></span>
                                             )}
                                         </div>
                                     </div>

@@ -18,6 +18,7 @@ import {
     MessageCircle
 } from 'lucide-react';
 import CustomAlert from '../components/ui/Alert/CustomAlert';
+import { PLACEHOLDER_IMAGE } from '../config';
 import '../pages/Orders.css';
 
 const OrderTimeline = ({ status }) => {
@@ -303,7 +304,7 @@ const MyOrders = () => {
                                                             alt={item.title}
                                                             className="item-image"
                                                             onError={(e) => {
-                                                                e.target.src = 'https://via.placeholder.com/150?text=No+Image';
+                                                                e.target.src = PLACEHOLDER_IMAGE;
                                                             }}
                                                         />
                                                         <div className="item-info">

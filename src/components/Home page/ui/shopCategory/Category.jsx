@@ -87,7 +87,7 @@ const Category = () => {
                     className="category-image"
                     onError={(e) => {
                       e.target.onerror = null;
-                      e.target.src = 'https://via.placeholder.com/300?text=No+Image';
+                      e.target.src = PLACEHOLDER_IMAGE;
                     }}
                   />
                 ) : (
