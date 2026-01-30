@@ -2,6 +2,9 @@ import React, { createContext, useState, useContext, useEffect } from 'react';
 import axios from 'axios';
 import { API_BASE_URL } from '../config';
 
+// Configure axios for cookie-based auth
+axios.defaults.withCredentials = true;
+
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
@@ -9,11 +12,10 @@ export const AuthProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const token = localStorage.getItem('token');
         const storedUser = localStorage.getItem('user');
-        if (token && storedUser) {
+        if (storedUser) {
             setUser(JSON.parse(storedUser));
-            // Optional: Verify token validity with backend here
+            // Verification can be done via a /me or /verify-session endpoint
         }
         setLoading(false);
     }, []);
@@ -26,11 +28,11 @@ export const AuthProvider = ({ children }) => {
             });
 
             if (response.data.success) {
-                const { token, user, role } = response.data;
-                localStorage.setItem('token', token);
+                const { user, role } = response.data;
+                // Note: Token is now handled via httpOnly cookies
                 localStorage.setItem('user', JSON.stringify({ ...user, role }));
                 setUser({ ...user, role });
-                return { success: true, role, token };
+                return { success: true, role };
             }
             return { success: false, message: response.data.message };
         } catch (error) {
@@ -130,10 +132,15 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
-    const logout = () => {
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
-        setUser(null);
+    const logout = async () => {
+        try {
+            await axios.post(`${API_BASE_URL}/auth/logout`);
+        } catch (error) {
+            console.error('Logout error:', error);
+        } finally {
+            localStorage.removeItem('user');
+            setUser(null);
+        }
     };
 
     const updateUser = (updatedUserData) => {

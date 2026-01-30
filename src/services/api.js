@@ -12,7 +12,8 @@ export async function apiFetch(url, options = {}) {
 
     const response = await fetch(url, {
         ...options,
-        headers: defaultHeaders
+        headers: defaultHeaders,
+        credentials: 'include'
     })
 
     return response
