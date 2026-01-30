@@ -28,6 +28,12 @@ const Login = () => {
                 navigate('/');
             }
         } else {
+            if (result.requiresVerification) {
+                const userEmail = result.email || email;
+                navigate('/verify-email', { state: { email: userEmail } });
+                return;
+            }
+
             // Set field-specific errors if available
             if (result.fieldErrors && Object.keys(result.fieldErrors).length > 0) {
                 setFieldErrors(result.fieldErrors);

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
+import { API_BASE_URL } from '../config';
 import { User, Camera, Package, Calendar, DollarSign, ShoppingBag, Edit2, Save, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import CustomAlert from '../components/ui/Alert/CustomAlert';
@@ -46,7 +47,7 @@ const Profile = () => {
             if (!token) {
                 return;
             }
-            const response = await fetch('https://store-b-backend-production.up.railway.app/api/user/profile', {
+            const response = await fetch(`${API_BASE_URL}/user/profile`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -77,7 +78,7 @@ const Profile = () => {
             if (!token) {
                 return;
             }
-            const response = await fetch('https://store-b-backend-production.up.railway.app/api/user/orders', {
+            const response = await fetch(`${API_BASE_URL}/user/orders`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -106,7 +107,7 @@ const Profile = () => {
         setUploading(true);
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch('https://store-b-backend-production.up.railway.app/api/user/profile/image', {
+            const response = await fetch(`${API_BASE_URL}/user/profile/image`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -133,7 +134,7 @@ const Profile = () => {
                 return;
             }
 
-            const response = await fetch('https://store-b-backend-production.up.railway.app/api/user/profile', {
+            const response = await fetch(`${API_BASE_URL}/user/profile`, {
                 method: 'PUT',
                 headers: {
                     'Authorization': `Bearer ${token}`,

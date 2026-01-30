@@ -64,10 +64,12 @@ export const AuthProvider = ({ children }) => {
                 password,
                 phone
             });
+            console.log('Registration response:', response.data);
             return {
                 success: true,
                 email: response.data.email,
-                message: response.data.message
+                message: response.data.message,
+                requiresVerification: response.data.requiresVerification
             };
         } catch (error) {
             console.error('Registration error:', error);

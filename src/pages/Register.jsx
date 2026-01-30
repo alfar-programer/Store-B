@@ -19,8 +19,14 @@ const Register = () => {
         setFieldErrors({});
 
         const result = await register(name, email, password, phone);
+        console.log('Register Result:', result);
 
         if (result.success) {
+            if (result.requiresVerification) {
+                navigate('/verify-email', { state: { email: result.email } });
+                return;
+            }
+
             // Auto-login after successful registration
             const loginResult = await login(email, password);
             if (loginResult.success) {
