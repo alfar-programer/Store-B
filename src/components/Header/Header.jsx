@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
-import { Search, ShoppingCart, User, Menu, X, Sparkles } from 'lucide-react'
+import { Search, ShoppingCart, User, Menu, X } from 'lucide-react'
 import { useCart } from '../../context/CartContext'
 import { useSearch } from '../../context/SearchContext'
 import { useAuth } from '../../context/AuthContext'
@@ -37,11 +37,11 @@ const Header = () => {
                     <div className="logo-container">
                         <Link to="/" className="logo-professional group">
                             <div className="logo-icon-box">
-                                <Sparkles size={22} className="logo-sparkle" />
+                                <img src="/svg/logo2.png" alt="Worm Touch Logo" className="logo-image" />
                             </div>
                             <div className="logo-text-group">
                                 <div className="flex items-center gap-1.5">
-                                    <span className="logo-main-text">WORM</span>
+                                    <span className="logo-main-text">WARM</span>
                                     <span className="logo-sub-text">TOUCH</span>
                                 </div>
                                 <span className="logo-arabic">تاتش</span>

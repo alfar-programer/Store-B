@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { Helmet } from 'react-helmet-async'
 import { useLocation } from 'react-router-dom'
 import { Mail, Phone, MapPin, Send } from 'lucide-react'
 import BubblesBackground from '../BubblesBackground/BubblesBackground'
@@ -45,6 +46,11 @@ const Contact = () => {
 
     return (
         <div className="contact-page">
+            <Helmet>
+                <title>Contact warmtotuch | Support & Inquiries | اتصل بنا</title>
+                <meta name="description" content="Have questions about our handmade products? Contact warmtotuch for support, custom orders, or inquiries. تواصل معنا لأي استفسار." />
+                <link rel="canonical" href="https://www.warmtotuch.store/contact" />
+            </Helmet>
             {/* Creative Background */}
             <div className="creative-bg">
                 <BubblesBackground bubbleColor="rgba(79, 70, 229, 0.15)" />

@@ -1,5 +1,5 @@
-
 import React, { useState, useMemo, useEffect } from 'react'
+import { Helmet } from 'react-helmet-async'
 import { useCart } from '../../context/CartContext'
 import { useSearchParams, useNavigate } from 'react-router-dom'
 import api from '../../services/api'
@@ -171,8 +171,46 @@ const AllProducts = () => {
         }
     }
 
+    const getSEO = () => {
+        const baseTitle = " | warmtotuch";
+        switch (selectedCategory) {
+            case 'Macrame':
+                return {
+                    title: `Handmade Macrame Wall Hangings | مكرميه يدوي${baseTitle}`,
+                    description: "Discover beautiful, handcrafted macrame wall hangings and boho decor. مكرميه يدوي بجودة عالية لديكور منزلك."
+                };
+            case 'Ramadan':
+                return {
+                    title: `Ramadan 2026 Decorations & Lanterns Egypt | زينة رمضان${baseTitle}`,
+                    description: "Celebrate with our exclusive Ramadan decor collection. تسوقي أحدث زينة رمضان، فوانيس ومفارش طاولة مميزة."
+                };
+            case 'Mugs':
+                return {
+                    title: `Unique Coffee Mugs & Ceramic Gifts | ماجات مميزة${baseTitle}`,
+                    description: "Personalized and artistic coffee mugs for your morning brew. ماجات قهوة سيراميك مميزة بتصاميم فنية."
+                };
+            case 'Home Decor':
+                return {
+                    title: `Premium Home Decor & Accessories | ديكور منزلي${baseTitle}`,
+                    description: "Shop quality home decor accessories at warmtotuch. أرقى قطع الديكور المنزلي لتجميل مساحتك الخاصة."
+                };
+            default:
+                return {
+                    title: `All Products - Handmade Decor & Gifts | كل المنتجات${baseTitle}`,
+                    description: "Browse our full collection of handmade macrame, mugs, and home decor at warmtotuch. كل ما تحتاجه من ديكورات يدوية وهدايا."
+                };
+        }
+    };
+
+    const seo = getSEO();
+
     return (
         <section className="products-section">
+            <Helmet>
+                <title>{seo.title}</title>
+                <meta name="description" content={seo.description} />
+                <link rel="canonical" href={`https://www.warmtotuch.store/allproducts${selectedCategory !== 'All' ? `?category=${encodeURIComponent(selectedCategory)}` : ''}`} />
+            </Helmet>
             <div className="products-container">
                 {loading ? (
                     <div className="loading-state">

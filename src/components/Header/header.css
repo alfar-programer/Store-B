@@ -31,11 +31,14 @@
     transform: rotate(5deg);
 }
 
-.logo-sparkle {
+.logo-image {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
     transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-.logo-professional:hover .logo-sparkle {
+.logo-professional:hover .logo-image {
     transform: scale(1.2) rotate(15deg);
     filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.8));
 }
@@ -345,9 +348,9 @@
         border-radius: 10px;
     }
 
-    .logo-sparkle {
-        width: 16px;
-        height: 16px;
+    .logo-image {
+        width: 18px;
+        height: 18px;
     }
 
     .icon-btn {

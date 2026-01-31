@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react'
+import { Helmet } from 'react-helmet-async'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { Sparkles, Heart, Zap, Users, TrendingUp, Award } from 'lucide-react'
@@ -149,7 +150,7 @@ const About = () => {
 
                 <div className="hero-content">
                     <h1 className="hero-title">
-                        We're <span className="gradient-text">AouraLiving</span>
+                        We're <span className="gradient-text">warmtotuch</span>
                     </h1>
                     <p className="hero-subtitle">
                         Crafting beautiful moments for your home, one product at a time
@@ -163,7 +164,7 @@ const About = () => {
                     <div className="story-content">
                         <h2>Our Story</h2>
                         <p>
-                            Founded in 2024, AouraLiving began with a simple vision: to bring joy and elegance
+                            Founded in 2024, warmtotuch began with a simple vision: to bring joy and elegance
                             into every home. We believe that your living space should reflect your personality
                             and inspire you every single day.
                         </p>
