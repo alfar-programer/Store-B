@@ -50,8 +50,8 @@ const Home = () => {
               "addressCountry": "EG"
             },
             "sameAs": [
-              "https://www.facebook.com/warmtotuch",
-              "https://www.instagram.com/warmtotuch"
+              "https://www.facebook.com/profile.php?id=100081186777200",
+              "https://www.instagram.com/warm.tch"
             ]
           }
           `}
