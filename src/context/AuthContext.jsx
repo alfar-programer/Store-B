@@ -28,8 +28,11 @@ export const AuthProvider = ({ children }) => {
             });
 
             if (response.data.success) {
-                const { user, role } = response.data;
-                // Note: Token is now handled via httpOnly cookies
+                const { user, role, token } = response.data;
+                // Store token in localStorage for Authorization header fallback
+                if (token) localStorage.setItem('token', token);
+
+                // Note: Token is also handled via httpOnly cookies
                 localStorage.setItem('user', JSON.stringify({ ...user, role }));
                 setUser({ ...user, role });
                 return { success: true, role };
@@ -139,6 +142,7 @@ export const AuthProvider = ({ children }) => {
             console.error('Logout error:', error);
         } finally {
             localStorage.removeItem('user');
+            localStorage.removeItem('token');
             setUser(null);
         }
     };

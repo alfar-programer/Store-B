@@ -23,10 +23,13 @@ export async function apiFetch(url, options = {}) {
  * Helper for authenticated requests
  */
 export async function authenticatedFetch(url, token, options = {}) {
+    // Auto-inject token from localStorage if not provided
+    const authToken = token || localStorage.getItem('token');
+
     return apiFetch(url, {
         ...options,
         headers: {
-            'Authorization': `Bearer ${token}`,
+            'Authorization': `Bearer ${authToken}`,
             ...options.headers
         }
     })
@@ -37,8 +40,10 @@ export async function authenticatedFetch(url, token, options = {}) {
  */
 export async function apiGet(endpoint, token = null) {
     const url = `${API_BASE_URL}${endpoint}`
-    return token
-        ? authenticatedFetch(url, token)
+    const authToken = token || localStorage.getItem('token');
+
+    return authToken
+        ? authenticatedFetch(url, authToken)
         : apiFetch(url)
 }
 
@@ -55,8 +60,10 @@ export async function apiPost(endpoint, data, token = null) {
         body: JSON.stringify(data)
     }
 
-    return token
-        ? authenticatedFetch(url, token, options)
+    const authToken = token || localStorage.getItem('token');
+
+    return authToken
+        ? authenticatedFetch(url, authToken, options)
         : apiFetch(url, options)
 }
 
@@ -73,8 +80,10 @@ export async function apiPut(endpoint, data, token = null) {
         body: JSON.stringify(data)
     }
 
-    return token
-        ? authenticatedFetch(url, token, options)
+    const authToken = token || localStorage.getItem('token');
+
+    return authToken
+        ? authenticatedFetch(url, authToken, options)
         : apiFetch(url, options)
 }
 
@@ -87,7 +96,8 @@ export async function apiDelete(endpoint, token) {
         method: 'DELETE'
     }
 
-    return authenticatedFetch(url, token, options)
+    const authToken = token || localStorage.getItem('token');
+    return authenticatedFetch(url, authToken, options)
 }
 
 // Products API

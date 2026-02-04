@@ -71,6 +71,10 @@ const Cart = () => {
         )
     }
 
+    const subtotal = getCartTotal()
+    const shippingCost = subtotal < 500 ? 30 : 0
+    const total = subtotal + shippingCost
+
     return (
         <div className="cart-page">
             <div className="cart-container">
@@ -157,24 +161,26 @@ const Cart = () => {
 
                         <div className="summary-row">
                             <span>Subtotal</span>
-                            <span>{getCartTotal().toFixed(2)} <small>EGP</small></span>
+                            <span>{subtotal.toFixed(2)} <small>EGP</small></span>
                         </div>
 
                         <div className="summary-row">
                             <span>Shipping</span>
-                            <span className="free-shipping">Free</span>
+                            <span className={shippingCost === 0 ? "free-shipping" : ""}>
+                                {shippingCost === 0 ? "Free" : `${shippingCost.toFixed(2)} EGP`}
+                            </span>
                         </div>
 
                         <div className="summary-row">
-                            <span>Tax (estimated)</span>
-                            <span>{(getCartTotal() * 0.1).toFixed(2)} <small>EGP</small></span>
+                            <span>Tax</span>
+                            <span className="free-shipping">Free</span>
                         </div>
 
                         <div className="summary-divider"></div>
 
                         <div className="summary-row total">
                             <span>Total</span>
-                            <span>{(getCartTotal() * 1.1).toFixed(2)} <small>EGP</small></span>
+                            <span>{total.toFixed(2)} <small>EGP</small></span>
                         </div>
 
                         <button className="checkout-btn" onClick={() => navigate('/checkout')}>
