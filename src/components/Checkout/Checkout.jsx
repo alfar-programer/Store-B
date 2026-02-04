@@ -139,6 +139,9 @@ const Checkout = () => {
 
             const response = await ordersAPI.create(orderData, token);
 
+            console.log('📦 Order Response Status:', response.status);
+            console.log('📦 Order Response OK:', response.ok);
+
             if (response.ok) {
                 const result = await response.json();
                 const newOrder = result.data || result;
@@ -149,12 +152,32 @@ const Checkout = () => {
                 // Navigate to My Orders page with success message
                 navigate('/my-orders', { state: { orderSuccess: true } })
             } else {
-                console.error('Order failed');
-                setAlert({ message: 'Failed to place order. Please try again.', type: 'error' });
+                // Log detailed error information
+                const errorData = await response.json().catch(() => ({}));
+                console.error('❌ Order failed with status:', response.status);
+                console.error('❌ Error details:', errorData);
+
+                const errorMessage = errorData.message || errorData.error || 'Please try again.';
+                setAlert({
+                    message: `Failed to place order: ${errorMessage}`,
+                    type: 'error'
+                });
             }
         } catch (error) {
-            console.error('Error placing order:', error);
-            setAlert({ message: 'An error occurred. Please try again.', type: 'error' });
+            console.error('❌ Error placing order:', error);
+            console.error('❌ Error name:', error.name);
+            console.error('❌ Error message:', error.message);
+
+            // More specific error messages
+            let errorMessage = 'An error occurred. Please try again.';
+
+            if (error.message.includes('Failed to fetch')) {
+                errorMessage = 'Network error. Please check your connection.';
+            } else if (error.message.includes('NetworkError')) {
+                errorMessage = 'Cannot connect to server. Please try again later.';
+            }
+
+            setAlert({ message: errorMessage, type: 'error' });
         } finally {
             setIsProcessing(false);
         }
