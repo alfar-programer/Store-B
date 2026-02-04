@@ -5,6 +5,7 @@ import { useSearchParams, useNavigate } from 'react-router-dom'
 import api from '../../services/api'
 import { API_BASE_URL, PLACEHOLDER_IMAGE } from '../../config'
 import './allproducts.css'
+import './allproducts-loading.css'
 
 const AllProducts = () => {
     const [products, setProducts] = useState([])
@@ -213,9 +214,22 @@ const AllProducts = () => {
             </Helmet>
             <div className="products-container">
                 {loading ? (
-                    <div className="loading-state">
-                        <div className="loading-spinner"></div>
-                        <p>Loading products...</p>
+                    <div className="skeleton-grid">
+                        {[...Array(8)].map((_, index) => (
+                            <div key={index} className="skeleton-card">
+                                <div className="skeleton-image"></div>
+                                <div className="skeleton-content">
+                                    <div className="skeleton-title skeleton-line"></div>
+                                    <div className="skeleton-desc skeleton-line"></div>
+                                    <div className="skeleton-desc-short skeleton-line"></div>
+                                    <div className="skeleton-rating skeleton-line"></div>
+                                </div>
+                                <div className="skeleton-footer">
+                                    <div className="skeleton-price"></div>
+                                    <div className="skeleton-btn"></div>
+                                </div>
+                            </div>
+                        ))}
                     </div>
                 ) : error ? (
                     <div className="error-state" style={{ textAlign: 'center', padding: '2rem', color: '#e53e3e' }}>

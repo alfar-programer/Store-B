@@ -149,8 +149,45 @@ export const AuthProvider = ({ children }) => {
         localStorage.setItem('user', JSON.stringify(updatedUser));
     };
 
+    /**
+     * Login with Google credential token
+     * Stateless OAuth - no redirects, just popup
+     * @param {string} credential - ID token from Google Sign-In
+     */
+    const loginWithGoogle = async (credential) => {
+        try {
+            const response = await axios.post(`${API_BASE_URL}/auth/google/login`, {
+                credential
+            });
+
+            if (response.data.success) {
+                const { user } = response.data;
+                localStorage.setItem('user', JSON.stringify(user));
+                setUser(user);
+                return { success: true, user };
+            }
+            return { success: false, message: response.data.message };
+        } catch (error) {
+            console.error('Google login error:', error);
+            return {
+                success: false,
+                message: error.response?.data?.message || 'Google login failed'
+            };
+        }
+    };
+
     return (
-        <AuthContext.Provider value={{ user, login, logout, register, verifyEmail, resendVerification, updateUser, loading }}>
+        <AuthContext.Provider value={{
+            user,
+            login,
+            logout,
+            register,
+            verifyEmail,
+            resendVerification,
+            updateUser,
+            loginWithGoogle, // Add Google OAuth login
+            loading
+        }}>
             {!loading && children}
         </AuthContext.Provider>
     );

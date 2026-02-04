@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { Eye, EyeOff } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import GoogleLoginButton from '../components/ui/GoogleLoginButton';
+import YetiAuth from '../components/ui/YetiAuth';
 import './Auth.css';
 
 const Register = () => {
@@ -10,6 +13,8 @@ const Register = () => {
     const [phone, setPhone] = useState('');
     const [error, setError] = useState('');
     const [fieldErrors, setFieldErrors] = useState({});
+    const [focusedField, setFocusedField] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
     const { register, login } = useAuth();
     const navigate = useNavigate();
 
@@ -48,18 +53,25 @@ const Register = () => {
     return (
         <div className="auth-container">
             <div className="auth-box">
+                <YetiAuth
+                    emailLength={email.length}
+                    focusedField={focusedField}
+                    showPassword={showPassword}
+                />
+
                 <h2>Create Account</h2>
-                <p className="auth-subtitle">Join us today</p>
 
                 {error && <div className="error-message">{error}</div>}
 
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit} autoComplete="off">
                     <div className="form-group">
                         <label>Full Name</label>
                         <input
                             type="text"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
+                            onFocus={() => setFocusedField('name')}
+                            onBlur={() => setFocusedField('')}
                             placeholder="Enter your full name"
                             className={fieldErrors.name ? 'input-error' : ''}
                             required
@@ -73,6 +85,8 @@ const Register = () => {
                             type="tel"
                             value={phone}
                             onChange={(e) => setPhone(e.target.value)}
+                            onFocus={() => setFocusedField('phone')}
+                            onBlur={() => setFocusedField('')}
                             placeholder="Enter your phone number"
                             className={fieldErrors.phone ? 'input-error' : ''}
                             required
@@ -86,6 +100,8 @@ const Register = () => {
                             type="email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
+                            onFocus={() => setFocusedField('email')}
+                            onBlur={() => setFocusedField('')}
                             placeholder="Enter your email"
                             className={fieldErrors.email ? 'input-error' : ''}
                             required
@@ -95,19 +111,37 @@ const Register = () => {
 
                     <div className="form-group">
                         <label>Password</label>
-                        <input
-                            type="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            placeholder="Create a password"
-                            className={fieldErrors.password ? 'input-error' : ''}
-                            required
-                        />
+                        <div className="password-wrapper">
+                            <input
+                                type={showPassword ? "text" : "password"}
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                onFocus={() => setFocusedField('password')}
+                                onBlur={() => setFocusedField('')}
+                                placeholder="Create a password"
+                                className={fieldErrors.password ? 'input-error' : ''}
+                                required
+                            />
+                            <button
+                                type="button"
+                                className="toggle-password-btn"
+                                onClick={() => setShowPassword(!showPassword)}
+                                onFocus={() => setFocusedField('password-toggle')}
+                            >
+                                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                            </button>
+                        </div>
                         {fieldErrors.password && <div className="field-error">{fieldErrors.password}</div>}
                     </div>
 
                     <button type="submit" className="auth-btn">Sign Up</button>
                 </form>
+
+                <div className="divider">
+                    <span>OR</span>
+                </div>
+
+                <GoogleLoginButton />
 
                 <div className="auth-footer">
                     <p>Already have an account? <Link to="/login">Login</Link></p>

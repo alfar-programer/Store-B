@@ -3,6 +3,8 @@ import { Helmet } from 'react-helmet-async'
 import Hero from './ui/HeroSection/Hero'
 import Category from './ui/shopCategory/Category'
 import Products from './ui/Products/Products'
+import TrustBadges from './ui/TrustBadges/TrustBadges'
+import Newsletter from './ui/Newsletter/Newsletter'
 import './home.css'
 
 const Home = () => {
@@ -58,8 +60,10 @@ const Home = () => {
         </script>
       </Helmet>
       <Hero />
+      <TrustBadges />
       <Category />
       <Products />
+      <Newsletter />
     </div>
   )
 }

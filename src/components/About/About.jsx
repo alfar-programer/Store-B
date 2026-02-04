@@ -1,18 +1,57 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { Helmet } from 'react-helmet-async'
+import { useLocation } from 'react-router-dom'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { Sparkles, Heart, Zap, Users, TrendingUp, Award } from 'lucide-react'
+import { Heart, Award, Users, Sparkles, Phone, Mail, MapPin, Send } from 'lucide-react'
 import './about.css'
 
 gsap.registerPlugin(ScrollTrigger)
 
 const About = () => {
+    const location = useLocation()
     const heroRef = useRef(null)
     const storyRef = useRef(null)
     const valuesRef = useRef(null)
     const statsRef = useRef(null)
-    const teamRef = useRef(null)
+
+    // Contact form state
+    const [formData, setFormData] = useState({
+        name: '',
+        email: '',
+        subject: '',
+        message: ''
+    })
+    const [status, setStatus] = useState('')
+
+    useEffect(() => {
+        if (location.state?.orderId) {
+            setFormData(prev => ({
+                ...prev,
+                subject: `Order Support: #${location.state.orderId}`
+            }))
+        }
+    }, [location.state])
+
+    const handleChange = (e) => {
+        const { name, value } = e.target
+        setFormData(prev => ({
+            ...prev,
+            [name]: value
+        }))
+    }
+
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        setStatus('sending')
+
+        // Simulate form submission
+        setTimeout(() => {
+            setStatus('success')
+            setFormData({ name: '', email: '', subject: '', message: '' })
+            setTimeout(() => setStatus(''), 3000)
+        }, 1500)
+    }
 
     useEffect(() => {
         // Hero section animations
@@ -24,11 +63,22 @@ const About = () => {
                 ease: 'power4.out'
             })
 
+            gsap.set('.hero-subtitle', { opacity: 1, y: 0 })
+            gsap.set('.hero-subtitle-ar', { opacity: 1, y: 0 })
+
             gsap.from('.hero-subtitle', {
                 opacity: 0,
                 y: 50,
                 duration: 1,
                 delay: 0.3,
+                ease: 'power3.out'
+            })
+
+            gsap.from('.hero-subtitle-ar', {
+                opacity: 0,
+                y: 50,
+                duration: 1,
+                delay: 0.5,
                 ease: 'power3.out'
             })
 
@@ -77,15 +127,18 @@ const About = () => {
             })
 
             // Values cards stagger animation
-            gsap.to('.value-card', {
+            gsap.set('.value-card', { opacity: 1, y: 0 })
+
+            gsap.from('.value-card', {
                 scrollTrigger: {
                     trigger: '.values-section',
-                    start: 'top 70%',
+                    start: 'top 80%',
+                    toggleActions: 'play none none reverse'
                 },
-                opacity: 1,
+                opacity: 0,
                 y: 50,
                 stagger: 0.2,
-                duration: 4,
+                duration: 1,
                 ease: 'back.out(1.7)'
             })
 
@@ -108,27 +161,6 @@ const About = () => {
                 })
             })
 
-            // Team cards hover effect
-            const teamCards = document.querySelectorAll('.team-card')
-            teamCards.forEach(card => {
-                card.addEventListener('mouseenter', () => {
-                    gsap.to(card, {
-                        y: -10,
-                        scale: 1.05,
-                        duration: 0.3,
-                        ease: 'power2.out'
-                    })
-                })
-                card.addEventListener('mouseleave', () => {
-                    gsap.to(card, {
-                        y: 0,
-                        scale: 1,
-                        duration: 0.3,
-                        ease: 'power2.out'
-                    })
-                })
-            })
-
         }, heroRef)
 
         return () => ctx.revert()
@@ -136,6 +168,12 @@ const About = () => {
 
     return (
         <div className="about-page" ref={heroRef}>
+            <Helmet>
+                <title>About Warm Touch | Handmade Macrame & Home Decor | من نحن</title>
+                <meta name="description" content="Discover Warm Touch's story - handcrafted macrame, artisan mugs, and unique home decor made with love. اكتشف قصة وارم تاتش - منتجات يدوية بحب." />
+                <link rel="canonical" href="https://www.warmtotuch.store/about" />
+            </Helmet>
+
             {/* Hero Section */}
             <section className="hero-section">
                 <div className="hero-decoration hero-decoration-1">
@@ -145,15 +183,18 @@ const About = () => {
                     <Heart size={50} />
                 </div>
                 <div className="hero-decoration hero-decoration-3">
-                    <Zap size={55} />
+                    <Sparkles size={55} />
                 </div>
 
                 <div className="hero-content">
                     <h1 className="hero-title">
-                        We're <span className="gradient-text">warmtotuch</span>
+                        Handmade with <span className="gradient-text">Love & Care</span>
                     </h1>
                     <p className="hero-subtitle">
-                        Crafting beautiful moments for your home, one product at a time
+                        Every piece tells a story of craftsmanship, passion, and warmth
+                    </p>
+                    <p className="hero-subtitle-ar">
+                        كل قطعة تحكي قصة من الحرفية والشغف والدفء
                     </p>
                 </div>
             </section>
@@ -164,20 +205,22 @@ const About = () => {
                     <div className="story-content">
                         <h2>Our Story</h2>
                         <p>
-                            Founded in 2024, warmtotuch began with a simple vision: to bring joy and elegance
-                            into every home. We believe that your living space should reflect your personality
-                            and inspire you every single day.
+                            Founded in 2024, Warm Touch began with a passion for bringing handmade beauty into every home.
+                            We specialize in artisan macrame wall hangings, hand-painted mugs, and unique home decor pieces
+                            that add warmth and personality to your space.
                         </p>
                         <p>
-                            From carefully curated home essentials to stunning garden accessories, every product
-                            we offer is chosen with love and attention to detail. We're not just selling products;
-                            we're helping you create a lifestyle.
+                            Each product is carefully crafted by skilled artisans who pour their heart into every knot,
+                            every brushstroke, and every detail. We believe that handmade items carry a special energy
+                            that mass-produced products simply cannot replicate.
+                        </p>
+                        <p>
+                            From our workshop to your home, we're committed to creating pieces that you'll treasure for years to come.
                         </p>
                     </div>
                     <div className="story-image">
                         <div className="image-placeholder">
-                            <img src="\svg\logo.jpg" width={600} height={600} alt="loading image" />
-
+                            <img src="\svg\logo.jpg" width={600} height={600} alt="Warm Touch handmade products" />
                         </div>
                     </div>
                 </div>
@@ -191,29 +234,29 @@ const About = () => {
                         <div className="value-icon">
                             <Heart size={40} />
                         </div>
-                        <h3>Passion</h3>
-                        <p>We're passionate about helping you create spaces you love</p>
+                        <h3>Handmade with Love</h3>
+                        <p>Every piece is crafted by hand with care and attention to detail</p>
                     </div>
                     <div className="value-card">
                         <div className="value-icon">
                             <Award size={40} />
                         </div>
-                        <h3>Quality</h3>
-                        <p>Only the finest products make it to our collection</p>
+                        <h3>Premium Quality</h3>
+                        <p>We use only the finest materials for lasting beauty</p>
                     </div>
                     <div className="value-card">
                         <div className="value-icon">
                             <Users size={40} />
                         </div>
                         <h3>Community</h3>
-                        <p>Building a community of home enthusiasts together</p>
+                        <p>Supporting local artisans and building connections</p>
                     </div>
                     <div className="value-card">
                         <div className="value-icon">
-                            <TrendingUp size={40} />
+                            <Sparkles size={40} />
                         </div>
-                        <h3>Innovation</h3>
-                        <p>Always discovering new trends and timeless classics</p>
+                        <h3>Unique Designs</h3>
+                        <p>One-of-a-kind pieces that reflect your personal style</p>
                     </div>
                 </div>
             </section>
@@ -227,11 +270,11 @@ const About = () => {
                     </div>
                     <div className="stat-item">
                         <div className="stat-number" data-target="500" data-suffix="+">0+</div>
-                        <div className="stat-label">Products</div>
+                        <div className="stat-label">Handmade Products</div>
                     </div>
                     <div className="stat-item">
                         <div className="stat-number" data-target="50" data-suffix="+">0+</div>
-                        <div className="stat-label">Countries</div>
+                        <div className="stat-label">Artisan Partners</div>
                     </div>
                     <div className="stat-item">
                         <div className="stat-number" data-target="99" data-suffix="%">0%</div>
@@ -240,41 +283,128 @@ const About = () => {
                 </div>
             </section>
 
-            {/* Team Section */}
-            <section className="team-section" ref={teamRef}>
-                <h2 className="section-title">Meet Our Team</h2>
-                <div className="team-grid">
-                    <div className="team-card">
-                        <div className="team-image">
-                            <Users size={60} />
-                        </div>
-                        <h3>Sarah Johnson</h3>
-                        <p className="team-role">Founder & CEO</p>
-                        <p className="team-bio">Visionary leader with 15 years in home design</p>
+            {/* Contact Section */}
+            <section className="contact-section" id="contact">
+                <div className="contact-container">
+                    <div className="contact-header">
+                        <h2>Get in Touch</h2>
+                        <p>We'd love to hear from you. Send us a message and we'll respond within 24 hours.</p>
+                        <p className="contact-subtitle-ar">نحب أن نسمع منك. أرسل لنا رسالة وسنرد خلال 24 ساعة</p>
                     </div>
-                    <div className="team-card">
-                        <div className="team-image">
-                            <Users size={60} />
+
+                    <div className="contact-grid">
+                        {/* Contact Info */}
+                        <div className="contact-info-card">
+                            <h3>Contact Information</h3>
+                            <p className="info-subtitle">Reach out to us through any of these channels</p>
+
+                            <div className="info-items">
+                                <div className="info-item">
+                                    <div className="icon-box">
+                                        <Phone size={24} />
+                                    </div>
+                                    <div>
+                                        <h4>Phone</h4>
+                                        <p>+20-109-816-5967</p>
+                                    </div>
+                                </div>
+
+                                <div className="info-item">
+                                    <div className="icon-box">
+                                        <Mail size={24} />
+                                    </div>
+                                    <div>
+                                        <h4>Email</h4>
+                                        <p>Wormtotch@gmail.com</p>
+                                    </div>
+                                </div>
+
+                                <div className="info-item">
+                                    <div className="icon-box">
+                                        <MapPin size={24} />
+                                    </div>
+                                    <div>
+                                        <h4>Address</h4>
+                                        <p>Egypt, GIZA October Garden 247</p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <h3>Michael Chen</h3>
-                        <p className="team-role">Creative Director</p>
-                        <p className="team-bio">Award-winning designer passionate about aesthetics</p>
-                    </div>
-                    <div className="team-card">
-                        <div className="team-image">
-                            <Users size={60} />
+
+                        {/* Contact Form */}
+                        <div className="contact-form-card">
+                            <form onSubmit={handleSubmit}>
+                                <div className="form-group">
+                                    <label>Your Name</label>
+                                    <input
+                                        type="text"
+                                        name="name"
+                                        value={formData.name}
+                                        onChange={handleChange}
+                                        required
+                                        placeholder="John Doe"
+                                    />
+                                </div>
+
+                                <div className="form-group">
+                                    <label>Email Address</label>
+                                    <input
+                                        type="email"
+                                        name="email"
+                                        value={formData.email}
+                                        onChange={handleChange}
+                                        required
+                                        placeholder="john@example.com"
+                                    />
+                                </div>
+
+                                <div className="form-group">
+                                    <label>Subject</label>
+                                    <input
+                                        type="text"
+                                        name="subject"
+                                        value={formData.subject}
+                                        onChange={handleChange}
+                                        required
+                                        placeholder="How can we help?"
+                                    />
+                                </div>
+
+                                <div className="form-group">
+                                    <label>Message</label>
+                                    <textarea
+                                        name="message"
+                                        value={formData.message}
+                                        onChange={handleChange}
+                                        required
+                                        rows="5"
+                                        placeholder="Write your message here..."
+                                    ></textarea>
+                                </div>
+
+                                <button
+                                    type="submit"
+                                    className={`submit-btn ${status === 'success' ? 'success' : ''}`}
+                                    disabled={status === 'sending'}
+                                >
+                                    {status === 'sending' ? (
+                                        'Sending...'
+                                    ) : status === 'success' ? (
+                                        '✓ Message Sent!'
+                                    ) : (
+                                        <>Send Message <Send size={18} /></>
+                                    )}
+                                </button>
+                            </form>
                         </div>
-                        <h3>Emma Davis</h3>
-                        <p className="team-role">Head of Curation</p>
-                        <p className="team-bio">Expert in finding unique and beautiful pieces</p>
                     </div>
                 </div>
             </section>
 
             {/* CTA Section */}
             <section className="cta-section">
-                <h2>Ready to Transform Your Space?</h2>
-                <p>Explore our collection and find your perfect pieces today</p>
+                <h2>Ready to Add Warmth to Your Home?</h2>
+                <p>Explore our collection of handmade treasures</p>
                 <button className="cta-button" onClick={() => window.location.href = '/allproducts'}>
                     Shop Now
                 </button>

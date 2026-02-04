@@ -56,7 +56,6 @@ const Header = () => {
                                 { name: 'Home', path: '/' },
                                 { name: 'AllProducts', path: '/allproducts' },
                                 { name: 'About', path: '/about' },
-                                { name: 'Contact', path: '/contact' },
                                 // Show My Orders primarily if logged in, but also in list generally
                                 ...(user ? [{ name: 'My Orders', path: '/my-orders' }] : []),
                                 // Mobile Only: Profile Links (since hidden in header)

@@ -57,8 +57,8 @@ const Hero = () => {
 
       <div className='hero-main'>
         <div className="hero-content">
-          <h1 ref={titleRef}>Curated Essentials for <span>Modern Living</span></h1>
-          <p ref={textRef}>Discover thoughtfully selected products that combine timeless design with exceptional quality</p>
+          <h1 ref={titleRef}>Handmade with <span>Love & Care</span></h1>
+          <p ref={textRef}>Discover unique macrame, artisan mugs, and home decor crafted with warmth and authenticity</p>
           <button
             ref={buttonRef}
             onMouseEnter={() => {

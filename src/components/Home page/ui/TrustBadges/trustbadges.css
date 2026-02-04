@@ -1,0 +1,140 @@
+.trust-badges {
+    padding: 80px 20px;
+    background: linear-gradient(135deg, #F5F1E8 0%, #FFFFFF 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.trust-badges::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -10%;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(212, 165, 116, 0.1) 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+.trust-badges-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.badges-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+}
+
+.badge-card {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(212, 165, 116, 0.2);
+    border-radius: 20px;
+    padding: 40px 30px;
+    text-align: center;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.badge-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(212, 165, 116, 0.1) 0%, rgba(139, 111, 71, 0.1) 100%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    z-index: 0;
+}
+
+.badge-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(139, 111, 71, 0.15);
+    border-color: rgba(212, 165, 116, 0.4);
+}
+
+.badge-card:hover::before {
+    opacity: 1;
+}
+
+.badge-icon {
+    font-size: 3.5rem;
+    margin-bottom: 20px;
+    position: relative;
+    z-index: 1;
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+.badge-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #4A3728;
+    margin-bottom: 10px;
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.badge-title-ar {
+    font-size: 0.95rem;
+    color: #8B6F47;
+    font-weight: 500;
+}
+
+.badge-description {
+    font-size: 0.95rem;
+    color: #6B7280;
+    line-height: 1.6;
+    position: relative;
+    z-index: 1;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .trust-badges {
+        padding: 60px 20px;
+    }
+
+    .badges-grid {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
+    }
+
+    .badge-card {
+        padding: 30px 20px;
+    }
+
+    .badge-icon {
+        font-size: 2.5rem;
+    }
+
+    .badge-title {
+        font-size: 1.1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .badges-grid {
+        grid-template-columns: 1fr;
+    }
+}
