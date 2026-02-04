@@ -165,7 +165,19 @@ export const AuthProvider = ({ children }) => {
             });
 
             if (response.data.success) {
-                const { user } = response.data;
+                const { user, token } = response.data;
+
+                // CRITICAL: Store token for Authorization header in API calls
+                // Backend sends token in cookie, but we also need it in localStorage
+                // for the Authorization: Bearer <token> header
+                if (token) {
+                    localStorage.setItem('token', token);
+                } else {
+                    // If backend doesn't send token in response, try to extract from cookie
+                    // This is a fallback - ideally backend should send it in response
+                    console.warn('⚠️ No token in Google login response, relying on cookie only');
+                }
+
                 localStorage.setItem('user', JSON.stringify(user));
                 setUser(user);
                 return { success: true, user };
