@@ -197,140 +197,140 @@ const Profile = () => {
     // Safety check - if no profileData but user exists, use user data
     const displayData = profileData || { name: user?.name || '', email: user?.email || '', role: user?.role || 'customer', profileImage: null };
 
+    // Filter for delivered orders (Redundant if backend does it, but safer)
+    const deliveredOrders = orders.filter(order => (order.status || '').toLowerCase() === 'delivered');
+
     return (
         <div className="profile-container">
-            <div className="profile-wrapper">
-                {/* Profile Header */}
-                <div className="profile-header">
-                    <div className="profile-header-bg"></div>
-                    <div className="profile-info-card">
-                        <div className="profile-image-section">
-                            <div className="profile-image-wrapper">
+            <div className="profile-content">
+                {/* Profile Sidebar / Card */}
+                <aside className="profile-sidebar">
+                    <div className="profile-card">
+                        <div className="profile-header-image">
+                            <div className="image-container">
                                 {displayData?.profileImage ? (
-                                    <img src={displayData.profileImage} alt="Profile" className="profile-image" />
+                                    <img src={displayData.profileImage} alt="Profile" className="profile-img" />
                                 ) : (
-                                    <div className="profile-image-placeholder">
-                                        <User size={60} />
+                                    <div className="profile-img-placeholder">
+                                        <User size={48} />
                                     </div>
                                 )}
-                                <label className="profile-image-upload-btn">
-                                    <Camera size={20} />
+                                <label className="upload-btn" title="Change Profile Photo">
+                                    <Camera size={18} />
                                     <input
                                         type="file"
                                         accept="image/*"
                                         onChange={handleImageUpload}
                                         disabled={uploading}
-                                        style={{ display: 'none' }}
+                                        hidden
                                     />
                                 </label>
-                                {uploading && <div className="upload-overlay">Uploading...</div>}
+                                {uploading && <div className="uploading-spinner"></div>}
                             </div>
                         </div>
 
-                        <div className="profile-details">
+                        <div className="profile-info-display">
                             {!isEditing ? (
                                 <>
-                                    <h1 className="profile-name">{displayData?.name || 'User'}</h1>
-                                    <p className="profile-email">{displayData?.email || ''}</p>
-                                    <p className="profile-role">{displayData?.role === 'admin' ? 'Administrator' : 'Customer'}</p>
-                                    <button className="edit-profile-btn" onClick={() => setIsEditing(true)}>
-                                        <Edit2 size={18} />
-                                        Edit Profile
+                                    <h2 className="user-name">{displayData?.name || 'User'}</h2>
+                                    <p className="user-email">{displayData?.email}</p>
+                                    <div className="user-badge">
+                                        {displayData?.role === 'admin' ? 'Administrator' : 'Verified Customer'}
+                                    </div>
+                                    <button className="btn-primary edit-btn" onClick={() => setIsEditing(true)}>
+                                        <Edit2 size={16} /> Edit Profile
                                     </button>
                                 </>
                             ) : (
-                                <div className="edit-profile-form">
-                                    <input
-                                        type="text"
-                                        value={editForm.name}
-                                        onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
-                                        placeholder="Name"
-                                        className="edit-input"
-                                    />
-                                    <input
-                                        type="email"
-                                        value={editForm.email}
-                                        onChange={(e) => setEditForm({ ...editForm, email: e.target.value })}
-                                        placeholder="Email"
-                                        className="edit-input"
-                                    />
-                                    <div className="edit-actions">
-                                        <button className="save-btn" onClick={handleUpdateProfile}>
-                                            <Save size={18} />
-                                            Save
+                                <div className="edit-form">
+                                    <div className="form-group">
+                                        <label>Full Name</label>
+                                        <input
+                                            type="text"
+                                            value={editForm.name}
+                                            onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
+                                            className="form-input"
+                                            autoFocus
+                                        />
+                                    </div>
+                                    <div className="form-group">
+                                        <label>Email Address</label>
+                                        <input
+                                            type="email"
+                                            value={editForm.email}
+                                            disabled
+                                            className="form-input disabled"
+                                            title="Email cannot be changed"
+                                        />
+                                        <span className="input-hint">Email cannot be changed associated with account</span>
+                                    </div>
+                                    <div className="form-actions">
+                                        <button className="btn-primary save-btn" onClick={handleUpdateProfile}>
+                                            <Save size={16} /> Save
                                         </button>
-                                        <button className="cancel-btn" onClick={() => setIsEditing(false)}>
-                                            <X size={18} />
-                                            Cancel
+                                        <button className="btn-secondary cancel-btn" onClick={() => setIsEditing(false)}>
+                                            <X size={16} /> Cancel
                                         </button>
                                     </div>
                                 </div>
                             )}
                         </div>
                     </div>
-                </div>
+                </aside>
 
-                {/* Order History */}
-                <div className="order-history-section">
-                    <div className="section-header">
-                        <Package size={28} />
-                        <h2>Shopping History</h2>
-                    </div>
-
-                    {orders.length === 0 ? (
-                        <div className="no-orders">
-                            <ShoppingBag size={64} />
-                            <h3>No Orders Yet</h3>
-                            <p>Start shopping to see your order history here!</p>
-                            <button className="shop-now-btn" onClick={() => navigate('/allproducts')}>
-                                Start Shopping
-                            </button>
+                {/* Main Content - Order History */}
+                <main className="profile-main">
+                    <div className="orders-section">
+                        <div className="section-header">
+                            <h2><Package size={24} /> Order History</h2>
+                            <p className="section-subtitle">View your past delivered orders</p>
                         </div>
-                    ) : (
-                        <div className="orders-grid">
-                            {orders.map((order, orderIndex) => (
-                                <div key={order.id || orderIndex} className="order-card">
-                                    <div className="order-header">
-                                        <div className="order-id">
-                                            <Package size={20} />
-                                            <span>Order #{order.id || 'N/A'}</span>
-                                        </div>
-                                        <span className={`order-status status-${(order.status || 'pending').toLowerCase()}`}>
-                                            {order.status || 'Pending'}
-                                        </span>
-                                    </div>
 
-                                    <div className="order-meta">
-                                        <div className="order-meta-item">
-                                            <Calendar size={16} />
-                                            <span>{formatDate(order.createdAt)}</span>
+                        {deliveredOrders.length === 0 ? (
+                            <div className="empty-state">
+                                <ShoppingBag size={48} />
+                                <h3>No delivered orders yet</h3>
+                                <p>Once your orders are delivered, they will appear here.</p>
+                                <button className="btn-primary shop-btn" onClick={() => navigate('/allproducts')}>
+                                    Start Shopping
+                                </button>
+                            </div>
+                        ) : (
+                            <div className="orders-list">
+                                {deliveredOrders.map((order, index) => (
+                                    <div key={order.id || index} className="order-item-card">
+                                        <div className="order-top">
+                                            <div className="order-id-group">
+                                                <span className="order-number">#{order.id || 'N/A'}</span>
+                                                <span className="order-date">{formatDate(order.createdAt)}</span>
+                                            </div>
+                                            <div className="order-status-badge status-delivered">
+                                                Delivered
+                                            </div>
                                         </div>
-                                        <div className="order-meta-item">
-                                            <DollarSign size={16} />
-                                            <span className="order-total">{parseFloat(order.total || 0).toFixed(2)} <small>EGP</small></span>
-                                        </div>
-                                    </div>
 
-                                    <div className="order-items">
-                                        <h4>Items ({order.items?.length || 0})</h4>
-                                        <div className="order-items-list">
-                                            {(order.items || []).map((item, index) => (
-                                                <div key={index} className="order-item">
-                                                    <img src={item.image || ''} alt={item.title || 'Item'} className="order-item-image" />
-                                                    <div className="order-item-details">
-                                                        <p className="order-item-title">{item.title || 'Unknown Item'}</p>
-                                                        <p className="order-item-quantity">Qty: {item.quantity || 0}</p>
-                                                    </div>
-                                                    <p className="order-item-price">{((item.price || 0) * (item.quantity || 0)).toFixed(2)} <small>EGP</small></p>
+                                        <div className="order-products">
+                                            {(order.items || []).map((item, idx) => (
+                                                <div key={idx} className="product-preview">
+                                                    <img src={item.image || ''} alt={item.title} title={item.title} />
+                                                    <span className="product-qty">x{item.quantity}</span>
                                                 </div>
                                             ))}
                                         </div>
+
+                                        <div className="order-footer">
+                                            <div className="order-total">
+                                                <span className="label">Total</span>
+                                                <span className="amount">{parseFloat(order.total || 0).toFixed(2)} EGP</span>
+                                            </div>
+                                            {/* Could add 'View Details' button here later */}
+                                        </div>
                                     </div>
-                                </div>
-                            ))}
-                        </div>
-                    )}
-                </div>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+                </main>
             </div>
             {alertState && (
                 <CustomAlert
