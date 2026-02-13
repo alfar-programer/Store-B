@@ -26,7 +26,7 @@ const Login = () => {
         if (result.success) {
             if (result.role === 'admin') {
                 console.log('Admin logged in successfully');
-                window.location.href = `https://store-b-dashboard-production-b902.up.railway.app/login?token=${result.token}&role=${result.role}`;
+                window.location.href = `https://store-b-dashboard-production.up.railway.app/login?token=${result.token}&role=${result.role}`;
             } else {
                 navigate('/');
             }
