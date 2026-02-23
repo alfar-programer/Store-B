@@ -38,25 +38,54 @@ const Home = () => {
 
         {/* Schema */}
         <script type="application/ld+json">
-          {`
-          {
-            "@context": "https://schema.org",
-            "@type": "Store",
-            "name": "Warm Touch",
-            "url": "https://www.warmtotuch.store/",
-            "logo": "https://www.warmtotuch.store/svg/logo2.png",
-            "image": "https://www.warmtotuch.store/svg/og-imag.png",
-            "description": "Handmade macrame, mugs and home decor products in Egypt.",
-            "address": {
-              "@type": "PostalAddress",
-              "addressCountry": "EG"
+          {JSON.stringify([
+            {
+              "@context": "https://schema.org",
+              "@type": "Store",
+              "name": "warmtotuch",
+              "alternateName": "warmtotch",
+              "url": "https://www.warmtotuch.store/",
+              "logo": "https://www.warmtotuch.store/svg/logo2.png",
+              "image": "https://www.warmtotuch.store/svg/og-imag.png",
+              "description": "Handmade macrame, mugs and home decor products in Egypt. Quality craftsmanship since 2024.",
+              "telephone": "+201098165967",
+              "priceRange": "$$",
+              "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "October Garden 247",
+                "addressLocality": "Giza",
+                "addressRegion": "Giza",
+                "postalCode": "12511",
+                "addressCountry": "EG"
+              },
+              "geo": {
+                "@type": "GeoCoordinates",
+                "latitude": 29.9870,
+                "longitude": 31.2118
+              },
+              "openingHoursSpecification": {
+                "@type": "OpeningHoursSpecification",
+                "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+                "opens": "00:00",
+                "closes": "23:59"
+              },
+              "sameAs": [
+                "https://www.facebook.com/profile.php?id=100081186777200",
+                "https://www.instagram.com/warm.tch"
+              ]
             },
-            "sameAs": [
-              "https://www.facebook.com/profile.php?id=100081186777200",
-              "https://www.instagram.com/warm.tch"
-            ]
-          }
-          `}
+            {
+              "@context": "https://schema.org",
+              "@type": "WebSite",
+              "name": "warmtotuch",
+              "url": "https://www.warmtotuch.store/",
+              "potentialAction": {
+                "@type": "SearchAction",
+                "target": "https://www.warmtotuch.store/allproducts?search={search_term_string}",
+                "query-input": "required name=search_term_string"
+              }
+            }
+          ])}
         </script>
       </Helmet>
       <Hero />

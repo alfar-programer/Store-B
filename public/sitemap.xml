@@ -7,7 +7,7 @@
   <!-- Home Page - Highest Priority -->
   <url>
     <loc>https://www.warmtotuch.store/</loc>
-    <lastmod>2026-01-31</lastmod>
+    <lastmod>2026-02-23</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -15,7 +15,7 @@
   <!-- Main Product Pages - High Priority -->
   <url>
     <loc>https://www.warmtotuch.store/allproducts</loc>
-    <lastmod>2026-01-31</lastmod>
+    <lastmod>2026-02-23</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
@@ -23,17 +23,17 @@
   <!-- About Page -->
   <url>
     <loc>https://www.warmtotuch.store/about</loc>
-    <lastmod>2026-01-31</lastmod>
-    <changefreq>monthly</changefreq>
+    <lastmod>2026-02-23</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
 
-  <!-- Contact Page -->
+  <!-- Contact Page (Redirects to About#contact) -->
   <url>
-    <loc>https://www.warmtotuch.store/contact</loc>
-    <lastmod>2026-01-31</lastmod>
+    <loc>https://www.warmtotuch.store/about#contact</loc>
+    <lastmod>2026-02-23</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.7</priority>
   </url>
 
 </urlset>

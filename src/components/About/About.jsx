@@ -172,6 +172,23 @@ const About = () => {
                 <title>About Warm Touch | Handmade Macrame & Home Decor | من نحن</title>
                 <meta name="description" content="Discover Warm Touch's story - handcrafted macrame, artisan mugs, and unique home decor made with love. اكتشف قصة وارم تاتش - منتجات يدوية بحب." />
                 <link rel="canonical" href="https://www.warmtotuch.store/about" />
+                <script type="application/ld+json">
+                    {JSON.stringify({
+                        "@context": "https://schema.org",
+                        "@type": "BreadcrumbList",
+                        "itemListElement": [{
+                            "@type": "ListItem",
+                            "position": 1,
+                            "name": "Home",
+                            "item": "https://www.warmtotuch.store/"
+                        }, {
+                            "@type": "ListItem",
+                            "position": 2,
+                            "name": "About Us",
+                            "item": "https://www.warmtotuch.store/about"
+                        }]
+                    })}
+                </script>
             </Helmet>
 
             {/* Hero Section */}

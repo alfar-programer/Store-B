@@ -211,6 +211,32 @@ const AllProducts = () => {
                 <title>{seo.title}</title>
                 <meta name="description" content={seo.description} />
                 <link rel="canonical" href={`https://www.warmtotuch.store/allproducts${selectedCategory !== 'All' ? `?category=${encodeURIComponent(selectedCategory)}` : ''}`} />
+                <script type="application/ld+json">
+                    {JSON.stringify({
+                        "@context": "https://schema.org",
+                        "@type": "BreadcrumbList",
+                        "itemListElement": [
+                            {
+                                "@type": "ListItem",
+                                "position": 1,
+                                "name": "Home",
+                                "item": "https://www.warmtotuch.store/"
+                            },
+                            {
+                                "@type": "ListItem",
+                                "position": 2,
+                                "name": "Products",
+                                "item": "https://www.warmtotuch.store/allproducts"
+                            },
+                            ...(selectedCategory !== 'All' ? [{
+                                "@type": "ListItem",
+                                "position": 3,
+                                "name": selectedCategory,
+                                "item": `https://www.warmtotuch.store/allproducts?category=${encodeURIComponent(selectedCategory)}`
+                            }] : [])
+                        ]
+                    })}
+                </script>
             </Helmet>
             <div className="products-container">
                 {loading ? (
