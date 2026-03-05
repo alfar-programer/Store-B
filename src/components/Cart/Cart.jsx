@@ -1,5 +1,6 @@
 
 import React from 'react'
+import { Helmet } from 'react-helmet-async'
 import { useCart } from '../../context/CartContext'
 import { Trash2, Plus, Minus, ShoppingBag, ArrowLeft, MessageCircle } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
@@ -56,6 +57,10 @@ const Cart = () => {
     if (cartItems.length === 0) {
         return (
             <div className="cart-page">
+                <Helmet>
+                    <title>سلة التسوق | Cart – warmtotuch</title>
+                    <meta name="robots" content="noindex, nofollow" />
+                </Helmet>
                 <div className="cart-container">
                     <div className="empty-cart">
                         <ShoppingBag size={80} strokeWidth={1.5} />
@@ -77,6 +82,10 @@ const Cart = () => {
 
     return (
         <div className="cart-page">
+            <Helmet>
+                <title>سلة التسوق | Cart – warmtotuch</title>
+                <meta name="robots" content="noindex, nofollow" />
+            </Helmet>
             <div className="cart-container">
                 <div className="cart-header">
                     <h1>Shopping Cart</h1>

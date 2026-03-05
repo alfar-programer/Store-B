@@ -1,15 +1,22 @@
-# robots.txt for Store-B E-Commerce Platform
+# robots.txt – warmtotuch.store
+# Optimized for Google, Bing, and social media crawlers
 
-# Allow all search engines to crawl the site
+# ============================================
+# All Crawlers – Default Rules
+# ============================================
 User-agent: *
 
-# Allow crawling of main pages
-Allow: /
-Allow: /about
-Allow: /contact
-Allow: /allproducts
+# === Allow important indexable content ===
+Allow: /$
+Allow: /allproducts$
+Allow: /about$
+Allow: /about#contact
 
-# Disallow crawling of user-specific and functional pages
+# === Allow static assets (images, SVGs) ===
+Allow: /images/
+Allow: /svg/
+
+# === Disallow private / functional pages ===
 Disallow: /cart
 Disallow: /checkout
 Disallow: /order-confirmation
@@ -19,24 +26,59 @@ Disallow: /verify-email
 Disallow: /profile
 Disallow: /my-orders
 
-# Disallow admin dashboard
+# === Disallow admin panel ===
 Disallow: /admin
-Disallow: /admin/*
+Disallow: /admin/
 
-# Disallow API endpoints
+# === Disallow API & internal endpoints ===
 Disallow: /api/
-Disallow: /api/*
+Disallow: /*.json$
 
-# Disallow search functionality
-Disallow: /search
-Disallow: /*?search=*
+# === Disallow query-string search noise ===
+Disallow: /*?*
+Allow: /allproducts?*
 
-# Allow crawling of images
+# ============================================
+# Googlebot – Specific Rules
+# ============================================
+User-agent: Googlebot
+
+Allow: /$
+Allow: /allproducts
+Allow: /about
 Allow: /images/
 Allow: /svg/
 
-# Crawl delay (optional - adjust based on server capacity)
-Crawl-delay: 1
+Disallow: /admin/
+Disallow: /api/
+Disallow: /cart
+Disallow: /checkout
+Disallow: /login
+Disallow: /register
+Disallow: /profile
+Disallow: /my-orders
 
-# Sitemap location
+# ============================================
+# Googlebot-Image – Allow all product images
+# ============================================
+User-agent: Googlebot-Image
+Allow: /images/
+Allow: /svg/
+Disallow: /admin/
+
+# ============================================
+# Social Media Crawlers – Allow OG data
+# ============================================
+User-agent: facebookexternalhit
+Allow: /
+
+User-agent: Twitterbot
+Allow: /
+
+User-agent: WhatsApp
+Allow: /
+
+# ============================================
+# Sitemap Location
+# ============================================
 Sitemap: https://www.warmtotuch.store/sitemap.xml

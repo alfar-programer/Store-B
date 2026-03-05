@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Eye, EyeOff } from 'lucide-react';
+import { Helmet } from 'react-helmet-async';
 import { useAuth } from '../context/AuthContext';
 import GoogleLoginButton from '../components/ui/GoogleLoginButton';
 import YetiAuth from '../components/ui/YetiAuth';
@@ -47,6 +48,11 @@ const Login = () => {
 
     return (
         <div className="auth-container">
+            <Helmet>
+                <title>تسجيل الدخول | Login – warmtotuch</title>
+                <meta name="robots" content="noindex, nofollow" />
+                <link rel="canonical" href="https://www.warmtotuch.store/login" />
+            </Helmet>
             <div className="auth-box">
                 <h2>Welcome Back</h2>
 

@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import { useAuth } from '../context/AuthContext';
 import './Auth.css';
 
@@ -118,6 +119,10 @@ const VerifyEmail = () => {
 
     return (
         <div className="auth-container">
+            <Helmet>
+                <title>تحقق من البريد الإلكتروني | Verify Email – warmtotuch</title>
+                <meta name="robots" content="noindex, nofollow" />
+            </Helmet>
             <div className="auth-box">
                 <h2>Verify Your Email</h2>
                 <p className="auth-subtitle">

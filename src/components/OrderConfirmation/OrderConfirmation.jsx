@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react'
+import { Helmet } from 'react-helmet-async'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { CheckCircle, Package, MapPin, CreditCard, ArrowRight, Home, MessageCircle } from 'lucide-react'
 import './orderConfirmation.css'
@@ -28,6 +29,10 @@ const OrderConfirmation = () => {
 
     return (
         <div className="confirmation-page">
+            <Helmet>
+                <title>تم تأكيد طلبك | Order Confirmed – warmtotuch</title>
+                <meta name="robots" content="noindex, nofollow" />
+            </Helmet>
             <div className="confirmation-container">
                 <div className="success-animation">
                     <CheckCircle size={80} strokeWidth={2} />

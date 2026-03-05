@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { Helmet } from 'react-helmet-async'
 import { useCart } from '../../context/CartContext'
 import { useAuth } from '../../context/AuthContext'
 import { useNavigate } from 'react-router-dom'
@@ -203,6 +204,10 @@ const Checkout = () => {
 
     return (
         <div className="checkout-page">
+            <Helmet>
+                <title>إتمام الطلب | Checkout – warmtotuch</title>
+                <meta name="robots" content="noindex, nofollow" />
+            </Helmet>
             <div className="checkout-container">
                 <div className="checkout-header">
                     <h1>Checkout</h1>
