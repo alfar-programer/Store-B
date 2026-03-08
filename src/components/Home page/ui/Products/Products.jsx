@@ -1,5 +1,6 @@
 
 import React, { useState, useEffect } from 'react'
+import { Helmet } from 'react-helmet-async'
 import axios from 'axios'
 import { useCart } from '../../../../context/CartContext'
 import { API_BASE_URL, PLACEHOLDER_IMAGE } from '../../../../config'
@@ -12,10 +13,6 @@ const Products = () => {
     const [isModalOpen, setIsModalOpen] = useState(false)
     const { addToCart } = useCart()
 
-    useEffect(() => {
-        fetchFeaturedProducts()
-    }, [])
-
     const fetchFeaturedProducts = async () => {
         try {
             const response = await axios.get(`${API_BASE_URL}/products/featured`)
@@ -26,6 +23,10 @@ const Products = () => {
             setLoading(false)
         }
     }
+
+    useEffect(() => {
+        fetchFeaturedProducts()
+    }, [])
 
     const parseImage = (imageField) => {
         if (!imageField) return PLACEHOLDER_IMAGE
@@ -85,6 +86,30 @@ const Products = () => {
 
     return (
         <section className="products-section">
+            <Helmet>
+                {selectedProduct && isModalOpen && (
+                    <script type="application/ld+json">
+                        {JSON.stringify({
+                            "@context": "https://schema.org/",
+                            "@type": "Product",
+                            "name": selectedProduct.title,
+                            "image": [parseImage(selectedProduct.image)],
+                            "description": selectedProduct.description,
+                            "brand": {
+                                "@type": "Brand",
+                                "name": "warmtotuch"
+                            },
+                            "offers": {
+                                "@type": "Offer",
+                                "url": "https://www.warmtotuch.store/",
+                                "priceCurrency": "EGP",
+                                "price": (parseFloat(selectedProduct.price) * (1 - selectedProduct.discount / 100)).toFixed(2),
+                                "availability": "https://schema.org/InStock"
+                            }
+                        })}
+                    </script>
+                )}
+            </Helmet>
             <div className="products-container">
                 <div className="products-header">
                     <h2>Featured Products</h2>

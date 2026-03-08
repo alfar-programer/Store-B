@@ -19,11 +19,6 @@ const AllProducts = () => {
     const [selectedCategory, setSelectedCategory] = useState(categoryParam || 'All')
     const { addToCart } = useCart()
 
-    // Fetch products from backend API
-    useEffect(() => {
-        fetchProducts()
-    }, [])
-
     const fetchProducts = async () => {
         try {
             setError(null)
@@ -42,6 +37,11 @@ const AllProducts = () => {
             setLoading(false)
         }
     }
+
+    // Fetch products from backend API
+    useEffect(() => {
+        fetchProducts()
+    }, [])
 
     const parseImage = (imageField) => {
         if (!imageField) return PLACEHOLDER_IMAGE
@@ -237,6 +237,28 @@ const AllProducts = () => {
                         ]
                     })}
                 </script>
+                {selectedProduct && (
+                    <script type="application/ld+json">
+                        {JSON.stringify({
+                            "@context": "https://schema.org/",
+                            "@type": "Product",
+                            "name": selectedProduct.title,
+                            "image": getImages(selectedProduct.image),
+                            "description": selectedProduct.description,
+                            "brand": {
+                                "@type": "Brand",
+                                "name": "warmtotuch"
+                            },
+                            "offers": {
+                                "@type": "Offer",
+                                "url": `https://www.warmtotuch.store/allproducts?category=${encodeURIComponent(selectedProduct.category)}`,
+                                "priceCurrency": "EGP",
+                                "price": (parseFloat(selectedProduct.price) * (1 - selectedProduct.discount / 100)).toFixed(2),
+                                "availability": "https://schema.org/InStock"
+                            }
+                        })}
+                    </script>
+                )}
             </Helmet>
             <div className="products-container">
                 {loading ? (
