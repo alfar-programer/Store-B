@@ -24,8 +24,11 @@ const AllProducts = () => {
             setError(null)
             const response = await api.products.getAll()
             if (response.ok) {
-                const data = await response.json()
-                setProducts(data)
+                const body = await response.json()
+                // Backend returns paginated: { success, data: [...], pagination }
+                // Fallback handles legacy plain-array responses
+                const productsArray = Array.isArray(body) ? body : (body?.data ?? [])
+                setProducts(productsArray)
             } else {
                 console.error('Failed to fetch products')
                 setError('Failed to load products. Please try again later.')

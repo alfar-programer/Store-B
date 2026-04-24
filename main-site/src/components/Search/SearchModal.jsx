@@ -28,7 +28,12 @@ const SearchModal = () => {
     const fetchProducts = async () => {
         try {
             const response = await axios.get(`${API_BASE_URL}/products`)
-            setProducts(response.data)
+            // Backend returns paginated: { success, data: [...], pagination }
+            // Axios wraps this in response.data, so the array is at response.data.data
+            const productsArray = Array.isArray(response.data)
+                ? response.data
+                : (response.data?.data ?? [])
+            setProducts(productsArray)
         } catch (error) {
             console.error('Error fetching products for search:', error)
         }
