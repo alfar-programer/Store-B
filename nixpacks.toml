@@ -1,8 +1,0 @@
-[phases.install]
-cmds = ["npm install --prefix main-site"]
-
-[phases.build]
-cmds = ["npm run build --prefix main-site"]
-
-[start]
-cmd = "npx serve@latest main-site/dist -s -l $PORT"
