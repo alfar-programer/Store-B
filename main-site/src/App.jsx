@@ -9,9 +9,9 @@ import About from './components/About/About'
 import Checkout from './components/Checkout/Checkout'
 import OrderConfirmation from './components/OrderConfirmation/OrderConfirmation'
 import LoadingScreen from './components/LoadingScreen/LoadingScreen'
-
 import Footer from './components/Footer/Footer'
 import ScrollToTop from './components/ScrollToTop/ScrollToTop'
+import PrivateRoute from './components/PrivateRoute/PrivateRoute'
 
 import { AuthProvider } from './context/AuthContext'
 import Login from './pages/Login'
@@ -25,16 +25,11 @@ const App = () => {
 
   // Show loading screen for 1.5 seconds on initial load
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setLoading(false)
-    }, 1500)
-
+    const timer = setTimeout(() => setLoading(false), 1500)
     return () => clearTimeout(timer)
   }, [])
 
-  if (loading) {
-    return <LoadingScreen />
-  }
+  if (loading) return <LoadingScreen />
 
   return (
     <Router>
@@ -44,18 +39,21 @@ const App = () => {
           <Header />
           <SearchModal />
           <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/cart" element={<Cart />} />
-            <Route path="/checkout" element={<Checkout />} />
+            {/* ── Public routes ────────────────────────────── */}
+            <Route path="/"                  element={<Home />} />
+            <Route path="/cart"              element={<Cart />} />
+            <Route path="/checkout"          element={<Checkout />} />
             <Route path="/order-confirmation" element={<OrderConfirmation />} />
-            <Route path="/allproducts" element={<AllProducts />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/contact" element={<Navigate to="/about#contact" replace />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/verify-email" element={<VerifyEmail />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/my-orders" element={<MyOrders />} />
+            <Route path="/allproducts"       element={<AllProducts />} />
+            <Route path="/about"             element={<About />} />
+            <Route path="/contact"           element={<Navigate to="/about#contact" replace />} />
+            <Route path="/login"             element={<Login />} />
+            <Route path="/register"          element={<Register />} />
+            <Route path="/verify-email"      element={<VerifyEmail />} />
+
+            {/* ── Protected routes (require login) ─────────── */}
+            <Route path="/profile"   element={<PrivateRoute><Profile /></PrivateRoute>} />
+            <Route path="/my-orders" element={<PrivateRoute><MyOrders /></PrivateRoute>} />
           </Routes>
           <Footer />
         </div>
