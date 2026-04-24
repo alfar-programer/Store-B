@@ -22,7 +22,7 @@ const AllProducts = () => {
     const fetchProducts = async () => {
         try {
             setError(null)
-            const response = await api.products.getAll()
+            const response = await api.products.getAll('?limit=1000')
             if (response.ok) {
                 const body = await response.json()
                 // Backend returns paginated: { success, data: [...], pagination }
