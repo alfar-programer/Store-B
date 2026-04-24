@@ -70,10 +70,10 @@ const Products = () => {
         setTimeout(() => setSelectedProduct(null), 300) // Delay to allow fade-out animation
     }
 
-    const handleAddToCart = (product) => {
+    const handleAddToCart = (product, event) => {
         addToCart(product)
         // Optional: Show a success message or animation
-        const button = event.target
+        const button = event.currentTarget
         const originalText = button.textContent
         button.textContent = '✓ Added!'
         button.style.background = 'linear-gradient(135deg, #48bb78 0%, #38a169 100%)'
@@ -162,7 +162,7 @@ const Products = () => {
                                     </div>
                                     <button
                                         className="add-to-cart-btn"
-                                        onClick={() => handleAddToCart(product)}
+                                        onClick={(e) => handleAddToCart(product, e)}
                                     >
                                         Add to Cart
                                     </button>
@@ -202,8 +202,8 @@ const Products = () => {
                             </div>
                             <button
                                 className="modal-add-to-cart"
-                                onClick={() => {
-                                    handleAddToCart(selectedProduct)
+                                onClick={(e) => {
+                                    handleAddToCart(selectedProduct, e)
                                     closeModal()
                                 }}
                             >

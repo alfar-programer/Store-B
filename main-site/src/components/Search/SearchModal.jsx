@@ -107,10 +107,10 @@ const SearchModal = () => {
         return () => window.removeEventListener('keydown', handleKeyDown)
     }, [isSearchOpen, closeSearch])
 
-    const handleAddToCart = (product) => {
+    const handleAddToCart = (product, event) => {
         addToCart(product)
         // Show success feedback
-        const button = event.target
+        const button = event.currentTarget
         const originalText = button.textContent
         button.textContent = '✓ Added!'
         button.style.background = 'linear-gradient(135deg, #48bb78 0%, #38a169 100%)'
@@ -202,7 +202,7 @@ const SearchModal = () => {
                                         className="search-add-to-cart"
                                         onClick={(e) => {
                                             e.stopPropagation()
-                                            handleAddToCart(product)
+                                            handleAddToCart(product, e)
                                         }}
                                     >
                                         Add to Cart
