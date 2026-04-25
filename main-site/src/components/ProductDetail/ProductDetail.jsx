@@ -5,7 +5,7 @@ import { useCart } from '../../context/CartContext';
 import { useFavorites } from '../../context/FavoritesContext';
 import api from '../../services/api';
 import { API_BASE_URL, PLACEHOLDER_IMAGE } from '../../config';
-import { Share2, ArrowLeft, Plus, Minus, X, Heart, ShoppingBag, Truck, ShieldCheck, RotateCcw, Hand, Leaf, Sparkles, CheckCircle, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Share2, ArrowLeft, Plus, Minus, X, Heart, ShoppingBag, Truck, ShieldCheck, RotateCcw, Hand, Leaf, Sparkles, CheckCircle, ChevronLeft, ChevronRight, Star, Eye } from 'lucide-react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import ReviewsSection from './ReviewsSection';
@@ -35,6 +35,8 @@ const ProductDetail = () => {
     const [showToast, setShowToast] = useState(false);
     const [recommendations, setRecommendations] = useState([]);
     const [recLoading, setRecLoading] = useState(true);
+    const [selectedRecProduct, setSelectedRecProduct] = useState(null);
+    const [isRecModalOpen, setIsRecModalOpen] = useState(false);
     const recSliderRef = useRef(null);
 
     useEffect(() => {
@@ -144,10 +146,12 @@ const ProductDetail = () => {
 
     const cleanImageUrl = (img) => {
         if (!img) return PLACEHOLDER_IMAGE;
-        if (img.startsWith('http') || img.startsWith('data:')) return img;
+        if (typeof img !== 'string') return img;
+        const normalizedImg = img.replace(/\\/g, '/');
+        if (normalizedImg.startsWith('http') || normalizedImg.startsWith('data:')) return normalizedImg;
         const rootUrl = API_BASE_URL.replace('/api', '');
         const cleanRoot = rootUrl.endsWith('/') ? rootUrl.slice(0, -1) : rootUrl;
-        const cleanPath = img.startsWith('/') ? img.slice(1) : img;
+        const cleanPath = normalizedImg.startsWith('/') ? normalizedImg.slice(1) : normalizedImg;
         return `${cleanRoot}/${cleanPath}`;
     };
 
@@ -188,13 +192,25 @@ const ProductDetail = () => {
 
     const scrollRecSlider = (direction) => {
         const container = recSliderRef.current;
-        const scrollAmount = 300;
-        container.scrollTo({
-            left: direction === 'left' 
-                ? container.scrollLeft - scrollAmount 
-                : container.scrollLeft + scrollAmount,
+        const scrollAmount = 350;
+        container.scrollBy({
+            left: direction === 'left' ? -scrollAmount : scrollAmount,
             behavior: 'smooth'
         });
+    };
+
+    const handleRecQuickView = (e, product) => {
+        if(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+        setSelectedRecProduct(product);
+        setIsRecModalOpen(true);
+    };
+
+    const closeRecModal = () => {
+        setIsRecModalOpen(false);
+        setTimeout(() => setSelectedRecProduct(null), 300);
     };
 
     const handleAddToCart = () => {
@@ -472,31 +488,144 @@ const ProductDetail = () => {
                                 ))
                             ) : (
                                 recommendations.map(item => {
-                                    const itemImages = getImages(item.image);
+                                    const itemImages = getImages(item.image || item.images);
                                     const img = itemImages[0] || PLACEHOLDER_IMAGE;
                                     const ratingObj = item.rating || { average: 5 };
                                     const ratingVal = typeof ratingObj === 'object' ? ratingObj.average : ratingObj;
 
                                     return (
-                                        <div key={item.id} className="rec-card" onClick={() => navigate(`/product/${item.id}`)}>
-                                            <div className="rec-img">
-                                                <img src={img} alt={item.title} />
-                                                <button className="rec-add" onClick={(e) => { e.stopPropagation(); addToCart(item, 1); setShowToast(true); setTimeout(() => setShowToast(false), 2000); }}><Plus size={16} /></button>
-                                            </div>
-                                            <div className="rec-info">
-                                                <h3>{item.title}</h3>
-                                                <div className="rec-meta">
-                                                    <span className="rec-price">{parseFloat(item.price).toFixed(2)} EGP</span>
-                                                    <div className="rec-rating">
-                                                        <span>★</span>
-                                                        <span>{Number(ratingVal).toFixed(1)}</span>
-                                                    </div>
+                                        <div key={item.id} className="rv-card rec-card-override" onClick={() => navigate(`/product/${item.id}`)}>
+                                            {item.discount > 0 && (
+                                                <div className="rv-discount-badge">-{item.discount}%</div>
+                                            )}
+                                            <div className="rv-image-wrapper">
+                                                <img src={img} alt={item.title} loading="lazy" />
+                                                <button 
+                                                    className="rv-favorite-btn"
+                                                    onClick={(e) => {
+                                                        e.preventDefault();
+                                                        e.stopPropagation();
+                                                        toggleFavorite(item);
+                                                    }}
+                                                >
+                                                    <Heart 
+                                                        size={20} 
+                                                        fill={isFavorite(item.id) ? '#ef4444' : 'none'} 
+                                                        color={isFavorite(item.id) ? '#ef4444' : '#6b7280'}
+                                                    />
+                                                </button>
+                                                <div className="rv-overlay">
+                                                    <button
+                                                        className="rv-quick-view-btn"
+                                                        onClick={(e) => handleRecQuickView(e, item)}
+                                                    >
+                                                        Quick View
+                                                    </button>
                                                 </div>
+                                            </div>
+                                            <div className="rv-info">
+                                                <h3 className="rv-title">{item.title}</h3>
+                                                <p className="rv-description">{item.description || ""}</p>
+                                                <div className="rv-rating-row">
+                                                    <span className="rv-stars">
+                                                        {[...Array(5)].map((_, i) => (
+                                                            <Star key={i} size={14} fill={i < Math.round(ratingVal) ? "#fbbf24" : "none"} color={i < Math.round(ratingVal) ? "#fbbf24" : "#d1d5db"} />
+                                                        ))}
+                                                    </span>
+                                                    <span className="rv-rating-value">{Number(ratingVal).toFixed(1)}</span>
+                                                </div>
+                                            </div>
+                                            <div className="rv-footer">
+                                                <div className="rv-price-wrapper">
+                                                    {item.discount > 0 ? (
+                                                        <>
+                                                            <span className="rv-price">{(parseFloat(item.price) * (1 - item.discount / 100)).toFixed(2)} <small>EGP</small></span>
+                                                            <span className="rv-original-price">{parseFloat(item.price).toFixed(2)} <small>EGP</small></span>
+                                                        </>
+                                                    ) : (
+                                                        <span className="rv-price">{parseFloat(item.price || 0).toFixed(2)} <small>EGP</small></span>
+                                                    )}
+                                                </div>
+                                                <button
+                                                    className="rv-add-to-cart-btn"
+                                                    disabled={typeof item.stock === 'number' && item.stock <= 0}
+                                                    onClick={(e) => {
+                                                        e.preventDefault();
+                                                        e.stopPropagation();
+                                                        addToCart(item, 1);
+                                                        setShowToast(true);
+                                                        setTimeout(() => setShowToast(false), 2000);
+                                                    }}
+                                                >
+                                                    <ShoppingBag size={18} />
+                                                </button>
                                             </div>
                                         </div>
                                     );
                                 })
                             )}
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Recommendation Quick View Modal */}
+            {isRecModalOpen && selectedRecProduct && (
+                <div className={`rv-modal-overlay active`} onClick={closeRecModal}>
+                    <div className="rv-modal-content" onClick={(e) => e.stopPropagation()}>
+                        <button className="rv-modal-close" onClick={closeRecModal}>×</button>
+                        <div className="rv-modal-image-wrapper">
+                            <button 
+                                className="rv-modal-favorite-btn"
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    toggleFavorite(selectedRecProduct);
+                                }}
+                            >
+                                <Heart 
+                                    size={24} 
+                                    fill={isFavorite(selectedRecProduct.id) ? '#ef4444' : 'none'} 
+                                    color={isFavorite(selectedRecProduct.id) ? '#ef4444' : '#6b7280'}
+                                />
+                            </button>
+                            <img src={cleanImageUrl((getImages(selectedRecProduct.image || selectedRecProduct.images))[0])} alt={selectedRecProduct.title} />
+                        </div>
+                        <div className="rv-modal-details">
+                            <h2>{selectedRecProduct.title}</h2>
+                            <p className="rv-modal-description">{selectedRecProduct.description}</p>
+                            <div className="rv-modal-rating">
+                                <span className="rv-stars">
+                                    {[...Array(5)].map((_, i) => (
+                                        <Star key={i} size={16} fill={i < Math.round(selectedRecProduct.rating?.average || selectedRecProduct.rating || 5) ? "#fbbf24" : "none"} color={i < Math.round(selectedRecProduct.rating?.average || selectedRecProduct.rating || 5) ? "#fbbf24" : "#d1d5db"} />
+                                    ))}
+                                </span>
+                                <span className="rv-rating-value">
+                                    {Number(selectedRecProduct.rating?.average || selectedRecProduct.rating || 5).toFixed(1)}
+                                </span>
+                            </div>
+                            <div className="rv-modal-price-section">
+                                {selectedRecProduct.discount > 0 ? (
+                                    <>
+                                        <span className="rv-modal-price">{(parseFloat(selectedRecProduct.price) * (1 - selectedRecProduct.discount / 100)).toFixed(2)} <small>EGP</small></span>
+                                        <span className="rv-modal-original-price">{parseFloat(selectedRecProduct.price).toFixed(2)} <small>EGP</small></span>
+                                        <span className="rv-modal-discount-badge">-{selectedRecProduct.discount}% OFF</span>
+                                    </>
+                                ) : (
+                                    <span className="rv-modal-price">{parseFloat(selectedRecProduct.price || 0).toFixed(2)} <small>EGP</small></span>
+                                )}
+                            </div>
+                            <button
+                                className="rv-modal-add-to-cart"
+                                onClick={(e) => {
+                                    addToCart(selectedRecProduct, 1);
+                                    closeRecModal();
+                                    setShowToast(true);
+                                    setTimeout(() => setShowToast(false), 2000);
+                                }}
+                            >
+                                Add to Cart
+                            </button>
                         </div>
                     </div>
                 </div>

@@ -674,41 +674,59 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 24px;
+  margin-bottom: 30px;
 }
 
 .recommendations-section h2 {
-  font-size: 1.8rem;
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  font-weight: 700;
   color: var(--text-primary);
   margin: 0;
+  position: relative;
+}
+
+.recommendations-section h2::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 0;
+    width: 60px;
+    height: 3px;
+    background: var(--accent-primary);
+    border-radius: 2px;
 }
 
 .slider-controls {
   display: flex;
-  gap: 12px;
+  gap: 15px;
 }
 
 .slider-arrow {
-  width: 44px;
-  height: 44px;
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
-  border: 1px solid rgba(0,0,0,0.08);
-  background: white;
+  border: 1px solid var(--border-color);
+  background: var(--bg-secondary);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   color: var(--text-primary);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
 }
 
-.slider-arrow:hover {
+.slider-arrow:hover:not(:disabled) {
   background: var(--accent-primary);
   color: white;
   border-color: var(--accent-primary);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  transform: translateY(-3px) scale(1.1);
+  box-shadow: 0 8px 25px rgba(139, 111, 71, 0.3);
+}
+
+.slider-arrow:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
 .rec-slider-wrapper {
@@ -719,10 +737,10 @@
 
 .rec-grid {
   display: flex;
-  gap: 16px;
+  gap: 25px;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
-  padding: 10px 0 20px 0;
+  padding: 20px 0 40px 0;
   scrollbar-width: none;
   -ms-overflow-style: none;
   -webkit-overflow-scrolling: touch;
@@ -732,115 +750,15 @@
   display: none;
 }
 
-.rec-card {
-  flex: 0 0 calc(20% - 13px);
-  min-width: 160px;
-  scroll-snap-align: start;
-  display: flex;
-  flex-direction: column;
-  background: white;
-  border-radius: 8px;
-  overflow: hidden;
-  border: 1px solid #f3f4f6;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  cursor: pointer;
-  text-decoration: none;
-  color: inherit;
+/* Override rv-card for recommendation grid */
+.rec-card-override {
+    flex: 0 0 280px;
+    scroll-snap-align: start;
 }
 
-.rec-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.05);
-}
-
-.rec-img {
-  width: 100%;
-  aspect-ratio: 1 / 1;
-  overflow: hidden;
-  background-color: #f9fafb;
-  position: relative;
-}
-
-.rec-img img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.5s ease;
-}
-
-.rec-card:hover .rec-img img {
-  transform: scale(1.05);
-}
-
-.rec-cat {
-  font-size: 0.75rem;
-  color: var(--soft-gray);
-  margin-bottom: 5px;
-}
-
-.rec-info {
-  padding: 12px;
-  display: flex;
-  flex-direction: column;
-}
-
-.rec-info h3 {
-  margin: 0 0 6px 0;
-  font-size: 0.95rem;
-  font-weight: 500;
-  color: var(--text-primary);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.rec-meta {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
+.recommendations-section .rv-footer {
   gap: 6px;
   margin-top: auto;
-}
-
-.rec-price {
-  font-weight: 600;
-  color: var(--text-primary);
-  font-size: 1rem;
-}
-
-.rec-rating {
-  display: flex;
-  align-items: center;
-  gap: 3px;
-  font-size: 0.8rem;
-  color: #ffb800;
-}
-
-.rec-add {
-  position: absolute;
-  bottom: 8px;
-  right: 8px;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  border: none;
-  background: rgba(255,255,255,0.9);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  opacity: 0;
-  transition: opacity 0.2s ease, background 0.2s ease;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-}
-
-.rec-card:hover .rec-add {
-  opacity: 1;
-}
-
-.rec-add:hover {
-  background: var(--accent-primary);
-  color: white;
 }
 
 @media (max-width: 1024px) {
