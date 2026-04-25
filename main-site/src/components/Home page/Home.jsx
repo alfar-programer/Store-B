@@ -5,9 +5,12 @@ import Category from './ui/shopCategory/Category'
 import Products from './ui/Products/Products'
 import TrustBadges from './ui/TrustBadges/TrustBadges'
 import Newsletter from './ui/Newsletter/Newsletter'
+import { useRecentlyViewed } from '../../hooks/useRecentlyViewed'
+import RecentlyViewed from '../RecentlyViewed/RecentlyViewed'
 import './home.css'
 
 const Home = () => {
+  const { recentlyViewed } = useRecentlyViewed();
   return (
     <div className="home-container">
       <Helmet>
@@ -92,6 +95,9 @@ const Home = () => {
       <TrustBadges />
       <Category />
       <Products />
+      {recentlyViewed && recentlyViewed.length > 0 && (
+        <RecentlyViewed products={recentlyViewed} />
+      )}
       <Newsletter />
     </div>
   )

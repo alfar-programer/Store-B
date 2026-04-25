@@ -173,11 +173,9 @@ const handleAddToCart = (e, product) => {
                                     </div>
                                     <button
                                         className="add-to-cart-btn"
-<<<<<<< HEAD:src/components/Home page/ui/Products/Products.jsx
+
                                         onClick={(e) => handleAddToCart(e, product)}
-=======
-                                        onClick={(e) => handleAddToCart(product, e)}
->>>>>>> 8fd4ea8c66452ae70bd4c7ce3284c5094f63b88e:main-site/src/components/Home page/ui/Products/Products.jsx
+
                                     >
                                         Add to Cart
                                     </button>
