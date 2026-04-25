@@ -75,25 +75,23 @@ const Profile = () => {
     const fetchOrders = async () => {
         try {
             const token = localStorage.getItem('token');
-            if (!token) {
-                return;
-            }
+            if (!token) return;
+
             const response = await fetch(`${API_BASE_URL}/user/orders`, {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
+                headers: { 'Authorization': `Bearer ${token}` }
             });
 
-            if (!response.ok) {
-                throw new Error(`Failed to fetch orders: ${response.status}`);
-            }
+            if (!response.ok) throw new Error(`Failed to fetch orders: ${response.status}`);
 
-            const data = await response.json();
-            // Ensure data is an array
-            setOrders(Array.isArray(data) ? data : []);
+            const payload = await response.json();
+
+            // API now returns { success, data: [...] }
+            // Fall back to treating payload itself as array for backwards compatibility
+            const list = Array.isArray(payload) ? payload : (payload.data ?? []);
+            setOrders(list);
         } catch (error) {
             console.error('Error fetching orders:', error);
-            setOrders([]); // Set empty array on error
+            setOrders([]);
         }
     };
 

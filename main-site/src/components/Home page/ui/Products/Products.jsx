@@ -75,23 +75,25 @@ const Products = () => {
         setTimeout(() => setSelectedProduct(null), 300) // Delay to allow fade-out animation
     }
 
-    const handleAddToCart = (e, product) => {
-        if(e) {
-            e.preventDefault();
-            e.stopPropagation();
-        }
-        addToCart(product)
-        // Optional: Show a success message or animation
-        const button = e.currentTarget
-        const originalText = button.textContent
-        button.textContent = '✓ Added!'
-        button.style.background = 'linear-gradient(135deg, #48bb78 0%, #38a169 100%)'
-
-        setTimeout(() => {
-            button.textContent = originalText
-            button.style.background = ''
-        }, 2000)
+const handleAddToCart = (e, product) => {
+    if (e) {
+        e.preventDefault()
+        e.stopPropagation()
     }
+
+    addToCart(product)
+
+    const button = e.currentTarget
+    const originalText = button.textContent
+
+    button.textContent = '✓ Added!'
+    button.style.background = 'linear-gradient(135deg, #48bb78 0%, #38a169 100%)'
+
+    setTimeout(() => {
+        button.textContent = originalText
+        button.style.background = ''
+    }, 2000)
+}
 
     return (
         <section className="products-section">
@@ -171,7 +173,11 @@ const Products = () => {
                                     </div>
                                     <button
                                         className="add-to-cart-btn"
+<<<<<<< HEAD:src/components/Home page/ui/Products/Products.jsx
                                         onClick={(e) => handleAddToCart(e, product)}
+=======
+                                        onClick={(e) => handleAddToCart(product, e)}
+>>>>>>> 8fd4ea8c66452ae70bd4c7ce3284c5094f63b88e:main-site/src/components/Home page/ui/Products/Products.jsx
                                     >
                                         Add to Cart
                                     </button>
@@ -211,8 +217,8 @@ const Products = () => {
                             </div>
                             <button
                                 className="modal-add-to-cart"
-                                onClick={() => {
-                                    handleAddToCart(selectedProduct)
+                                onClick={(e) => {
+                                    handleAddToCart(selectedProduct, e)
                                     closeModal()
                                 }}
                             >

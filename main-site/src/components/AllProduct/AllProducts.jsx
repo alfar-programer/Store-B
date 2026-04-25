@@ -22,10 +22,13 @@ const AllProducts = () => {
     const fetchProducts = async () => {
         try {
             setError(null)
-            const response = await api.products.getAll()
+            const response = await api.products.getAll('?limit=1000')
             if (response.ok) {
-                const data = await response.json()
-                setProducts(data)
+                const body = await response.json()
+                // Backend returns paginated: { success, data: [...], pagination }
+                // Fallback handles legacy plain-array responses
+                const productsArray = Array.isArray(body) ? body : (body?.data ?? [])
+                setProducts(productsArray)
             } else {
                 console.error('Failed to fetch products')
                 setError('Failed to load products. Please try again later.')
@@ -152,23 +155,25 @@ const AllProducts = () => {
         }, 3000) // Delay to allow fade-out animation
     }
 
-    const handleAddToCart = (e, product) => {
-        if(e) {
-            e.preventDefault();
-            e.stopPropagation();
-        }
-        addToCart(product)
-        // Optional: Show a success message or animation
-        const button = e.currentTarget // Get the button element 
-        const originalText = button.textContent
-        button.textContent = '✓ Added!'
-        button.style.background = 'linear-gradient(135deg, #48bb78 0%, #38a169 100%)'
-
-        setTimeout(() => {
-            button.textContent = originalText
-            button.style.background = ''
-        }, 2000)
+const handleAddToCart = (e, product) => {
+    if (e) {
+        e.preventDefault()
+        e.stopPropagation()
     }
+
+    addToCart(product)
+
+    const button = e.currentTarget
+    const originalText = button.textContent
+
+    button.textContent = '✓ Added!'
+    button.style.background = 'linear-gradient(135deg, #48bb78 0%, #38a169 100%)'
+
+    setTimeout(() => {
+        button.textContent = originalText
+        button.style.background = ''
+    }, 2000)
+}
 
     const handleCategoryChange = (category) => {
         setSelectedCategory(category)
@@ -370,7 +375,11 @@ const AllProducts = () => {
                                         </div>
                                         <button
                                             className="add-to-cart-btn"
+<<<<<<< HEAD:src/components/AllProduct/AllProducts.jsx
                                             onClick={(e) => handleAddToCart(e, product)}
+=======
+                                            onClick={(e) => handleAddToCart(product, e)}
+>>>>>>> 8fd4ea8c66452ae70bd4c7ce3284c5094f63b88e:main-site/src/components/AllProduct/AllProducts.jsx
                                         >
                                             Add to Cart
                                         </button>
@@ -432,8 +441,8 @@ const AllProducts = () => {
                                         </div>
                                         <button
                                             className="modal-add-to-cart"
-                                            onClick={() => {
-                                                handleAddToCart(selectedProduct)
+                                            onClick={(e) => {
+                                                handleAddToCart(selectedProduct, e)
                                                 closeModal()
                                             }}
                                         >

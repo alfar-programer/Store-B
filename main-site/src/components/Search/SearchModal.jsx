@@ -28,7 +28,12 @@ const SearchModal = () => {
     const fetchProducts = async () => {
         try {
             const response = await axios.get(`${API_BASE_URL}/products`)
-            setProducts(response.data)
+            // Backend returns paginated: { success, data: [...], pagination }
+            // Axios wraps this in response.data, so the array is at response.data.data
+            const productsArray = Array.isArray(response.data)
+                ? response.data
+                : (response.data?.data ?? [])
+            setProducts(productsArray)
         } catch (error) {
             console.error('Error fetching products for search:', error)
         }
@@ -102,10 +107,10 @@ const SearchModal = () => {
         return () => window.removeEventListener('keydown', handleKeyDown)
     }, [isSearchOpen, closeSearch])
 
-    const handleAddToCart = (product) => {
+    const handleAddToCart = (product, event) => {
         addToCart(product)
         // Show success feedback
-        const button = event.target
+        const button = event.currentTarget
         const originalText = button.textContent
         button.textContent = '✓ Added!'
         button.style.background = 'linear-gradient(135deg, #48bb78 0%, #38a169 100%)'
@@ -197,7 +202,7 @@ const SearchModal = () => {
                                         className="search-add-to-cart"
                                         onClick={(e) => {
                                             e.stopPropagation()
-                                            handleAddToCart(product)
+                                            handleAddToCart(product, e)
                                         }}
                                     >
                                         Add to Cart

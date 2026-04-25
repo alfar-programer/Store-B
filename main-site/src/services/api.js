@@ -102,7 +102,7 @@ export async function apiDelete(endpoint, token) {
 
 // Products API
 export const productsAPI = {
-    getAll: () => apiGet('/products'),
+    getAll: (params = '') => apiGet(`/products${params}`),
     getById: (id) => apiGet(`/products/${id}`),
     create: (data) => apiPost('/products', data),
     update: (id, data) => apiPut(`/products/${id}`, data),
