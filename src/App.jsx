@@ -9,6 +9,7 @@ import About from './components/About/About'
 import Checkout from './components/Checkout/Checkout'
 import OrderConfirmation from './components/OrderConfirmation/OrderConfirmation'
 import LoadingScreen from './components/LoadingScreen/LoadingScreen'
+import ProductDetail from './components/ProductDetail/ProductDetail'
 
 import Footer from './components/Footer/Footer'
 import ScrollToTop from './components/ScrollToTop/ScrollToTop'
@@ -49,6 +50,7 @@ const App = () => {
             <Route path="/checkout" element={<Checkout />} />
             <Route path="/order-confirmation" element={<OrderConfirmation />} />
             <Route path="/allproducts" element={<AllProducts />} />
+            <Route path="/product/:id" element={<ProductDetail />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Navigate to="/about#contact" replace />} />
             <Route path="/login" element={<Login />} />

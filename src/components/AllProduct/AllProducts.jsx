@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react'
 import { Helmet } from 'react-helmet-async'
 import { useCart } from '../../context/CartContext'
-import { useSearchParams, useNavigate } from 'react-router-dom'
+import { useSearchParams, useNavigate, Link } from 'react-router-dom'
 import api from '../../services/api'
 import { API_BASE_URL, PLACEHOLDER_IMAGE } from '../../config'
 import './allproducts.css'
@@ -131,7 +131,11 @@ const AllProducts = () => {
     const [modalImages, setModalImages] = useState([]);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-    const handleQuickView = (product) => {
+    const handleQuickView = (e, product) => {
+        if(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
         setSelectedProduct(product)
         const images = getImages(product.image);
         setModalImages(images);
@@ -148,10 +152,14 @@ const AllProducts = () => {
         }, 3000) // Delay to allow fade-out animation
     }
 
-    const handleAddToCart = (product) => {
+    const handleAddToCart = (e, product) => {
+        if(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
         addToCart(product)
         // Optional: Show a success message or animation
-        const button = event.target // Get the button element 
+        const button = e.currentTarget // Get the button element 
         const originalText = button.textContent
         button.textContent = '✓ Added!'
         button.style.background = 'linear-gradient(135deg, #48bb78 0%, #38a169 100%)'
@@ -326,7 +334,7 @@ const AllProducts = () => {
 
                         <div className="products-grid">
                             {filteredProducts.map((product) => (
-                                <div className="product-card" key={product.id}>
+                                <Link to={`/product/${product.id}`} className="product-card" key={product.id} style={{ textDecoration: 'none', color: 'inherit', display: 'flex', flexDirection: 'column' }}>
                                     {product.discount > 0 && (
                                         <div className="discount-badge">-{product.discount}%</div>
                                     )}
@@ -335,7 +343,7 @@ const AllProducts = () => {
                                         <div className="product-overlay">
                                             <button
                                                 className="quick-view-btn"
-                                                onClick={() => handleQuickView(product)}
+                                                onClick={(e) => handleQuickView(e, product)}
                                             >
                                                 Quick View
                                             </button>
@@ -362,12 +370,12 @@ const AllProducts = () => {
                                         </div>
                                         <button
                                             className="add-to-cart-btn"
-                                            onClick={() => handleAddToCart(product)}
+                                            onClick={(e) => handleAddToCart(e, product)}
                                         >
                                             Add to Cart
                                         </button>
                                     </div>
-                                </div>
+                                </Link>
                             ))}
                         </div>
 
