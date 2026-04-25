@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
-import { Search, ShoppingCart, User, Menu, X } from 'lucide-react'
+import { Search, ShoppingCart, User, Menu, X, Heart } from 'lucide-react'
 import { useCart } from '../../context/CartContext'
 import { useSearch } from '../../context/SearchContext'
 import { useAuth } from '../../context/AuthContext'
+import { useFavorites } from '../../context/FavoritesContext'
 import './header.css'
 
 const Header = () => {
@@ -13,7 +14,9 @@ const Header = () => {
     const { getCartCount } = useCart();
     const { openSearch } = useSearch();
     const { user, logout } = useAuth();
+    const { getFavoritesCount } = useFavorites();
     const cartCount = getCartCount();
+    const favoritesCount = getFavoritesCount();
 
     const toggleMobileMenu = () => {
         setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -111,6 +114,16 @@ const Header = () => {
                             onClick={openSearch}
                         >
                             <Search size={22} strokeWidth={2} />
+                        </button>
+                        <button
+                            className="icon-btn cart-btn"
+                            aria-label="Favorites"
+                            onClick={() => navigate('/favorites')}
+                        >
+                            <Heart size={22} strokeWidth={2} />
+                            {favoritesCount > 0 && (
+                                <span className="cart-badge">{favoritesCount}</span>
+                            )}
                         </button>
                         <button
                             className="icon-btn cart-btn"

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { useCart } from '../../context/CartContext';
+import { useFavorites } from '../../context/FavoritesContext';
 import api from '../../services/api';
 import { API_BASE_URL, PLACEHOLDER_IMAGE } from '../../config';
 import { Share2, ArrowLeft, Plus, Minus, X, Heart, ShoppingBag, Truck, ShieldCheck, RotateCcw, Hand, Leaf, Sparkles, CheckCircle, ChevronLeft, ChevronRight } from 'lucide-react';
@@ -18,6 +19,7 @@ const ProductDetail = () => {
     const { id } = useParams();
     const navigate = useNavigate();
     const { addToCart } = useCart();
+    const { toggleFavorite, isFavorite } = useFavorites();
     const { addToRecentlyViewed, recentlyViewed } = useRecentlyViewed();
 
     const [product, setProduct] = useState(null);
@@ -371,7 +373,17 @@ const ProductDetail = () => {
                             <ShoppingBag size={20} />
                             <span>Add to Cart</span>
                         </button>
-                        <button className="wishlist-btn-ui"><Heart size={20} /></button>
+                        <button 
+                            className="wishlist-btn-ui"
+                            onClick={() => toggleFavorite(product)}
+                            style={{ transition: 'color 0.2s ease, transform 0.2s ease' }}
+                        >
+                            <Heart 
+                                size={20} 
+                                fill={product && isFavorite(product.id) ? '#ef4444' : 'none'} 
+                                color={product && isFavorite(product.id) ? '#ef4444' : 'currentColor'}
+                            />
+                        </button>
                     </div>
 
                     <div className="feature-icon-strip">

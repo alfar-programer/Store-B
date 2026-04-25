@@ -2,13 +2,15 @@
 import React from 'react'
 import { Helmet } from 'react-helmet-async'
 import { useCart } from '../../context/CartContext'
-import { Trash2, Plus, Minus, ShoppingBag, ArrowLeft, MessageCircle } from 'lucide-react'
+import { Trash2, Plus, Minus, ShoppingBag, ArrowLeft, MessageCircle, Heart } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
+import { useFavorites } from '../../context/FavoritesContext'
 import { API_BASE_URL, PLACEHOLDER_IMAGE } from '../../config'
 import './cart.css'
 
 const Cart = () => {
     const { cartItems, removeFromCart, updateQuantity, getCartTotal, clearCart } = useCart()
+    const { toggleFavorite, isFavorite } = useFavorites()
     const navigate = useNavigate() // Import useNavigate to navigate to the home page
 
     const parseImage = (imageField) => {
@@ -37,9 +39,13 @@ const Cart = () => {
         return imageUrl || PLACEHOLDER_IMAGE
     }
 
-    const handleQuantityChange = (productId, newQuantity) => {
+    const handleQuantityChange = (productId, newQuantity, maxStock) => {
         if (newQuantity >= 1) {
-            updateQuantity(productId, newQuantity)
+            // Don't exceed available stock
+            const capped = typeof maxStock === 'number' && maxStock > 0
+                ? Math.min(newQuantity, maxStock)
+                : newQuantity
+            updateQuantity(productId, capped)
         }
     } // Function to handle quantity changes its check if the new quantity is greater than or equal to 1
 
@@ -106,19 +112,27 @@ const Cart = () => {
                                     {item.discount > 0 && (
                                         <span className="cart-item-discount">-{item.discount}% OFF</span>
                                     )}
+                                    {typeof item.stock === 'number' && (
+                                        <p className="cart-item-stock" style={{ fontSize: '0.85rem', color: item.stock > 0 ? (item.stock < 10 ? '#d97706' : '#059669') : '#dc2626', marginTop: '4px', fontWeight: '500' }}>
+                                            {item.stock > 0 ? `${item.stock} in stock` : 'Out of stock'}
+                                        </p>
+                                    )}
                                 </div>
 
                                 <div className="cart-item-quantity">
                                     <button
                                         className="quantity-btn"
-                                        onClick={() => handleQuantityChange(item.id, item.quantity - 1)}
+                                        onClick={() => handleQuantityChange(item.id, item.quantity - 1, item.stock)}
                                     >
                                         <Minus size={16} />
                                     </button>
                                     <span className="quantity-value">{item.quantity}</span>
                                     <button
                                         className="quantity-btn"
-                                        onClick={() => handleQuantityChange(item.id, item.quantity + 1)}
+                                        disabled={typeof item.stock === 'number' && item.stock > 0 && item.quantity >= item.stock}
+                                        style={typeof item.stock === 'number' && item.stock > 0 && item.quantity >= item.stock ? { opacity: 0.4, cursor: 'not-allowed' } : {}}
+                                        title={typeof item.stock === 'number' && item.stock > 0 && item.quantity >= item.stock ? `Max stock: ${item.stock}` : ''}
+                                        onClick={() => handleQuantityChange(item.id, item.quantity + 1, item.stock)}
                                     >
                                         <Plus size={16} />
                                     </button>
@@ -154,13 +168,26 @@ const Cart = () => {
                                     </div>
                                 </div>
 
-                                <button
-                                    className="remove-item-btn"
-                                    onClick={() => removeFromCart(item.id)}
-                                    title="Remove item"
-                                >
-                                    <Trash2 size={20} />
-                                </button>
+                                <div className="cart-item-actions" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                                    <button
+                                        className="remove-item-btn"
+                                        style={{ 
+                                            background: isFavorite(item.id) ? '#fee2e2' : '#f3f4f6', 
+                                            color: isFavorite(item.id) ? '#ef4444' : '#6b7280'
+                                        }}
+                                        onClick={() => toggleFavorite(item)}
+                                        title={isFavorite(item.id) ? "Remove from favorites" : "Add to favorites"}
+                                    >
+                                        <Heart size={20} fill={isFavorite(item.id) ? '#ef4444' : 'none'} />
+                                    </button>
+                                    <button
+                                        className="remove-item-btn"
+                                        onClick={() => removeFromCart(item.id)}
+                                        title="Remove item"
+                                    >
+                                        <Trash2 size={20} />
+                                    </button>
+                                </div>
                             </div>
                         ))}
                     </div>

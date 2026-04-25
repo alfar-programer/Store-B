@@ -15,11 +15,13 @@ import ScrollToTop from './components/ScrollToTop/ScrollToTop'
 import PrivateRoute from './components/PrivateRoute/PrivateRoute'
 
 import { AuthProvider } from './context/AuthContext'
+import { FavoritesProvider } from './context/FavoritesContext'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import VerifyEmail from './pages/VerifyEmail'
 import Profile from './pages/Profile'
 import MyOrders from './pages/MyOrders'
+import Favorites from './components/Favorites/Favorites'
 
 const App = () => {
   const [loading, setLoading] = useState(true)
@@ -34,7 +36,8 @@ const App = () => {
   return (
     <Router>
       <AuthProvider>
-        <ScrollToTop />
+        <FavoritesProvider>
+          <ScrollToTop />
         <div>
           <Header />
           <SearchModal />
@@ -51,6 +54,7 @@ const App = () => {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/verify-email" element={<VerifyEmail />} />
+            <Route path="/favorites" element={<Favorites />} />
 
             {/* Protected routes */}
             <Route path="/profile" element={<PrivateRoute><Profile /></PrivateRoute>} />
@@ -58,6 +62,7 @@ const App = () => {
           </Routes>
           <Footer />
         </div>
+        </FavoritesProvider>
       </AuthProvider>
     </Router>
   )

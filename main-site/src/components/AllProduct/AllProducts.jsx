@@ -1,6 +1,8 @@
 import React, { useState, useMemo, useEffect } from 'react'
 import { Helmet } from 'react-helmet-async'
+import { Heart } from 'lucide-react'
 import { useCart } from '../../context/CartContext'
+import { useFavorites } from '../../context/FavoritesContext'
 import { useSearchParams, useNavigate, Link } from 'react-router-dom'
 import api from '../../services/api'
 import { API_BASE_URL, PLACEHOLDER_IMAGE } from '../../config'
@@ -18,6 +20,7 @@ const AllProducts = () => {
     const categoryParam = searchParams.get('category')
     const [selectedCategory, setSelectedCategory] = useState(categoryParam || 'All')
     const { addToCart } = useCart()
+    const { toggleFavorite, isFavorite } = useFavorites()
 
     const fetchProducts = async () => {
         try {
@@ -160,6 +163,9 @@ const handleAddToCart = (e, product) => {
         e.preventDefault()
         e.stopPropagation()
     }
+
+    // Guard: don't add if out of stock
+    if (typeof product.stock === 'number' && product.stock <= 0) return
 
     addToCart(product)
 
@@ -345,6 +351,36 @@ const handleAddToCart = (e, product) => {
                                     )}
                                     <div className="product-image-wrapper">
                                         <img src={parseImage(product.image)} alt={product.title} />
+                                        <button 
+                                            className="favorite-btn"
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                e.stopPropagation();
+                                                toggleFavorite(product);
+                                            }}
+                                            style={{
+                                                position: 'absolute',
+                                                top: '10px',
+                                                right: '10px',
+                                                background: 'white',
+                                                border: 'none',
+                                                borderRadius: '50%',
+                                                padding: '8px',
+                                                cursor: 'pointer',
+                                                boxShadow: '0 2px 5px rgba(0,0,0,0.1)',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                zIndex: 2,
+                                                transition: 'transform 0.2s ease, color 0.2s ease'
+                                            }}
+                                        >
+                                            <Heart 
+                                                size={20} 
+                                                fill={isFavorite(product.id) ? '#ef4444' : 'none'} 
+                                                color={isFavorite(product.id) ? '#ef4444' : '#6b7280'}
+                                            />
+                                        </button>
                                         <div className="product-overlay">
                                             <button
                                                 className="quick-view-btn"
@@ -373,14 +409,19 @@ const handleAddToCart = (e, product) => {
                                                 <span className="price">{parseFloat(product.price).toFixed(2)} <small>EGP</small></span>
                                             )}
                                         </div>
+                                        {/* Stock indicator */}
+                                        {typeof product.stock === 'number' && product.stock > 0 && product.stock < 10 && (
+                                            <span style={{ fontSize: '0.7rem', color: '#d97706', fontWeight: '600', marginBottom: '4px', display: 'block' }}>
+                                                Only {product.stock} left!
+                                            </span>
+                                        )}
                                         <button
                                             className="add-to-cart-btn"
-
+                                            disabled={typeof product.stock === 'number' && product.stock <= 0}
+                                            style={typeof product.stock === 'number' && product.stock <= 0 ? { opacity: 0.5, cursor: 'not-allowed' } : {}}
                                             onClick={(e) => handleAddToCart(e, product)}
-
-
                                         >
-                                            Add to Cart
+                                            {typeof product.stock === 'number' && product.stock <= 0 ? 'Out of Stock' : 'Add to Cart'}
                                         </button>
                                     </div>
                                 </Link>
@@ -392,7 +433,37 @@ const handleAddToCart = (e, product) => {
                             <div className={`modal-overlay ${isModalOpen ? 'active' : ''}`} onClick={closeModal}>
                                 <div className="modal-content" onClick={(e) => e.stopPropagation()}>
                                     <button className="modal-close" onClick={closeModal}>×</button>
-                                    <div className="modal-image-wrapper">
+                                    <div className="modal-image-wrapper" style={{ position: 'relative' }}>
+                                        <button 
+                                            className="favorite-btn"
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                e.stopPropagation();
+                                                toggleFavorite(selectedProduct);
+                                            }}
+                                            style={{
+                                                position: 'absolute',
+                                                top: '10px',
+                                                right: '10px',
+                                                background: 'white',
+                                                border: 'none',
+                                                borderRadius: '50%',
+                                                padding: '10px',
+                                                cursor: 'pointer',
+                                                boxShadow: '0 2px 5px rgba(0,0,0,0.1)',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                zIndex: 10,
+                                                transition: 'transform 0.2s ease'
+                                            }}
+                                        >
+                                            <Heart 
+                                                size={24} 
+                                                fill={isFavorite(selectedProduct.id) ? '#ef4444' : 'none'} 
+                                                color={isFavorite(selectedProduct.id) ? '#ef4444' : '#6b7280'}
+                                            />
+                                        </button>
                                         <div className="modal-gallery-container">
                                             <div className="modal-main-image">
                                                 <img

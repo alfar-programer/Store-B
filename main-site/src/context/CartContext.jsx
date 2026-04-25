@@ -23,19 +23,23 @@ export const CartProvider = ({ children }) => {
     }, [cartItems])
 
     const addToCart = (product, quantity = 1) => {
+        const maxStock = typeof product.stock === 'number' ? product.stock : Infinity
+        if (maxStock <= 0) return // Out of stock – do nothing
+
         setCartItems((prevItems) => {
             const existingItem = prevItems.find((item) => item.id === product.id)
 
             if (existingItem) {
-                // If item exists, increase quantity
+                // Respect stock ceiling
+                const newQty = Math.min(existingItem.quantity + quantity, maxStock)
                 return prevItems.map((item) =>
                     item.id === product.id
-                        ? { ...item, quantity: item.quantity + quantity }
+                        ? { ...item, quantity: newQty }
                         : item
                 )
             } else {
-                // If item doesn't exist, add it with quantity
-                return [...prevItems, { ...product, quantity }]
+                // If item doesn't exist, add it with quantity capped to stock
+                return [...prevItems, { ...product, quantity: Math.min(quantity, maxStock) }]
             }
         })
     }
@@ -51,9 +55,13 @@ export const CartProvider = ({ children }) => {
         }
 
         setCartItems((prevItems) =>
-            prevItems.map((item) =>
-                item.id === productId ? { ...item, quantity } : item
-            )
+            prevItems.map((item) => {
+                if (item.id !== productId) return item
+                const maxStock = typeof item.stock === 'number' && item.stock > 0
+                    ? item.stock
+                    : Infinity
+                return { ...item, quantity: Math.min(quantity, maxStock) }
+            })
         )
     }
 
