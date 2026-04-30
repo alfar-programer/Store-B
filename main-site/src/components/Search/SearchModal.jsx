@@ -8,7 +8,7 @@ import { API_BASE_URL, PLACEHOLDER_IMAGE } from '../../config'
 import './searchModal.css'
 
 const SearchModal = () => {
-    const { isSearchOpen, closeSearch } = useSearch()
+    const { isSearchOpen, openSearch, closeSearch } = useSearch()
     const [searchQuery, setSearchQuery] = useState('')
     const [products, setProducts] = useState([])
     const [filteredProducts, setFilteredProducts] = useState([])
@@ -94,18 +94,14 @@ const SearchModal = () => {
                 if (isSearchOpen) {
                     closeSearch()
                 } else {
-                    closeSearch()
-                    setTimeout(() => {
-                        const searchContext = useSearch()
-                        searchContext.openSearch()
-                    }, 0)
+                    openSearch()
                 }
             }
         }
 
         window.addEventListener('keydown', handleKeyDown)
         return () => window.removeEventListener('keydown', handleKeyDown)
-    }, [isSearchOpen, closeSearch])
+    }, [isSearchOpen, openSearch, closeSearch])
 
     const handleAddToCart = (product, event) => {
         addToCart(product)
@@ -121,7 +117,8 @@ const SearchModal = () => {
         }, 2000)
     }
 
-    const handleProductClick = () => {
+    const handleProductClick = (productId) => {
+        navigate(`/product/${productId}`)
         closeSearch()
         setSearchQuery('')
     }
@@ -178,7 +175,7 @@ const SearchModal = () => {
                                 <div
                                     key={product.id}
                                     className="search-result-item"
-                                    onClick={handleProductClick}
+                                    onClick={() => handleProductClick(product.id)}
                                 >
                                     <div className="search-result-image">
                                         <img src={parseImage(product.image)} alt={product.title} />
