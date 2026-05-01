@@ -58,7 +58,7 @@ const Hero = () => {
       <div className='hero-main'>
         <div className="hero-content">
           <h1 ref={titleRef}>Handmade with <span>Love & Care</span></h1>
-          <p ref={textRef}>warmtotuch (sometimes searched as warmtotch or warm to touch) is a handmade decor store in Egypt specializing in macrame wall hangings and artisan home accessories.</p>
+          <p ref={textRef}>قطع يدوية تُصنع بعشق وتُهدى بدفء — مكرميات، ديكورات منزلية، وهدايا فريدة تُحكي قصة.</p>
           <button
             ref={buttonRef}
             onMouseEnter={() => {

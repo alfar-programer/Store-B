@@ -49,7 +49,7 @@ const Login = () => {
     return (
         <div className="auth-container">
             <Helmet>
-                <title>تسجيل الدخول | Login – warmtotuch</title>
+                <title>تسجيل الدخول | Login – Warm Touch</title>
                 <meta name="robots" content="noindex, nofollow" />
                 <link rel="canonical" href="https://www.warmtotuch.store/login" />
             </Helmet>

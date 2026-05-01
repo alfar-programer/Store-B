@@ -129,10 +129,12 @@
 }
 
 .story-content p {
-    font-size: 1.1rem;
-    line-height: 1.8;
-    color: var(--text-secondary);
+    font-size: 1.15rem;
+    line-height: 1.9;
+    color: var(--text-primary);
+    font-weight: 400;
     margin-bottom: 20px;
+    letter-spacing: 0.01em;
 }
 
 .story-image {
@@ -547,5 +549,133 @@
     .submit-btn {
         padding: 14px 30px;
         font-size: 1rem;
+    }
+}
+
+/* ── About Contact CTA Section ──────────────────────── */
+.about-contact-cta {
+    padding: 80px 24px;
+    background: var(--bg-secondary);
+    transition: background 0.3s ease;
+}
+
+.about-cta-inner {
+    max-width: 960px;
+    margin: 0 auto;
+    background: linear-gradient(135deg, #6b4f31 0%, #8B6F47 50%, #c49456 100%);
+    border-radius: 28px;
+    padding: 56px 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 40px;
+    box-shadow: 0 20px 60px rgba(139, 111, 71, 0.35);
+    flex-wrap: wrap;
+}
+
+.about-cta-info {
+    flex: 1;
+    min-width: 240px;
+}
+
+.about-cta-icons {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 22px;
+}
+
+.about-cta-icon-box {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.18);
+    border: 1px solid rgba(255,255,255,0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    backdrop-filter: blur(6px);
+}
+
+.about-cta-info h2 {
+    font-size: clamp(1.6rem, 4vw, 2.4rem);
+    font-weight: 700;
+    color: white;
+    margin-bottom: 12px;
+    font-family: 'Cairo', sans-serif;
+    background: none;
+    -webkit-text-fill-color: white;
+}
+
+.about-cta-info p {
+    font-size: 1.05rem;
+    color: rgba(255,255,255,0.85);
+    line-height: 1.7;
+    font-family: 'Cairo', sans-serif;
+    margin-bottom: 18px;
+}
+
+.about-contact-details {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+}
+
+.about-contact-details span {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.9rem;
+    color: rgba(255,255,255,0.9);
+    font-family: 'Cairo', sans-serif;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.2);
+    padding: 5px 14px;
+    border-radius: 50px;
+}
+
+.about-contact-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 16px 34px;
+    background: white;
+    color: #8B6F47;
+    border: none;
+    border-radius: 50px;
+    font-size: 1.05rem;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.18);
+    white-space: nowrap;
+    font-family: 'Cairo', sans-serif;
+    flex-shrink: 0;
+}
+
+.about-contact-link:hover {
+    transform: translateY(-4px) scale(1.04);
+    box-shadow: 0 14px 38px rgba(0, 0, 0, 0.25);
+    color: #6b4f31;
+}
+
+@media (max-width: 768px) {
+    .about-cta-inner {
+        padding: 40px 30px;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .about-contact-link {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .about-cta-inner {
+        padding: 30px 22px;
+        border-radius: 20px;
     }
 }

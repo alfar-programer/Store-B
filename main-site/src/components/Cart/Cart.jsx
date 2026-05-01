@@ -18,25 +18,36 @@ const Cart = () => {
 
         let imageUrl = imageField
 
+        // Handle Array object (not just JSON string)
+        if (Array.isArray(imageField) && imageField.length > 0) {
+            imageUrl = imageField[0]
+        }
+
         try {
-            if (typeof imageField === 'string' && (imageField.startsWith('[') || imageField.startsWith('{'))) {
-                const parsed = JSON.parse(imageField)
+            if (typeof imageUrl === 'string' && (imageUrl.startsWith('[') || imageUrl.startsWith('{'))) {
+                const parsed = JSON.parse(imageUrl)
                 if (Array.isArray(parsed) && parsed.length > 0) {
                     imageUrl = parsed[0]
+                } else if (typeof parsed === 'string') {
+                    imageUrl = parsed
                 }
             }
         } catch (e) {
-            console.warn('Image parsing error:', e)
+            // Use raw value if JSON parse fails
         }
 
-        if (imageUrl && !imageUrl.startsWith('http') && !imageUrl.startsWith('data:')) {
-            const rootUrl = API_BASE_URL.replace('/api', '')
-            const cleanRoot = rootUrl.endsWith('/') ? rootUrl.slice(0, -1) : rootUrl
-            const cleanPath = imageUrl.startsWith('/') ? imageUrl.slice(1) : imageUrl
-            return `${cleanRoot}/${cleanPath}`
+        if (!imageUrl || typeof imageUrl !== 'string') return PLACEHOLDER_IMAGE
+
+        // Already an absolute URL — return as-is
+        if (imageUrl.startsWith('http') || imageUrl.startsWith('data:') || imageUrl.startsWith('blob:')) {
+            return imageUrl
         }
 
-        return imageUrl || PLACEHOLDER_IMAGE
+        // Relative path — prepend backend root
+        const rootUrl = API_BASE_URL.replace('/api', '')
+        const cleanRoot = rootUrl.endsWith('/') ? rootUrl.slice(0, -1) : rootUrl
+        const cleanPath = imageUrl.startsWith('/') ? imageUrl.slice(1) : imageUrl
+        return `${cleanRoot}/${cleanPath}`
     }
 
     const handleQuantityChange = (productId, newQuantity, maxStock) => {
@@ -64,7 +75,7 @@ const Cart = () => {
         return (
             <div className="cart-page">
                 <Helmet>
-                    <title>سلة التسوق | Cart – warmtotuch</title>
+                    <title>سلة التسوق | Cart – Warm Touch</title>
                     <meta name="robots" content="noindex, nofollow" />
                 </Helmet>
                 <div className="cart-container">
@@ -89,7 +100,7 @@ const Cart = () => {
     return (
         <div className="cart-page">
             <Helmet>
-                <title>سلة التسوق | Cart – warmtotuch</title>
+                <title>سلة التسوق | Cart – Warm Touch</title>
                 <meta name="robots" content="noindex, nofollow" />
             </Helmet>
             <div className="cart-container">
@@ -103,7 +114,12 @@ const Cart = () => {
                         {cartItems.map((item) => (
                             <div className="cart-item" key={item.id}>
                                 <div className="cart-item-image">
-                                    <img src={parseImage(item.image)} alt={item.title} />
+                                    <img
+                                        src={parseImage(item.image)}
+                                        alt={item.title}
+                                        loading="lazy"
+                                        onError={(e) => { e.currentTarget.src = PLACEHOLDER_IMAGE }}
+                                    />
                                 </div>
 
                                 <div className="cart-item-details">

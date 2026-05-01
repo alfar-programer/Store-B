@@ -92,7 +92,7 @@ const handleAddToCart = (e, product) => {
     const button = e.currentTarget
     const originalText = button.textContent
 
-    button.textContent = '✓ Added!'
+    button.textContent = '✓ تمت الإضافة!'
     button.style.background = 'linear-gradient(135deg, #48bb78 0%, #38a169 100%)'
 
     setTimeout(() => {
@@ -114,7 +114,7 @@ const handleAddToCart = (e, product) => {
                             "description": selectedProduct.description,
                             "brand": {
                                 "@type": "Brand",
-                                "name": "warmtotuch"
+                                "name": "Warm Touch"
                             },
                             "offers": {
                                 "@type": "Offer",
@@ -184,7 +184,7 @@ const handleAddToCart = (e, product) => {
                                             className="quick-view-btn"
                                             onClick={(e) => handleQuickView(e, product)}
                                         >
-                                            Quick View
+                                            عرض سريع
                                         </button>
                                     </div>
                                 </div>
@@ -210,7 +210,7 @@ const handleAddToCart = (e, product) => {
                                     {/* Stock indicator */}
                                     {typeof product.stock === 'number' && product.stock > 0 && product.stock < 10 && (
                                         <span style={{ fontSize: '0.7rem', color: '#d97706', fontWeight: '600', marginBottom: '4px', display: 'block' }}>
-                                            Only {product.stock} left!
+                                            باقي {product.stock} فقط!
                                         </span>
                                     )}
                                     <button
@@ -219,7 +219,7 @@ const handleAddToCart = (e, product) => {
                                         style={typeof product.stock === 'number' && product.stock <= 0 ? { opacity: 0.5, cursor: 'not-allowed' } : {}}
                                         onClick={(e) => handleAddToCart(e, product)}
                                     >
-                                        {typeof product.stock === 'number' && product.stock <= 0 ? 'Out of Stock' : 'Add to Cart'}
+                                        {typeof product.stock === 'number' && product.stock <= 0 ? 'نفذت الكمية' : 'أضف للسلة'}
                                     </button>
                                 </div>
                             </Link>
@@ -292,7 +292,7 @@ const handleAddToCart = (e, product) => {
                                     closeModal()
                                 }}
                             >
-                                Add to Cart
+                                أضف للسلة
                             </button>
                         </div>
                     </div>

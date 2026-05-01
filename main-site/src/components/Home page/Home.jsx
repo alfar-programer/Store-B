@@ -45,7 +45,7 @@ const Home = () => {
             {
               "@context": "https://schema.org",
               "@type": "Store",
-              "name": "warmtotuch",
+              "name": "Warm Touch",
               "alternateName": "warmtotch",
               "url": "https://www.warmtotuch.store/",
               "logo": "https://www.warmtotuch.store/svg/logo2.png",
@@ -80,7 +80,7 @@ const Home = () => {
             {
               "@context": "https://schema.org",
               "@type": "WebSite",
-              "name": "warmtotuch",
+              "name": "Warm Touch",
               "url": "https://www.warmtotuch.store/",
               "potentialAction": {
                 "@type": "SearchAction",

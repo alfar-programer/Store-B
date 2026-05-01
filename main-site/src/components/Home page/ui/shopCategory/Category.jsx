@@ -83,7 +83,7 @@ const Category = () => {
                 {cat.image ? (
                   <img
                     src={getImageUrl(cat.image)}
-                    alt={`${cat.name} - Handmade Decor | warmtotuch`}
+                    alt={`${cat.name} - Handmade Decor | Warm Touch`}
                     className="category-image"
                     onError={(e) => {
                       e.target.onerror = null;

@@ -30,7 +30,7 @@ const OrderConfirmation = () => {
     return (
         <div className="confirmation-page">
             <Helmet>
-                <title>تم تأكيد طلبك | Order Confirmed – warmtotuch</title>
+                <title>تم تأكيد طلبك | Order Confirmed – Warm Touch</title>
                 <meta name="robots" content="noindex, nofollow" />
             </Helmet>
             <div className="confirmation-container">

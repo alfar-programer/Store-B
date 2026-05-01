@@ -120,7 +120,7 @@ const VerifyEmail = () => {
     return (
         <div className="auth-container">
             <Helmet>
-                <title>تحقق من البريد الإلكتروني | Verify Email – warmtotuch</title>
+                <title>تحقق من البريد الإلكتروني | Verify Email – Warm Touch</title>
                 <meta name="robots" content="noindex, nofollow" />
             </Helmet>
             <div className="auth-box">

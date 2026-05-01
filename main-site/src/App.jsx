@@ -6,6 +6,7 @@ import Header from './components/Header/Header'
 import SearchModal from './components/Search/SearchModal'
 import AllProducts from './components/AllProduct/AllProducts'
 import About from './components/About/About'
+import Contact from './components/Contact/Contact'
 import Checkout from './components/Checkout/Checkout'
 import OrderConfirmation from './components/OrderConfirmation/OrderConfirmation'
 import LoadingScreen from './components/LoadingScreen/LoadingScreen'
@@ -50,7 +51,7 @@ const App = () => {
             <Route path="/allproducts" element={<AllProducts />} />
             <Route path="/product/:id" element={<ProductDetail />} />
             <Route path="/about" element={<About />} />
-            <Route path="/contact" element={<Navigate to="/about#contact" replace />} />
+            <Route path="/contact" element={<Contact />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/verify-email" element={<VerifyEmail />} />

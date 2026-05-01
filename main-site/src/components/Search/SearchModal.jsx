@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import axios from 'axios'
 import { Search, X } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { useSearch } from '../../context/SearchContext'
 import { useCart } from '../../context/CartContext'
 import { API_BASE_URL, PLACEHOLDER_IMAGE } from '../../config'
@@ -134,7 +134,7 @@ const SearchModal = () => {
                         <input
                             ref={inputRef}
                             type="text"
-                            placeholder="Search products..."
+                            placeholder="ابحث عن منتج..."
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                             className="search-input"
@@ -143,13 +143,14 @@ const SearchModal = () => {
                             <button
                                 className="clear-search-btn"
                                 onClick={() => setSearchQuery('')}
+                                title="مسح البحث"
                             >
-                                <X size={18} />
+                                مسح
                             </button>
                         )}
                     </div>
-                    <button className="close-search-modal" onClick={closeSearch}>
-                        <X size={24} />
+                    <button className="close-search-modal" onClick={closeSearch} title="إغلاق">
+                        <X size={22} />
                     </button>
                 </div>
 
@@ -169,13 +170,17 @@ const SearchModal = () => {
                     ) : (
                         <div className="search-results-list">
                             <p className="results-count">
-                                Found {filteredProducts.length} {filteredProducts.length === 1 ? 'product' : 'products'}
+                                {filteredProducts.length} {filteredProducts.length === 1 ? 'نتيجة' : 'نتيجة'} لـ "{searchQuery}"
                             </p>
                             {filteredProducts.map((product) => (
-                                <div
+                                <Link
                                     key={product.id}
+                                    to={`/product/${product.id}`}
                                     className="search-result-item"
-                                    onClick={() => handleProductClick(product.id)}
+                                    onClick={() => {
+                                        closeSearch()
+                                        setSearchQuery('')
+                                    }}
                                 >
                                     <div className="search-result-image">
                                         <img src={parseImage(product.image)} alt={product.title} />
@@ -198,13 +203,14 @@ const SearchModal = () => {
                                     <button
                                         className="search-add-to-cart"
                                         onClick={(e) => {
+                                            e.preventDefault()
                                             e.stopPropagation()
                                             handleAddToCart(product, e)
                                         }}
                                     >
-                                        Add to Cart
+                                        أضف للسلة
                                     </button>
-                                </div>
+                                </Link>
                             ))}
                         </div>
                     )}

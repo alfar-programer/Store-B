@@ -269,24 +269,29 @@
 
 .price-wrapper {
     display: flex;
-    flex-direction: column;
-    gap: 5px;
+    flex-direction: row;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 6px;
 }
 
 .price {
-    font-size: 1.8rem;
+    font-size: 1.3rem;
     font-weight: 700;
     color: #8B6F47;
     background: linear-gradient(135deg, #8B6F47 0%, #D4A574 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    white-space: nowrap;
+    display: inline-block;
 }
 
 .original-price {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     color: var(--text-muted);
     text-decoration: line-through;
+    white-space: nowrap;
 }
 
 /* Add to Cart Button */
@@ -928,4 +933,144 @@
 
 .gallery-thumbnail.active img {
     transform: scale(1.1);
+}
+
+/* ── Sort Toolbar ──────────────────────────────────────── */
+.sort-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 28px;
+    padding: 14px 20px;
+    background: var(--bg-secondary, rgba(255,255,255,0.6));
+    border: 1px solid var(--border-color, rgba(139,111,71,0.15));
+    border-radius: 14px;
+    backdrop-filter: blur(10px);
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.sort-count {
+    font-size: 0.95rem;
+    color: var(--text-secondary, #888);
+    font-weight: 500;
+}
+
+.sort-select-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--bg-primary, #fff);
+    border: 1.5px solid rgba(139,111,71,0.3);
+    border-radius: 10px;
+    padding: 8px 14px;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.sort-select-wrapper:focus-within {
+    border-color: #8B6F47;
+    box-shadow: 0 0 0 3px rgba(139,111,71,0.12);
+}
+
+.sort-icon {
+    color: #8B6F47;
+    flex-shrink: 0;
+}
+
+.sort-select {
+    border: none;
+    background: transparent;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--text-primary, #333);
+    cursor: pointer;
+    outline: none;
+    padding-right: 4px;
+    direction: rtl;
+    min-width: 180px;
+}
+
+/* ── Load More ─────────────────────────────────────────── */
+.load-more-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-top: 50px;
+    padding: 10px 0 20px;
+}
+
+.load-more-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 16px 48px;
+    background: linear-gradient(135deg, #8B6F47 0%, #D4A574 100%);
+    color: white;
+    border: none;
+    border-radius: 50px;
+    font-size: 1.05rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 8px 28px rgba(139, 111, 71, 0.38);
+    letter-spacing: 0.3px;
+    position: relative;
+    overflow: hidden;
+}
+
+.load-more-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(255,255,255,0.12);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.load-more-btn:hover::before {
+    opacity: 1;
+}
+
+.load-more-btn:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 14px 38px rgba(139, 111, 71, 0.52);
+}
+
+.load-more-btn:active {
+    transform: translateY(-1px);
+}
+
+.load-more-count {
+    font-size: 0.85rem;
+    font-weight: 400;
+    opacity: 0.85;
+}
+
+.all-loaded-msg {
+    text-align: center;
+    margin-top: 40px;
+    color: var(--text-secondary, #888);
+    font-size: 0.95rem;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+}
+
+@media (max-width: 480px) {
+    .sort-toolbar {
+        padding: 10px 14px;
+        gap: 8px;
+    }
+
+    .sort-select-wrapper {
+        padding: 6px 10px;
+    }
+
+    .sort-select {
+        min-width: 140px;
+        font-size: 0.85rem;
+    }
+
+    .load-more-btn {
+        padding: 14px 30px;
+        font-size: 0.95rem;
+    }
 }

@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react'
 import { Helmet } from 'react-helmet-async'
-import { Heart } from 'lucide-react'
+import { Heart, ArrowUpDown } from 'lucide-react'
 import { useCart } from '../../context/CartContext'
 import { useFavorites } from '../../context/FavoritesContext'
 import { useSearchParams, useNavigate, Link } from 'react-router-dom'
@@ -8,6 +8,8 @@ import api from '../../services/api'
 import { API_BASE_URL, PLACEHOLDER_IMAGE } from '../../config'
 import './allproducts.css'
 import './allproducts-loading.css'
+
+const ITEMS_PER_PAGE = 12
 
 const AllProducts = () => {
     const [products, setProducts] = useState([])
@@ -19,6 +21,8 @@ const AllProducts = () => {
     const navigate = useNavigate()
     const categoryParam = searchParams.get('category')
     const [selectedCategory, setSelectedCategory] = useState(categoryParam || 'All')
+    const [sortOrder, setSortOrder] = useState('default')
+    const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE)
     const { addToCart } = useCart()
     const { toggleFavorite, isFavorite } = useFavorites()
 
@@ -95,11 +99,27 @@ const AllProducts = () => {
 
     // Filter products based on selected category
     const filteredProducts = useMemo(() => {
-        if (selectedCategory === 'All') {
-            return products
+        let result = selectedCategory === 'All'
+            ? products
+            : products.filter(product => product.category === selectedCategory)
+
+        switch (sortOrder) {
+            case 'price-asc':
+                return [...result].sort((a, b) => parseFloat(a.price) * (1 - a.discount / 100) - parseFloat(b.price) * (1 - b.discount / 100))
+            case 'price-desc':
+                return [...result].sort((a, b) => parseFloat(b.price) * (1 - b.discount / 100) - parseFloat(a.price) * (1 - a.discount / 100))
+            case 'newest':
+                return [...result].sort((a, b) => new Date(b.createdAt || b.created_at || 0) - new Date(a.createdAt || a.created_at || 0))
+            case 'discount':
+                return [...result].sort((a, b) => (b.discount || 0) - (a.discount || 0))
+            default:
+                return result
         }
-        return products.filter(product => product.category === selectedCategory)
-    }, [selectedCategory, products])
+    }, [selectedCategory, products, sortOrder])
+
+    // Visible products slice for Load More
+    const visibleProducts = useMemo(() => filteredProducts.slice(0, visibleCount), [filteredProducts, visibleCount])
+    const hasMore = visibleCount < filteredProducts.length
 
     // Helper to get all images
     const getImages = (imageField) => {
@@ -172,7 +192,7 @@ const handleAddToCart = (e, product) => {
     const button = e.currentTarget
     const originalText = button.textContent
 
-    button.textContent = '✓ Added!'
+    button.textContent = '✓ تمت الإضافة!'
     button.style.background = 'linear-gradient(135deg, #48bb78 0%, #38a169 100%)'
 
     setTimeout(() => {
@@ -183,6 +203,7 @@ const handleAddToCart = (e, product) => {
 
     const handleCategoryChange = (category) => {
         setSelectedCategory(category)
+        setVisibleCount(ITEMS_PER_PAGE) // reset pagination on category change
         // Update URL with category parameter
         if (category === 'All') {
             navigate('/allproducts')
@@ -191,8 +212,12 @@ const handleAddToCart = (e, product) => {
         }
     }
 
+    const handleLoadMore = () => {
+        setVisibleCount(prev => prev + ITEMS_PER_PAGE)
+    }
+
     const getSEO = () => {
-        const baseTitle = " | warmtotuch";
+        const baseTitle = " | Warm Touch";
         switch (selectedCategory) {
             case 'Macrame':
                 return {
@@ -212,12 +237,12 @@ const handleAddToCart = (e, product) => {
             case 'Home Decor':
                 return {
                     title: `Premium Home Decor & Accessories | ديكور منزلي${baseTitle}`,
-                    description: "Shop quality home decor accessories at warmtotuch. أرقى قطع الديكور المنزلي لتجميل مساحتك الخاصة."
+                    description: "Shop quality home decor accessories at Warm Touch. أرقى قطع الديكور المنزلي لتجميل مساحتك الخاصة."
                 };
             default:
                 return {
                     title: `All Products - Handmade Decor & Gifts | كل المنتجات${baseTitle}`,
-                    description: "Browse our full collection of handmade macrame, mugs, and home decor at warmtotuch. كل ما تحتاجه من ديكورات يدوية وهدايا."
+                    description: "Browse our full collection of handmade macrame, mugs, and home decor at Warm Touch. كل ما تحتاجه من ديكورات يدوية وهدايا."
                 };
         }
     };
@@ -266,7 +291,7 @@ const handleAddToCart = (e, product) => {
                             "description": selectedProduct.description,
                             "brand": {
                                 "@type": "Brand",
-                                "name": "warmtotuch"
+                                "name": "Warm Touch"
                             },
                             "offers": {
                                 "@type": "Offer",
@@ -343,8 +368,28 @@ const handleAddToCart = (e, product) => {
                             ))}
                         </div>
 
+                        {/* Sort Toolbar */}
+                        <div className="sort-toolbar">
+                            <span className="sort-count">{filteredProducts.length} منتج</span>
+                            <div className="sort-select-wrapper">
+                                <ArrowUpDown size={16} className="sort-icon" />
+                                <select
+                                    id="sort-order"
+                                    className="sort-select"
+                                    value={sortOrder}
+                                    onChange={(e) => { setSortOrder(e.target.value); setVisibleCount(ITEMS_PER_PAGE) }}
+                                >
+                                    <option value="default">الترتيب الافتراضي</option>
+                                    <option value="newest">الأحدث أولاً</option>
+                                    <option value="price-asc">السعر: من الأقل للأعلى</option>
+                                    <option value="price-desc">السعر: من الأعلى للأقل</option>
+                                    <option value="discount">أعلى خصم</option>
+                                </select>
+                            </div>
+                        </div>
+
                         <div className="products-grid">
-                            {filteredProducts.map((product) => (
+                            {visibleProducts.map((product) => (
                                 <Link to={`/product/${product.id}`} className="product-card" key={product.id} style={{ textDecoration: 'none', color: 'inherit', display: 'flex', flexDirection: 'column' }}>
                                     {product.discount > 0 && (
                                         <div className="discount-badge">-{product.discount}%</div>
@@ -386,7 +431,7 @@ const handleAddToCart = (e, product) => {
                                                 className="quick-view-btn"
                                                 onClick={(e) => handleQuickView(e, product)}
                                             >
-                                                Quick View
+                                            عرض سريع
                                             </button>
                                         </div>
                                     </div>
@@ -402,17 +447,17 @@ const handleAddToCart = (e, product) => {
                                         <div className="price-wrapper">
                                             {product.discount > 0 ? (
                                                 <>
-                                                    <span className="price">{(parseFloat(product.price) * (1 - product.discount / 100)).toFixed(2)} <small>EGP</small></span>
-                                                    <span className="original-price">{parseFloat(product.price).toFixed(2)} <small>EGP</small></span>
+                                                    <span className="price">{(parseFloat(product.price) * (1 - product.discount / 100)).toFixed(2)} EGP</span>
+                                                    <span className="original-price">{parseFloat(product.price).toFixed(2)} EGP</span>
                                                 </>
                                             ) : (
-                                                <span className="price">{parseFloat(product.price).toFixed(2)} <small>EGP</small></span>
+                                                <span className="price">{parseFloat(product.price).toFixed(2)} EGP</span>
                                             )}
                                         </div>
                                         {/* Stock indicator */}
                                         {typeof product.stock === 'number' && product.stock > 0 && product.stock < 10 && (
                                             <span style={{ fontSize: '0.7rem', color: '#d97706', fontWeight: '600', marginBottom: '4px', display: 'block' }}>
-                                                Only {product.stock} left!
+                                                باقي {product.stock} فقط!
                                             </span>
                                         )}
                                         <button
@@ -421,12 +466,25 @@ const handleAddToCart = (e, product) => {
                                             style={typeof product.stock === 'number' && product.stock <= 0 ? { opacity: 0.5, cursor: 'not-allowed' } : {}}
                                             onClick={(e) => handleAddToCart(e, product)}
                                         >
-                                            {typeof product.stock === 'number' && product.stock <= 0 ? 'Out of Stock' : 'Add to Cart'}
+                                            {typeof product.stock === 'number' && product.stock <= 0 ? 'نفذت الكمية' : 'أضف للسلة'}
                                         </button>
                                     </div>
                                 </Link>
                             ))}
                         </div>
+
+                        {/* Load More */}
+                        {hasMore && (
+                            <div className="load-more-wrapper">
+                                <button className="load-more-btn" onClick={handleLoadMore}>
+                                    عرض المزيد
+                                    <span className="load-more-count">({filteredProducts.length - visibleCount} منتج إضافي)</span>
+                                </button>
+                            </div>
+                        )}
+                        {!hasMore && filteredProducts.length > ITEMS_PER_PAGE && (
+                            <p className="all-loaded-msg">✓ تم عرض جميع المنتجات</p>
+                        )}
 
                         {/* Quick View Modal */}
                         {isModalOpen && selectedProduct && (
@@ -516,7 +574,7 @@ const handleAddToCart = (e, product) => {
                                                 closeModal()
                                             }}
                                         >
-                                            Add to Cart
+                                            أضف للسلة
                                         </button>
                                     </div>
                                 </div>

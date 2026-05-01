@@ -40,7 +40,7 @@ const Header = () => {
                     <div className="logo-container">
                         <Link to="/" className="logo-professional group">
                             <div className="logo-icon-box">
-                                <img src="/svg/logo2.png" alt="Worm Touch Logo" className="logo-image" />
+                                <img src="/svg/logo2.png" alt="Warm Touch Logo" className="logo-image" />
                             </div>
                             <div className="logo-text-group">
                                 <div className="flex items-center gap-1.5">
@@ -57,7 +57,7 @@ const Header = () => {
                         <ul className="flex gap-10 list-none m-0 p-0">
                             {[
                                 { name: 'Home', path: '/' },
-                                { name: 'AllProducts', path: '/allproducts' },
+                                { name: 'Products', path: '/allproducts' },
                                 { name: 'About', path: '/about' },
                                 // Show My Orders primarily if logged in, but also in list generally
                                 ...(user ? [{ name: 'My Orders', path: '/my-orders' }] : []),

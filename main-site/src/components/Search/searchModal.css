@@ -68,12 +68,12 @@
 }
 
 .search-input-wrapper:focus-within {
-    background: #edf2f7;
-    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    background: rgba(139,111,71,0.06);
+    box-shadow: 0 0 0 3px rgba(139, 111, 71, 0.12);
 }
 
 .search-icon {
-    color: #667eea;
+    color: #8B6F47;
     flex-shrink: 0;
 }
 
@@ -91,21 +91,26 @@
 }
 
 .clear-search-btn {
-    background: transparent;
-    border: none;
-    color: #a0aec0;
+    background: rgba(139,111,71,0.1);
+    border: 1px solid rgba(139,111,71,0.25);
+    color: #8B6F47;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 4px;
-    border-radius: 50%;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    font-family: 'Cairo', sans-serif;
     transition: all 0.2s ease;
+    white-space: nowrap;
+    flex-shrink: 0;
 }
 
 .clear-search-btn:hover {
-    background: var(--bg-tertiary);
-    color: var(--text-secondary);
+    background: rgba(139,111,71,0.18);
+    color: #6b4f31;
 }
 
 .close-search-modal {
@@ -124,7 +129,7 @@
 }
 
 .close-search-modal:hover {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #8B6F47 0%, #D4A574 100%);
     color: white;
     transform: rotate(90deg);
 }
@@ -198,6 +203,8 @@
     cursor: pointer;
     transition: all 0.3s ease;
     align-items: center;
+    text-decoration: none;
+    color: inherit;
 }
 
 .search-result-item:hover {
@@ -231,11 +238,10 @@
 }
 
 .search-result-price {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     font-weight: 700;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #8B6F47 0%, #D4A574 100%);
     -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
     -webkit-text-fill-color: transparent;
     background-clip: text;
 }
@@ -265,7 +271,7 @@
 /* Add to Cart Button */
 .search-add-to-cart {
     padding: 10px 20px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #8B6F47 0%, #D4A574 100%);
     color: white;
     border: none;
     border-radius: 20px;
@@ -274,11 +280,12 @@
     cursor: pointer;
     transition: all 0.3s ease;
     white-space: nowrap;
+    font-family: 'Cairo', sans-serif;
 }
 
 .search-add-to-cart:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+    box-shadow: 0 6px 20px rgba(139, 111, 71, 0.4);
 }
 
 .search-add-to-cart:active {

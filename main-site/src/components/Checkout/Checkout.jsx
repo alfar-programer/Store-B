@@ -205,7 +205,7 @@ const Checkout = () => {
     return (
         <div className="checkout-page">
             <Helmet>
-                <title>إتمام الطلب | Checkout – warmtotuch</title>
+                <title>إتمام الطلب | Checkout – Warm Touch</title>
                 <meta name="robots" content="noindex, nofollow" />
             </Helmet>
             <div className="checkout-container">

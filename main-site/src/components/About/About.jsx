@@ -1,57 +1,18 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { Helmet } from 'react-helmet-async'
-import { useLocation } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { Heart, Award, Users, Sparkles, Phone, Mail, MapPin, Send } from 'lucide-react'
+import { Heart, Award, Users, Sparkles, Phone, Mail, MapPin, ArrowLeft } from 'lucide-react'
 import './about.css'
 
 gsap.registerPlugin(ScrollTrigger)
 
 const About = () => {
-    const location = useLocation()
     const heroRef = useRef(null)
     const storyRef = useRef(null)
     const valuesRef = useRef(null)
     const statsRef = useRef(null)
-
-    // Contact form state
-    const [formData, setFormData] = useState({
-        name: '',
-        email: '',
-        subject: '',
-        message: ''
-    })
-    const [status, setStatus] = useState('')
-
-    useEffect(() => {
-        if (location.state?.orderId) {
-            setFormData(prev => ({
-                ...prev,
-                subject: `Order Support: #${location.state.orderId}`
-            }))
-        }
-    }, [location.state])
-
-    const handleChange = (e) => {
-        const { name, value } = e.target
-        setFormData(prev => ({
-            ...prev,
-            [name]: value
-        }))
-    }
-
-    const handleSubmit = (e) => {
-        e.preventDefault()
-        setStatus('sending')
-
-        // Simulate form submission
-        setTimeout(() => {
-            setStatus('success')
-            setFormData({ name: '', email: '', subject: '', message: '' })
-            setTimeout(() => setStatus(''), 3000)
-        }, 1500)
-    }
 
     useEffect(() => {
         // Hero section animations
@@ -300,121 +261,26 @@ const About = () => {
                 </div>
             </section>
 
-            {/* Contact Section */}
-            <section className="contact-section" id="contact">
-                <div className="contact-container">
-                    <div className="contact-header">
-                        <h2>Get in Touch</h2>
-                        <p>We'd love to hear from you. Send us a message and we'll respond within 24 hours.</p>
-                        <p className="contact-subtitle-ar">نحب أن نسمع منك. أرسل لنا رسالة وسنرد خلال 24 ساعة</p>
-                    </div>
-
-                    <div className="contact-grid">
-                        {/* Contact Info */}
-                        <div className="contact-info-card">
-                            <h3>Contact Information</h3>
-                            <p className="info-subtitle">Reach out to us through any of these channels</p>
-
-                            <div className="info-items">
-                                <div className="info-item">
-                                    <div className="icon-box">
-                                        <Phone size={24} />
-                                    </div>
-                                    <div>
-                                        <h4>Phone</h4>
-                                        <p>+20-109-816-5967</p>
-                                    </div>
-                                </div>
-
-                                <div className="info-item">
-                                    <div className="icon-box">
-                                        <Mail size={24} />
-                                    </div>
-                                    <div>
-                                        <h4>Email</h4>
-                                        <p>Wormtotch@gmail.com</p>
-                                    </div>
-                                </div>
-
-                                <div className="info-item">
-                                    <div className="icon-box">
-                                        <MapPin size={24} />
-                                    </div>
-                                    <div>
-                                        <h4>Address</h4>
-                                        <p>Egypt, GIZA October Garden 247</p>
-                                    </div>
-                                </div>
-                            </div>
+            {/* Contact CTA Section */}
+            <section className="about-contact-cta" id="contact">
+                <div className="about-cta-inner">
+                    <div className="about-cta-info">
+                        <div className="about-cta-icons">
+                            <div className="about-cta-icon-box"><Phone size={20} /></div>
+                            <div className="about-cta-icon-box"><Mail size={20} /></div>
+                            <div className="about-cta-icon-box"><MapPin size={20} /></div>
                         </div>
-
-                        {/* Contact Form */}
-                        <div className="contact-form-card">
-                            <form onSubmit={handleSubmit}>
-                                <div className="form-group">
-                                    <label>Your Name</label>
-                                    <input
-                                        type="text"
-                                        name="name"
-                                        value={formData.name}
-                                        onChange={handleChange}
-                                        required
-                                        placeholder="John Doe"
-                                    />
-                                </div>
-
-                                <div className="form-group">
-                                    <label>Email Address</label>
-                                    <input
-                                        type="email"
-                                        name="email"
-                                        value={formData.email}
-                                        onChange={handleChange}
-                                        required
-                                        placeholder="john@example.com"
-                                    />
-                                </div>
-
-                                <div className="form-group">
-                                    <label>Subject</label>
-                                    <input
-                                        type="text"
-                                        name="subject"
-                                        value={formData.subject}
-                                        onChange={handleChange}
-                                        required
-                                        placeholder="How can we help?"
-                                    />
-                                </div>
-
-                                <div className="form-group">
-                                    <label>Message</label>
-                                    <textarea
-                                        name="message"
-                                        value={formData.message}
-                                        onChange={handleChange}
-                                        required
-                                        rows="5"
-                                        placeholder="Write your message here..."
-                                    ></textarea>
-                                </div>
-
-                                <button
-                                    type="submit"
-                                    className={`submit-btn ${status === 'success' ? 'success' : ''}`}
-                                    disabled={status === 'sending'}
-                                >
-                                    {status === 'sending' ? (
-                                        'Sending...'
-                                    ) : status === 'success' ? (
-                                        '✓ Message Sent!'
-                                    ) : (
-                                        <>Send Message <Send size={18} /></>
-                                    )}
-                                </button>
-                            </form>
+                        <h2>هل لديك سؤال؟</h2>
+                        <p>فريقنا جاهز للمساعدة. تواصل معنا عبر البريد الإلكتروني أو الهاتف أو نموذج التواصل المخصص.</p>
+                        <div className="about-contact-details">
+                            <span><Mail size={15} /> info@warmtouch.store</span>
+                            <span><Phone size={15} /> +20 109 816 5967</span>
                         </div>
                     </div>
+                    <Link to="/contact" className="about-contact-link" id="about-contact-us-btn">
+                        تواصل معنا
+                        <ArrowLeft size={20} />
+                    </Link>
                 </div>
             </section>
 

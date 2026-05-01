@@ -54,7 +54,7 @@ const Register = () => {
     return (
         <div className="auth-container">
             <Helmet>
-                <title>إنشاء حساب | Register – warmtotuch</title>
+                <title>إنشاء حساب | Register – Warm Touch</title>
                 <meta name="robots" content="noindex, nofollow" />
                 <link rel="canonical" href="https://www.warmtotuch.store/register" />
             </Helmet>
