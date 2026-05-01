@@ -169,8 +169,18 @@ const ProductDetail = () => {
             }
         };
         window.addEventListener('keydown', handleKeyDown);
-        return () => window.removeEventListener('keydown', handleKeyDown);
-    }, [isLightboxOpen, currentImageIndex, images]);
+        
+        if (isLightboxOpen || isRecModalOpen) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'unset';
+        }
+
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+            document.body.style.overflow = 'unset';
+        };
+    }, [isLightboxOpen, isRecModalOpen, currentImageIndex, images]);
 
     const handleNextImage = () => {
         setCurrentImageIndex((prev) => (prev + 1) % images.length);
@@ -320,16 +330,32 @@ const ProductDetail = () => {
                 {/* Image Gallery */}
                 <div className="hero-gallery-side">
                     <div className="main-image-viewport">
+                        {images.length > 1 && (
+                            <div className="gallery-nav-overlay">
+                                <button className="gal-nav-btn" onClick={(e) => { e.stopPropagation(); handlePrevImage(); }}>
+                                    <ChevronLeft size={20} />
+                                </button>
+                                <button className="gal-nav-btn" onClick={(e) => { e.stopPropagation(); handleNextImage(); }}>
+                                    <ChevronRight size={20} />
+                                </button>
+                            </div>
+                        )}
+                        
                         {product?.discount > 0 && (
                             <div className="sale-badge">SALE -{product.discount}%</div>
                         )}
                         {product?.createdAt && (new Date() - new Date(product.createdAt)) < 14 * 24 * 60 * 60 * 1000 && (
                             <span className="badge-new">New</span>
                         )}
-                        <div className="main-image-container" onClick={() => window.innerWidth >= 768 && setIsLightboxOpen(true)}>
-                            <img src={images[currentImageIndex]} alt={product.title} />
+                        <div className="main-image-container" onClick={() => setIsLightboxOpen(true)}>
+                            <img 
+                                key={currentImageIndex}
+                                src={images[currentImageIndex]} 
+                                alt={product.title} 
+                                className="main-product-img"
+                            />
                             <button className="zoom-indicator">
-                                <Plus size={20} />
+                                <Eye size={20} />
                             </button>
                         </div>
                     </div>
@@ -341,7 +367,8 @@ const ProductDetail = () => {
                                     className={`thumb-box ${idx === currentImageIndex ? 'active' : ''}`}
                                     onClick={() => setCurrentImageIndex(idx)}
                                 >
-                                    <img src={img} alt="Thumbnail" />
+                                    <img src={img} alt={`Thumbnail ${idx + 1}`} />
+                                    <div className="thumb-indicator"></div>
                                 </button>
                             ))}
                         </div>
@@ -637,9 +664,32 @@ const ProductDetail = () => {
             {/* Lightbox Overlay */}
             {isLightboxOpen && (
                 <div className="lightbox-overlay" onClick={() => setIsLightboxOpen(false)}>
-                    <X className="lb-close" size={32} />
+                    <button className="lb-close" onClick={() => setIsLightboxOpen(false)}>
+                        <X size={32} />
+                    </button>
+                    
+                    {images.length > 1 && (
+                        <>
+                            <button 
+                                className="lb-nav-btn lb-prev" 
+                                onClick={(e) => { e.stopPropagation(); handlePrevImage(); }}
+                            >
+                                <ChevronLeft size={48} />
+                            </button>
+                            <button 
+                                className="lb-nav-btn lb-next" 
+                                onClick={(e) => { e.stopPropagation(); handleNextImage(); }}
+                            >
+                                <ChevronRight size={48} />
+                            </button>
+                        </>
+                    )}
+
                     <div className="lb-content" onClick={e => e.stopPropagation()}>
-                        <img src={images[currentImageIndex]} alt="Product" />
+                        <img src={images[currentImageIndex]} alt="Product Large View" />
+                        <div className="lb-caption">
+                            {product.title} - Image {currentImageIndex + 1} of {images.length}
+                        </div>
                     </div>
                 </div>
             )}

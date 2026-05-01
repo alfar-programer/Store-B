@@ -58,7 +58,7 @@
     left: 0;
     width: 100px;
     height: 4px;
-    background: var(--accent-primary);
+    background: linear-gradient(135deg,#8b6f47,#d4a574);
     border-radius: 2px;
 }
 
@@ -92,9 +92,9 @@
 }
 
 .rv-arrow:hover {
-    background: var(--accent-primary);
+    background: linear-gradient(135deg,#8b6f47,#d4a574);
     color: white;
-    border-color: var(--accent-primary);
+    border-color: #8b6f47;
     transform: translateY(-3px) scale(1.1);
     box-shadow: 0 8px 25px rgba(139, 111, 71, 0.3);
 }
@@ -135,7 +135,7 @@
 .rv-discount-badge {
     position: absolute;
     top: 15px;
-    right: 15px;
+    left: 15px;
     background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
     color: white;
     padding: 8px 15px;

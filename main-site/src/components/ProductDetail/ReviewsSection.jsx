@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import api from '../../services/api';
-import { Star, ThumbsUp, ThumbsDown, CheckCircle, ChevronDown } from 'lucide-react';
+import { Star, ThumbsUp, ThumbsDown, CheckCircle, ChevronDown, X } from 'lucide-react';
 import gsap from 'gsap';
 import { ScrollTrigger as GSAPScrollTrigger } from 'gsap/ScrollTrigger';
 import './ReviewsSection.css';
@@ -37,6 +37,18 @@ const ReviewsSection = ({ productId, initialRating }) => {
     useEffect(() => {
         localStorage.setItem(`voted_reviews_${productId}`, JSON.stringify(votedReviews));
     }, [votedReviews, productId]);
+
+    // Handle body scroll locking when modal is open
+    useEffect(() => {
+        if (showWriteForm) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = '';
+        }
+        return () => {
+            document.body.style.overflow = '';
+        };
+    }, [showWriteForm]);
     
     const barsRef = useRef([]);
 
@@ -222,20 +234,30 @@ const ReviewsSection = ({ productId, initialRating }) => {
                 </div>
 
                 <div className="write-review-container">
-                    {!showWriteForm ? (
-                        <button className="write-review-btn" onClick={() => setShowWriteForm(true)}>
-                            Write a Review
+                    <button className="write-review-btn" onClick={() => setShowWriteForm(true)}>
+                        Write a Review
+                    </button>
+                </div>
+            </div>
+
+            {showWriteForm && (
+                <div className="review-modal-overlay" onClick={() => setShowWriteForm(false)}>
+                    <div className="review-modal-content" onClick={(e) => e.stopPropagation()}>
+                        <button className="modal-close-btn" onClick={() => setShowWriteForm(false)}>
+                            <X size={24} />
                         </button>
-                    ) : (
+                        
                         <form className="write-review-form" onSubmit={handleSubmitReview}>
-                            <h4>Share your experience</h4>
+                            <h3>Share your experience</h3>
+                            <p className="modal-subtitle">Your feedback helps others make better choices.</p>
+                            
                             <div className="form-stars">
                                 <label>Your Rating *</label>
                                 <div className="interactive-stars">
                                     {[1, 2, 3, 4, 5].map(star => (
                                         <Star 
                                             key={star} 
-                                            size={24} 
+                                            size={32} 
                                             onClick={() => setNewRating(star)}
                                             onMouseEnter={() => setHoverRating(star)}
                                             onMouseLeave={() => setHoverRating(0)}
@@ -266,7 +288,7 @@ const ReviewsSection = ({ productId, initialRating }) => {
                                     value={newBody} 
                                     onChange={(e) => setNewBody(e.target.value)} 
                                     placeholder="Tell us what you liked or didn't like"
-                                    rows="4"
+                                    rows="5"
                                 ></textarea>
                                 <span className="char-count">{newBody.length}/1000</span>
                             </div>
@@ -281,9 +303,9 @@ const ReviewsSection = ({ productId, initialRating }) => {
                                 </button>
                             </div>
                         </form>
-                    )}
+                    </div>
                 </div>
-            </div>
+            )}
 
             <div className="reviews-list">
                 {loading && page === 1 ? (
