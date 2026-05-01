@@ -354,9 +354,7 @@ const ProductDetail = () => {
                                 alt={product.title} 
                                 className="main-product-img"
                             />
-                            <button className="zoom-indicator">
-                                <Eye size={20} />
-                            </button>
+                            
                         </div>
                     </div>
                     {images.length > 1 && (
