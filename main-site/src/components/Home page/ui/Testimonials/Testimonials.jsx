@@ -30,13 +30,13 @@ const Testimonials = () => {
             text: 'كله مصنوع بعناية فائقة ودقة في التفاصيل. شكراً ورم تاتش!',
             rating: 5,
         },
-         {
+        {
             name: 'Youssef DA.',
             verified: false,
             text: 'كله مصنوع بعناية فائقة ودقة في التفاصيل. شكراً ورم تاتش!',
             rating: 3,
         },
-         {
+        {
             name: 'Youssef SA.',
             verified: false,
             text: 'كله مصنوع بعناية فائقة ودقة في التفاصيل. شكراً ورم تاتش!',
@@ -103,7 +103,7 @@ const Testimonials = () => {
                                 <p className="testimonial-text">{review.text}</p>
                                 {/* Review images */}
                                 <div className="testimonial-images">
-                                    <div className="testimonial-img"><div className=""><img src="../../../../public/images/about_cta.png" alt="" /></div></div>
+                                    <div className="testimonial-img"><div className=""><img src="images/about_cta.png" alt="" /></div></div>
                                 </div>
                             </div>
                         ))}

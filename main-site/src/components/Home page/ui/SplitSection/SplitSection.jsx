@@ -16,7 +16,7 @@ const SplitSection = () => {
                 {/* LEFT: Image */}
                 <div className="split-image">
                     <div className="split-image-card">
-                        <img src="../../../../public/images/splitsection.jpeg" alt="" />
+                        <img src="images/splitsection.jpeg" alt="" />
                     </div>
                 </div>
 

@@ -11,12 +11,12 @@ const Hero = () => {
         const tl = gsap.timeline({ defaults: { ease: 'power3.out' } })
 
         tl.from('.hero-bg', { scale: 1.1, duration: 1.5, ease: 'power2.out' })
-          .from('.hero-eyebrow', { y: 20, autoAlpha: 0, duration: 0.6 }, '-=1')
-          .from('.hero-title', { y: 40, autoAlpha: 0, duration: 0.8 }, '-=0.4')
-          .from('.hero-desc', { y: 30, autoAlpha: 0, duration: 0.7 }, '-=0.5')
-          .from('.hero-buttons', { y: 20, autoAlpha: 0, duration: 0.6 }, '-=0.4')
-          .from('.hero-social-proof', { y: 15, autoAlpha: 0, duration: 0.5 }, '-=0.3')
-          .from('.hero-scroll-indicator', { autoAlpha: 0, y: 20, duration: 0.6 }, '-=0.2')
+            .from('.hero-eyebrow', { y: 20, autoAlpha: 0, duration: 0.6 }, '-=1')
+            .from('.hero-title', { y: 40, autoAlpha: 0, duration: 0.8 }, '-=0.4')
+            .from('.hero-desc', { y: 30, autoAlpha: 0, duration: 0.7 }, '-=0.5')
+            .from('.hero-buttons', { y: 20, autoAlpha: 0, duration: 0.6 }, '-=0.4')
+            .from('.hero-social-proof', { y: 15, autoAlpha: 0, duration: 0.5 }, '-=0.3')
+            .from('.hero-scroll-indicator', { autoAlpha: 0, y: 20, duration: 0.6 }, '-=0.2')
 
     }, { scope: heroRef })
 
@@ -24,8 +24,8 @@ const Hero = () => {
         <section className="hero" ref={heroRef}>
             {/* Background Image */}
             <div className="hero-bg">
-                <img src="../../../../public/images/herosection home page.png" alt="Warm Touch" className="hero-bg-img" />
-            
+                <img src="images/herosection home page.png" alt="Warm Touch" className="hero-bg-img" />
+
             </div>
 
             <div className="hero-container">
@@ -74,7 +74,7 @@ const Hero = () => {
                 </div>
                 <span>Scroll to explore</span>
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="scroll-arrow">
-                    <path d="m6 9 6 6 6-6"/>
+                    <path d="m6 9 6 6 6-6" />
                 </svg>
             </div>
         </section>
