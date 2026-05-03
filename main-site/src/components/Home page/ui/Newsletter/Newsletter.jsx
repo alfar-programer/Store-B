@@ -3,64 +3,54 @@ import './newsletter.css'
 
 const Newsletter = () => {
     const [email, setEmail] = useState('')
-    const [status, setStatus] = useState('') // 'success', 'error', or ''
+    const [status, setStatus] = useState('')
 
     const handleSubmit = (e) => {
         e.preventDefault()
-
-        // Basic email validation
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
         if (!emailRegex.test(email)) {
             setStatus('error')
             return
         }
-
-        // TODO: Integrate with your newsletter service (e.g., Mailchimp, SendGrid)
         console.log('Newsletter signup:', email)
-
         setStatus('success')
         setEmail('')
-
-        // Reset status after 3 seconds
-        setTimeout(() => {
-            setStatus('')
-        }, 3000)
+        setTimeout(() => setStatus(''), 3000)
     }
 
     return (
-        <section className="newsletter">
-            <div className="newsletter-container">
-                <div className="newsletter-content">
-                    <h2>Stay Connected</h2>
-                    <p className="newsletter-subtitle">
-                        Subscribe to get special offers, free giveaways, and updates
-                    </p>
-                    <p className="newsletter-subtitle-ar">
-                        اشترك للحصول على عروض خاصة وتحديثات
+        <section className="newsletter-v2">
+            <div className="newsletter-v2-container">
+                <div className="newsletter-v2-content">
+                    <h2 className="newsletter-v2-title">
+                        Get <span className="newsletter-v2-highlight">10% off</span> your first order
+                    </h2>
+                    <p className="newsletter-v2-desc">
+                        Join our community and be the first to know about new arrivals, exclusive offers, and home inspiration.
                     </p>
 
-                    <form className="newsletter-form" onSubmit={handleSubmit}>
-                        <div className="form-wrapper">
+                    <form className="newsletter-v2-form" onSubmit={handleSubmit}>
+                        <div className="newsletter-v2-input-group">
                             <input
                                 type="email"
                                 placeholder="Enter your email"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                                className="newsletter-input"
+                                className="newsletter-v2-input"
                                 required
                             />
-                            <button type="submit" className="newsletter-button">
+                            <button type="submit" className="newsletter-v2-btn">
                                 Subscribe
                             </button>
                         </div>
 
                         {status === 'success' && (
-                            <p className="status-message success">
+                            <p className="newsletter-v2-status success">
                                 ✓ Thank you for subscribing!
                             </p>
                         )}
                         {status === 'error' && (
-                            <p className="status-message error">
+                            <p className="newsletter-v2-status error">
                                 ✗ Please enter a valid email address
                             </p>
                         )}

@@ -1,9 +1,11 @@
 import React from 'react'
 import { Helmet } from 'react-helmet-async'
 import Hero from './ui/HeroSection/Hero'
-import Category from './ui/shopCategory/Category'
-import Products from './ui/Products/Products'
 import TrustBadges from './ui/TrustBadges/TrustBadges'
+import Products from './ui/Products/Products'
+import SplitSection from './ui/SplitSection/SplitSection'
+import Testimonials from './ui/Testimonials/Testimonials'
+import Category from './ui/shopCategory/Category'
 import Newsletter from './ui/Newsletter/Newsletter'
 import { useRecentlyViewed } from '../../hooks/useRecentlyViewed'
 import RecentlyViewed from '../RecentlyViewed/RecentlyViewed'
@@ -91,13 +93,18 @@ const Home = () => {
           ])}
         </script>
       </Helmet>
+
       <Hero />
       <TrustBadges />
       <Category />
       <Products />
+      <SplitSection />
+      
+      
       {recentlyViewed && recentlyViewed.length > 0 && (
         <RecentlyViewed products={recentlyViewed} />
       )}
+      <Testimonials />
       <Newsletter />
     </div>
   )

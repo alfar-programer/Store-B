@@ -1,140 +1,103 @@
-.trust-badges {
-    padding: 80px 20px;
-    background: linear-gradient(135deg, #F5F1E8 0%, #FFFFFF 100%);
-    position: relative;
-    overflow: hidden;
+/* ===== FEATURES BAR ===== */
+.features-bar {
+    padding: 0;
+    background: var(--bg-primary);
+    border-top: 1px solid var(--border-light);
+    border-bottom: 1px solid var(--border-light);
 }
 
-.trust-badges::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    right: -10%;
-    width: 500px;
-    height: 500px;
-    background: radial-gradient(circle, rgba(212, 165, 116, 0.1) 0%, transparent 70%);
-    border-radius: 50%;
-    pointer-events: none;
-}
-
-.trust-badges-container {
-    max-width: 1200px;
+.features-container {
+    max-width: 1320px;
     margin: 0 auto;
-}
-
-.badges-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 30px;
+    grid-template-columns: repeat(4, 1fr);
+    padding: 0;
 }
 
-.badge-card {
-    background: rgba(255, 255, 255, 0.7);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(212, 165, 116, 0.2);
-    border-radius: 20px;
-    padding: 40px 30px;
-    text-align: center;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    position: relative;
-    overflow: hidden;
-}
-
-.badge-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(135deg, rgba(212, 165, 116, 0.1) 0%, rgba(139, 111, 71, 0.1) 100%);
-    opacity: 0;
-    transition: opacity 0.4s ease;
-    z-index: 0;
-}
-
-.badge-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 20px 40px rgba(139, 111, 71, 0.15);
-    border-color: rgba(212, 165, 116, 0.4);
-}
-
-.badge-card:hover::before {
-    opacity: 1;
-}
-
-.badge-icon {
-    font-size: 3.5rem;
-    margin-bottom: 20px;
-    position: relative;
-    z-index: 1;
-    animation: float 3s ease-in-out infinite;
-}
-
-@keyframes float {
-
-    0%,
-    100% {
-        transform: translateY(0);
-    }
-
-    50% {
-        transform: translateY(-10px);
-    }
-}
-
-.badge-title {
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: #4A3728;
-    margin-bottom: 10px;
-    position: relative;
-    z-index: 1;
+.feature-item {
     display: flex;
-    flex-direction: column;
-    gap: 5px;
+    align-items: center;
+    gap: 14px;
+    padding: 28px 24px;
+    border-right: 1px solid var(--border-light);
+    transition: background-color 0.3s ease;
 }
 
-.badge-title-ar {
-    font-size: 0.95rem;
-    color: #8B6F47;
-    font-weight: 500;
+.feature-item:last-child {
+    border-right: none;
 }
 
-.badge-description {
-    font-size: 0.95rem;
-    color: #6B7280;
-    line-height: 1.6;
-    position: relative;
-    z-index: 1;
+.feature-item:hover {
+    background: var(--warm-50);
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
-    .trust-badges {
-        padding: 60px 20px;
+.feature-icon {
+    color: var(--accent-primary);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    background: var(--warm-50);
+    border-radius: var(--radius-md);
+}
+
+.feature-text {
+    min-width: 0;
+}
+
+.feature-title {
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 3px;
+}
+
+.feature-desc {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    line-height: 1.4;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1024px) {
+    .features-container {
+        grid-template-columns: repeat(2, 1fr);
     }
 
-    .badges-grid {
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 20px;
+    .feature-item:nth-child(2) {
+        border-right: none;
     }
 
-    .badge-card {
-        padding: 30px 20px;
-    }
-
-    .badge-icon {
-        font-size: 2.5rem;
-    }
-
-    .badge-title {
-        font-size: 1.1rem;
+    .feature-item:nth-child(1),
+    .feature-item:nth-child(2) {
+        border-bottom: 1px solid var(--border-light);
     }
 }
 
 @media (max-width: 480px) {
-    .badges-grid {
-        grid-template-columns: 1fr;
+    .features-container {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .feature-item {
+        flex-direction: column;
+        text-align: center;
+        gap: 8px;
+        padding: 20px 12px;
+    }
+
+    .feature-icon {
+        width: 40px;
+        height: 40px;
+    }
+
+    .feature-title {
+        font-size: 0.82rem;
+    }
+
+    .feature-desc {
+        font-size: 0.72rem;
     }
 }

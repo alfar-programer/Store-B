@@ -117,7 +117,7 @@
     justify-content: center;
     gap: 8px;
     padding: 12px;
-    background: #111827;
+    background: var(--accent-primary);
     color: white;
     border: none;
     border-radius: 12px;
@@ -128,7 +128,7 @@
 }
 
 .btn-primary:hover {
-    background: #374151;
+    background: var(--warm-900);
 }
 
 .btn-secondary {

@@ -26,7 +26,6 @@ const Header = () => {
         setIsMobileMenuOpen(false);
     };
 
-    // Helper function to check if a nav item is active
     const isActive = (path) => {
         if (path === '/') return location.pathname === '/';
         return location.pathname.startsWith(path);
@@ -34,39 +33,38 @@ const Header = () => {
 
     return (
         <>
-            <header className="main-header fixed top-0 left-0 w-full z-[1000] bg-white/98 backdrop-blur-lg shadow-md py-5 transition-all duration-300">
-                <div className="mx-auto px-10 flex justify-between items-center">
+            {/* Announcement Bar */}
+            <div className="announcement-bar">
+                <p>🚚 Free shipping on all orders over 1,000 EGP</p>
+            </div>
+
+            <header className="main-header">
+                <div className="header-inner">
                     {/* Logo */}
-                    <div className="logo-container">
-                        <Link to="/" className="logo-professional group">
+                    <div className="header-logo">
+                        <Link to="/" className="logo-link">
                             <div className="logo-icon-box">
                                 <img src="/svg/logo2.png" alt="Warm Touch Logo" className="logo-image" />
                             </div>
-                            <div className="logo-text-group">
-                                <div className="flex items-center gap-1.5">
-                                    <span className="logo-main-text">WARM</span>
-                                    <span className="logo-sub-text">TOUCH</span>
-                                </div>
-                                <span className="logo-arabic">تاتش</span>
-                            </div>
+                            <span className="logo-text">
+                                <span className="logo-warm">Warm</span>
+                                <span className="logo-touch">Touch</span>
+                            </span>
                         </Link>
                     </div>
 
-                    {/* Navigation */}
-                    <nav className={isMobileMenuOpen ? 'active' : ''}>
-                        <ul className="flex gap-10 list-none m-0 p-0">
+                    {/* Center Navigation */}
+                    <nav className={`header-nav ${isMobileMenuOpen ? 'active' : ''}`}>
+                        <ul>
                             {[
                                 { name: 'Home', path: '/' },
-                                { name: 'Products', path: '/allproducts' },
+                                { name: 'All Products', path: '/allproducts' },
                                 { name: 'About', path: '/about' },
-                                // Show My Orders primarily if logged in, but also in list generally
                                 ...(user ? [{ name: 'My Orders', path: '/my-orders' }] : []),
-                                // Mobile Only: Profile Links (since hidden in header)
                                 ...(isMobileMenuOpen && user ? [
                                     { name: 'My Profile', path: '/profile' },
                                     ...(user.role === 'admin' ? [{ name: 'Admin Dashboard', path: `http://localhost:${import.meta.env.VITE_ADMIN_DASHBOARD_PORT || '5174'}`, external: true }] : [])
                                 ] : []),
-                                // Mobile Only: Login if not logged in
                                 ...(isMobileMenuOpen && !user ? [
                                     { name: 'Login', path: '/login' },
                                     { name: 'Register', path: '/register' }
@@ -88,7 +86,6 @@ const Header = () => {
                                     )}
                                 </li>
                             ))}
-                            {/* Mobile Only: Logout */}
                             {isMobileMenuOpen && user && (
                                 <li>
                                     <button
@@ -96,8 +93,7 @@ const Header = () => {
                                             logout();
                                             closeMobileMenu();
                                         }}
-                                        className="nav-link text-red-500 w-full text-left"
-                                        style={{ color: '#e53e3e' }}
+                                        className="nav-link mobile-logout"
                                     >
                                         Logout
                                     </button>
@@ -106,77 +102,66 @@ const Header = () => {
                         </ul>
                     </nav>
 
-                    {/* Actions */}
-                    <div className="flex gap-4 items-center">
+                    {/* Right Actions */}
+                    <div className="header-actions">
                         <button
                             className="icon-btn"
                             aria-label="Search"
                             onClick={openSearch}
                         >
-                            <Search size={22} strokeWidth={2} />
+                            <Search size={20} strokeWidth={1.8} />
                         </button>
+
                         <button
-                            className="icon-btn cart-btn"
+                            className="icon-btn"
                             aria-label="Favorites"
                             onClick={() => navigate('/favorites')}
                         >
-                            <Heart size={22} strokeWidth={2} />
+                            <Heart size={20} strokeWidth={1.8} />
                             {favoritesCount > 0 && (
-                                <span className="cart-badge">{favoritesCount}</span>
-                            )}
-                        </button>
-                        <button
-                            className="icon-btn cart-btn"
-                            aria-label="Cart"
-                            onClick={() => navigate('/cart')}
-                        >
-                            <ShoppingCart size={22} strokeWidth={2} />
-                            {cartCount > 0 && (
-                                <span className="cart-badge">{cartCount}</span>
+                                <span className="action-badge">{favoritesCount}</span>
                             )}
                         </button>
 
-                        <div className="relative group hidden lg:block">
+                        <button
+                            className="icon-btn"
+                            aria-label="Cart"
+                            onClick={() => navigate('/cart')}
+                        >
+                            <ShoppingCart size={20} strokeWidth={1.8} />
+                            {cartCount > 0 && (
+                                <span className="action-badge">{cartCount}</span>
+                            )}
+                        </button>
+
+                        <div className="profile-dropdown-wrapper">
                             <button
                                 className="icon-btn"
                                 aria-label="Profile"
                                 onClick={(e) => {
-                                    // Don't navigate if clicking inside dropdown
                                     if (e.target.closest('.account-dropdown-menu')) return;
                                     user ? navigate('/profile') : navigate('/login');
                                 }}
                             >
-                                <User size={22} strokeWidth={2} />
+                                <User size={20} strokeWidth={1.8} />
                             </button>
 
                             {user && (
-                                <div
-                                    className="account-dropdown-menu"
-                                    onClick={(e) => e.stopPropagation()}
-                                >
+                                <div className="account-dropdown-menu" onClick={(e) => e.stopPropagation()}>
                                     <div className="dropdown-header">
                                         <p className="user-name">{user.name}</p>
                                         <p className="user-email">{user.email}</p>
                                     </div>
                                     <div className="dropdown-divider"></div>
-                                    <Link to="/profile" className="dropdown-item">
-                                        My Profile
-                                    </Link>
-                                    <Link to="/my-orders" className="dropdown-item">
-                                        My Orders
-                                    </Link>
+                                    <Link to="/profile" className="dropdown-item">My Profile</Link>
+                                    <Link to="/my-orders" className="dropdown-item">My Orders</Link>
                                     {user.role === 'admin' && (
-                                        <a
-                                            href={`http://localhost:${import.meta.env.VITE_ADMIN_DASHBOARD_PORT || '5174'}`}
-                                            className="dropdown-item"
-                                        >
+                                        <a href={`http://localhost:${import.meta.env.VITE_ADMIN_DASHBOARD_PORT || '5174'}`} className="dropdown-item">
                                             Admin Dashboard
                                         </a>
                                     )}
                                     <div className="dropdown-divider"></div>
-                                    <button onClick={logout} className="dropdown-item text-red">
-                                        Logout
-                                    </button>
+                                    <button onClick={logout} className="dropdown-item text-red">Logout</button>
                                 </div>
                             )}
                         </div>
@@ -191,14 +176,13 @@ const Header = () => {
                         </button>
                     </div>
                 </div>
-            </header >
+            </header>
 
             {/* Mobile Overlay */}
-            < div
-                className={`mobile-overlay ${isMobileMenuOpen ? 'active' : ''}`
-                }
+            <div
+                className={`mobile-overlay ${isMobileMenuOpen ? 'active' : ''}`}
                 onClick={closeMobileMenu}
-            ></div >
+            ></div>
         </>
     )
 }

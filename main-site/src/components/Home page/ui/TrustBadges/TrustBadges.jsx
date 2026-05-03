@@ -1,49 +1,43 @@
 import React from 'react'
+import { Award, Gem, Truck, Users } from 'lucide-react'
 import './trustbadges.css'
 
 const TrustBadges = () => {
     const badges = [
         {
-            icon: '🧶',
-            title: 'Handmade with Love',
-            titleAr: 'صُنع بحب',
-            description: 'Every piece crafted with care and attention to detail'
+            icon: <Award size={28} strokeWidth={1.6} />,
+            title: 'Premium Quality',
+            description: 'Hand-crafted with care using the finest materials'
         },
         {
-            icon: '🚚',
-            title: 'Fast Shipping',
-            titleAr: 'شحن سريع',
-            description: 'Quick delivery across Egypt'
+            icon: <Gem size={28} strokeWidth={1.6} />,
+            title: 'Affordable Luxury',
+            description: 'Beautiful pieces at prices you\'ll love'
         },
         {
-            icon: '🔒',
-            title: 'Secure Payment',
-            titleAr: 'دفع آمن',
-            description: 'Safe and encrypted transactions'
+            icon: <Truck size={28} strokeWidth={1.6} />,
+            title: 'Fast Delivery',
+            description: 'Quick and reliable delivery across Egypt'
         },
         {
-            icon: '⭐',
-            title: 'Quality Guaranteed',
-            titleAr: 'جودة مضمونة',
-            description: 'Premium materials and craftsmanship'
+            icon: <Users size={28} strokeWidth={1.6} />,
+            title: 'Trusted by Thousands',
+            description: '10,000+ customers love shopping with us'
         }
     ]
 
     return (
-        <section className="trust-badges">
-            <div className="trust-badges-container">
-                <div className="badges-grid">
-                    {badges.map((badge, index) => (
-                        <div className="badge-card" key={index}>
-                            <div className="badge-icon">{badge.icon}</div>
-                            <h3 className="badge-title">
-                                {badge.title}
-                                <span className="badge-title-ar">{badge.titleAr}</span>
-                            </h3>
-                            <p className="badge-description">{badge.description}</p>
+        <section className="features-bar">
+            <div className="features-container">
+                {badges.map((badge, index) => (
+                    <div className="feature-item" key={index}>
+                        <div className="feature-icon">{badge.icon}</div>
+                        <div className="feature-text">
+                            <h3 className="feature-title">{badge.title}</h3>
+                            <p className="feature-desc">{badge.description}</p>
                         </div>
-                    ))}
-                </div>
+                    </div>
+                ))}
             </div>
         </section>
     )

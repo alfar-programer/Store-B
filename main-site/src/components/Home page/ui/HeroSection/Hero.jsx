@@ -1,84 +1,84 @@
-import React, { useRef, lazy, Suspense } from 'react'
+import React, { useRef } from 'react'
+import { Link } from 'react-router-dom'
 import './hero.css'
-import gsap from 'gsap';
-import { useGSAP } from '@gsap/react';
-
-// Lazy load not strictly necessary for this lightweight component but consistent with previous structure if desired, 
-// or just standard import. Let's use standard import for simplicity and speed.
-import BubblesBackground from '../../../BubblesBackground/BubblesBackground';
+import gsap from 'gsap'
+import { useGSAP } from '@gsap/react'
 
 const Hero = () => {
-  const heroRef = useRef(null);
-  const titleRef = useRef(null);
-  const textRef = useRef(null);
-  const buttonRef = useRef(null);
+    const heroRef = useRef(null)
 
-  useGSAP(() => {
-    const tl = gsap.timeline();
+    useGSAP(() => {
+        const tl = gsap.timeline({ defaults: { ease: 'power3.out' } })
 
-    tl.from(titleRef.current, {
-      y: 50,
-      opacity: 0,
-      duration: 1,
-      ease: "power3.out"
-    })
-      .from(textRef.current, {
-        y: 30,
-        opacity: 0,
-        duration: 1,
-        ease: "power3.out"
-      }, "-=0.5")
-      .from(buttonRef.current, {
-        scale: 0.8,
-        opacity: 0,
-        duration: 0.8,
-        ease: "back.out(1.7)"
-      }, "-=0.5");
+        tl.from('.hero-bg', { scale: 1.1, duration: 1.5, ease: 'power2.out' })
+          .from('.hero-eyebrow', { y: 20, autoAlpha: 0, duration: 0.6 }, '-=1')
+          .from('.hero-title', { y: 40, autoAlpha: 0, duration: 0.8 }, '-=0.4')
+          .from('.hero-desc', { y: 30, autoAlpha: 0, duration: 0.7 }, '-=0.5')
+          .from('.hero-buttons', { y: 20, autoAlpha: 0, duration: 0.6 }, '-=0.4')
+          .from('.hero-social-proof', { y: 15, autoAlpha: 0, duration: 0.5 }, '-=0.3')
+          .from('.hero-scroll-indicator', { autoAlpha: 0, y: 20, duration: 0.6 }, '-=0.2')
 
-  }, { scope: heroRef });
+    }, { scope: heroRef })
 
-  return (
-    <section className='hero' ref={heroRef}>
-      {/* CSS Bubbles Background */}
-      <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 0 }}>
-        <BubblesBackground />
-      </div>
+    return (
+        <section className="hero" ref={heroRef}>
+            {/* Background Image */}
+            <div className="hero-bg">
+                <img src="../../../../public/images/herosection home page.png" alt="Warm Touch" className="hero-bg-img" />
+            
+            </div>
 
-      {/* Animated gradient overlays */}
-      <div className="gradient-overlay gradient-1"></div>
-      <div className="gradient-overlay gradient-2"></div>
-      <div className="gradient-overlay gradient-3"></div>
+            <div className="hero-container">
+                <div className="hero-content">
+                    <span className="hero-eyebrow">Handmade with Love & Care</span>
+                    <h1 className="hero-title">
+                        Feel Comfort.<br />
+                        Live <span className="hero-highlight">Better.</span>
+                    </h1>
+                    <p className="hero-desc">
+                        Handmade décor and home accessories
+                        that turn every corner of your home
+                        into a place of warmth.
+                    </p>
+                    <div className="hero-buttons">
+                        <Link to="/allproducts" className="btn-primary">
+                            Shop Now
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <path d="M5 12h14M12 5l7 7-7 7" />
+                            </svg>
+                        </Link>
+                        <Link to="/allproducts" className="btn-secondary">
+                            Explore Collection
+                        </Link>
+                    </div>
 
-      {/* Floating shapes */}
-      <div className="floating-shape shape-1"></div>
-      <div className="floating-shape shape-2"></div>
-      <div className="floating-shape shape-3"></div>
-      <div className="floating-shape shape-4"></div>
+                    {/* Social Proof */}
+                    <div className="hero-social-proof">
+                        <div className="avatar-stack">
+                            <div className="avatar avatar-1"><div className="image-placeholder"></div></div>
+                            <div className="avatar avatar-2"><div className="image-placeholder"></div></div>
+                            <div className="avatar avatar-3"><div className="image-placeholder"></div></div>
+                            <div className="avatar avatar-4"><div className="image-placeholder"></div></div>
+                        </div>
+                        <span className="social-proof-text">
+                            <strong>10,000+</strong> Happy Customers
+                        </span>
+                    </div>
+                </div>
+            </div>
 
-      <div className='hero-main'>
-        <div className="hero-content">
-          <h1 ref={titleRef}>Handmade with <span>Love & Care</span></h1>
-          <p ref={textRef}>قطع يدوية تُصنع بعشق وتُهدى بدفء — مكرميات، ديكورات منزلية، وهدايا فريدة تُحكي قصة.</p>
-          <button
-            ref={buttonRef}
-            onMouseEnter={() => {
-              gsap.to(buttonRef.current, { scale: 1.1, duration: 0.3, ease: "power1.out" });
-            }}
-            onMouseLeave={() => {
-              gsap.to(buttonRef.current, { scale: 1, duration: 0.3, ease: "power1.out" });
-            }}
-          >
-            Explore Collection
-            <span className="arrow-icon">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </span>
-          </button>
-        </div>
-      </div>
-    </section>
-  )
+            {/* Scroll Indicator */}
+            <div className="hero-scroll-indicator centered">
+                <div className="mouse-icon">
+                    <div className="mouse-wheel"></div>
+                </div>
+                <span>Scroll to explore</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="scroll-arrow">
+                    <path d="m6 9 6 6 6-6"/>
+                </svg>
+            </div>
+        </section>
+    )
 }
 
 export default Hero
