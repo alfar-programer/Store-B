@@ -3,132 +3,107 @@ import { Helmet } from 'react-helmet-async'
 import { Link } from 'react-router-dom'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { Heart, Award, Users, Sparkles, Phone, Mail, MapPin, ArrowLeft } from 'lucide-react'
+import {
+    Heart, Eye, Target, Shield, Star, Truck,
+    Package, Brush, CheckCircle, Gift,
+    Linkedin, Instagram, ArrowRight,
+    Leaf, Users, Smile, Handshake
+} from 'lucide-react'
 import './about.css'
 
 gsap.registerPlugin(ScrollTrigger)
 
 const About = () => {
-    const heroRef = useRef(null)
-    const storyRef = useRef(null)
-    const valuesRef = useRef(null)
-    const statsRef = useRef(null)
+    const pageRef = useRef(null)
 
     useEffect(() => {
-        // Hero section animations
         const ctx = gsap.context(() => {
-            gsap.from('.hero-title', {
-                opacity: 0,
-                y: 100,
-                duration: 1.2,
-                ease: 'power4.out'
+            // Hero entrance
+            gsap.from('.about-hero-title', { opacity: 0, y: 60, duration: 1, ease: 'power3.out' })
+            gsap.from('.about-hero-subtitle', { opacity: 0, y: 40, duration: 1, delay: 0.2, ease: 'power3.out' })
+            gsap.from('.about-hero-desc', { opacity: 0, y: 30, duration: 1, delay: 0.4, ease: 'power3.out' })
+
+            // Story section
+            gsap.from('.about-story-content', {
+                scrollTrigger: { trigger: '.about-story', start: 'top 80%', toggleActions: 'play none none reverse' },
+                opacity: 0, y: 40, duration: 0.8, ease: 'power2.out'
             })
 
-            gsap.set('.hero-subtitle', { opacity: 1, y: 0 })
-            gsap.set('.hero-subtitle-ar', { opacity: 1, y: 0 })
-
-            gsap.from('.hero-subtitle', {
-                opacity: 0,
-                y: 50,
-                duration: 1,
-                delay: 0.3,
-                ease: 'power3.out'
+            // Mission & Vision
+            gsap.from('.mv-card', {
+                scrollTrigger: { trigger: '.about-mv', start: 'top 80%', toggleActions: 'play none none reverse' },
+                opacity: 0, y: 40, stagger: 0.2, duration: 0.8, ease: 'power2.out'
             })
 
-            gsap.from('.hero-subtitle-ar', {
-                opacity: 0,
-                y: 50,
-                duration: 1,
-                delay: 0.5,
-                ease: 'power3.out'
+            // Process steps
+            gsap.from('.process-step', {
+                scrollTrigger: { trigger: '.about-process', start: 'top 80%', toggleActions: 'play none none reverse' },
+                opacity: 0, y: 30, stagger: 0.15, duration: 0.6, ease: 'back.out(1.4)'
             })
 
-            gsap.from('.hero-decoration', {
-                opacity: 0,
-                scale: 0,
-                duration: 1.5,
-                delay: 0.5,
-                ease: 'elastic.out(1, 0.5)'
+            // Team cards
+            gsap.from('.team-card', {
+                scrollTrigger: { trigger: '.about-team', start: 'top 80%', toggleActions: 'play none none reverse' },
+                opacity: 0, y: 40, stagger: 0.12, duration: 0.7, ease: 'power2.out'
             })
 
-            // Floating animation for decorations
-            gsap.to('.hero-decoration', {
-                y: -20,
-                duration: 2,
-                repeat: -1,
-                yoyo: true,
-                ease: 'sine.inOut'
-            })
-
-            // Story section scroll animation
-            gsap.from('.story-content', {
-                scrollTrigger: {
-                    trigger: '.story-section',
-                    start: 'top 80%',
-                    end: 'bottom 20%',
-                    toggleActions: 'play none none reverse'
-                },
-                opacity: 0,
-                x: -100,
-                duration: 1,
-                ease: 'power3.out'
-            })
-
-            gsap.from('.story-image', {
-                scrollTrigger: {
-                    trigger: '.story-section',
-                    start: 'top 80%',
-                    end: 'bottom 20%',
-                    toggleActions: 'play none none reverse'
-                },
-                opacity: 0,
-                x: 100,
-                duration: 1,
-                ease: 'power3.out'
-            })
-
-            // Values cards stagger animation
-            gsap.set('.value-card', { opacity: 1, y: 0 })
-
+            // Values
             gsap.from('.value-card', {
-                scrollTrigger: {
-                    trigger: '.values-section',
-                    start: 'top 80%',
-                    toggleActions: 'play none none reverse'
-                },
-                opacity: 0,
-                y: 50,
-                stagger: 0.2,
-                duration: 1,
-                ease: 'back.out(1.7)'
+                scrollTrigger: { trigger: '.about-values', start: 'top 80%', toggleActions: 'play none none reverse' },
+                opacity: 0, y: 30, stagger: 0.1, duration: 0.6, ease: 'power2.out'
             })
 
             // Stats counter animation
-            const stats = document.querySelectorAll('.stat-number')
+            const stats = document.querySelectorAll('.about-stat-number')
             stats.forEach(stat => {
                 const target = parseInt(stat.getAttribute('data-target'))
-                gsap.to(stat, {
-                    scrollTrigger: {
-                        trigger: '.stats-section',
-                        start: 'top 80%',
-                    },
-                    textContent: target,
+                const suffix = stat.getAttribute('data-suffix') || ''
+                let obj = { val: 0 }
+                
+                gsap.to(obj, {
+                    scrollTrigger: { trigger: '.about-stats', start: 'top 80%' },
+                    val: target,
                     duration: 2,
-                    ease: 'power1.out',
-                    snap: { textContent: 1 },
-                    onUpdate: function () {
-                        stat.textContent = Math.ceil(stat.textContent) + (stat.getAttribute('data-suffix') || '')
+                    ease: 'power2.out',
+                    onUpdate: () => {
+                        stat.textContent = Math.floor(obj.val).toLocaleString() + suffix
                     }
                 })
             })
 
-        }, heroRef)
+            // CTA
+            gsap.from('.about-cta-content', {
+                scrollTrigger: { trigger: '.about-cta', start: 'top 80%', toggleActions: 'play none none reverse' },
+                opacity: 0, y: 40, duration: 0.8, ease: 'power2.out'
+            })
+        }, pageRef)
 
         return () => ctx.revert()
     }, [])
 
+    const teamMembers = [
+        { name: 'Nouran Ahmed', role: 'Founder & CEO' },
+        { name: 'Omar Khaled', role: 'Head of Design' },
+        { name: 'Sara Mostafa', role: 'Artisan Liaison' },
+        { name: 'Youssef Tarek', role: 'Operations Manager' },
+    ]
+
+    const processSteps = [
+        { num: 1, img: '/images/plante.png', title: 'Sourcing Materials', desc: 'We carefully select natural, sustainable materials that are safe and long-lasting.' },
+        { num: 2, img: '/images/handmade.png', title: 'Crafting Products', desc: 'Skilled artisans craft each piece with attention to detail and passion.' },
+        { num: 3, img: '/images/lens.png', title: 'Quality Check', desc: 'Every item goes through rigorous quality checks to ensure perfection.' },
+        { num: 4, img: '/images/box.png', title: 'Careful Delivery', desc: 'We pack with care and deliver on time — because you deserve the best.' },
+    ]
+
+    const values = [
+        { icon: <Leaf size={55} />, title: 'Simplicity', desc: 'Simple designs that bring peace and balance to your space.' },
+        { icon: <Heart size={55} />, title: 'Comfort', desc: 'Everything we create is made to make you feel at home.' },
+        { icon: <Shield size={55} />, title: 'Quality', desc: 'We never compromise on materials or craftsmanship. Ever.' },
+        { icon: <Handshake size={55} />, title: 'Trust', desc: 'Honest communication, reliable service, and lasting relationships.' },
+    ]
+
     return (
-        <div className="about-page" ref={heroRef}>
+        <div className="about-page" ref={pageRef}>
             <Helmet>
                 <title>About Warm Touch | Handmade Macrame & Home Decor | من نحن</title>
                 <meta name="description" content="Discover Warm Touch's story - handcrafted macrame, artisan mugs, and unique home decor made with love. اكتشف قصة وارم تاتش - منتجات يدوية بحب." />
@@ -152,145 +127,192 @@ const About = () => {
                 </script>
             </Helmet>
 
-            {/* Hero Section */}
-            <section className="hero-section">
-                <div className="hero-decoration hero-decoration-1">
-                    <Sparkles size={60} />
+            {/* ─── 1. HERO ─────────────────────────────────── */}
+            <section className="about-hero">
+                <div className="about-hero-bg">
+                    <img src="/images/about hero.png" alt="About Hero" className="about-hero-img" />
                 </div>
-                <div className="hero-decoration hero-decoration-2">
-                    <Heart size={50} />
-                </div>
-                <div className="hero-decoration hero-decoration-3">
-                    <Sparkles size={55} />
-                </div>
-
-                <div className="hero-content">
-                    <h1 className="hero-title">
-                        Handmade with <span className="gradient-text">Love & Care</span>
-                    </h1>
-                    <p className="hero-subtitle">
-                        Every piece tells a story of craftsmanship, passion, and warmth
-                    </p>
-                    <p className="hero-subtitle-ar">
-                        كل قطعة تحكي قصة من الحرفية والشغف والدفء
+                
+                <div className="about-hero-inner">
+                    <h1 className="about-hero-title">Our Story</h1>
+                    <h2 className="about-hero-subtitle">Built Around <br /> Comfort & Simplicity</h2>
+                    <p className="about-hero-desc">
+                        At WarmTouch, we believe that the little things at home make the biggest difference.
                     </p>
                 </div>
             </section>
 
-            {/* Story Section */}
-            <section className="story-section" ref={storyRef}>
-                <div className="story-container">
-                    <div className="story-content">
-                        <h2>Our Story</h2>
-                        <p>
-                            Founded in 2024, Warm Touch began with a passion for bringing handmade beauty into every home.
-                            We specialize in artisan macrame wall hangings, hand-painted mugs, and unique home decor pieces
-                            that add warmth and personality to your space.
-                        </p>
-                        <p>
-                            Each product is carefully crafted by skilled artisans who pour their heart into every knot,
-                            every brushstroke, and every detail. We believe that handmade items carry a special energy
-                            that mass-produced products simply cannot replicate.
-                        </p>
-                        <p>
-                            From our workshop to your home, we're committed to creating pieces that you'll treasure for years to come.
-                        </p>
+            {/* ─── 2. OUR STORY ────────────────────────────── */}
+            <section className="about-story">
+                <div className="about-story-decorations">
+                    <div className="about-decoration-leaf leaf-story-left"></div>
+                    <div className="about-decoration-leaf leaf-story-right"></div>
+                </div>
+                <div className="about-story-content">
+                    <h2 className="about-section-title">Our Story</h2>
+                    <div className="about-divider">
+                        <span className="divider-leaf">❧</span>
                     </div>
-                    <div className="story-image">
-                        <div className="image-placeholder">
-                            <img src="\svg\logo.jpg" width={600} height={600} alt="Warm Touch handmade products" />
-                        </div>
+                    <div className="about-story-text">
+                        <p>
+                            WarmTouch was born from a simple belief: your home should be your favorite place.
+                            In a world that moves too fast, we create handmade pieces that bring warmth,
+                            beauty, and calm into everyday life.
+                        </p>
+                        <p>
+                            We noticed how mass-produced home décor often feels cold and without connection.
+                            Our mission is to change that — by supporting local artisans and offering
+                            thoughtfully made products that stand the test of time.
+                        </p>
+                        <p>
+                            Every item we make carries a story, a purpose, and a whole lot of heart.
+                            Thank you for being part of ours.
+                        </p>
                     </div>
                 </div>
             </section>
 
-            {/* Values Section */}
-            <section className="values-section" ref={valuesRef}>
-                <h2 className="section-title">What We Stand For</h2>
-                <div className="values-grid">
-                    <div className="value-card">
-                        <div className="value-icon">
-                            <Heart size={40} />
+            {/* ─── 3. MISSION & VISION ─────────────────────── */}
+            <section className="about-mv">
+                <div className="about-mv-grid">
+                    <div className="mv-card">
+                        <div className="icon-text">
+                            <div className="mv-icon-wrap">
+                                <Target size={50} />
+                            </div>
+                            <h3>Our Mission</h3>
                         </div>
-                        <h3>Handmade with Love</h3>
-                        <p>Every piece is crafted by hand with care and attention to detail</p>
+                        <p>
+                            To create handmade home essentials that combine beauty, function, and comfort
+                            — while supporting talented artisans and sustainable practices.
+                        </p>
                     </div>
-                    <div className="value-card">
-                        <div className="value-icon">
-                            <Award size={40} />
+                    <div className="mv-divider"></div>
+                    <div className="mv-card">
+                        <div className="icon-text">
+                            <div className="mv-icon-wrap">
+                                <Eye size={50} />
+                            </div>
+                            <h3>Our Vision</h3>
                         </div>
-                        <h3>Premium Quality</h3>
-                        <p>We use only the finest materials for lasting beauty</p>
-                    </div>
-                    <div className="value-card">
-                        <div className="value-icon">
-                            <Users size={40} />
-                        </div>
-                        <h3>Community</h3>
-                        <p>Supporting local artisans and building connections</p>
-                    </div>
-                    <div className="value-card">
-                        <div className="value-icon">
-                            <Sparkles size={40} />
-                        </div>
-                        <h3>Unique Designs</h3>
-                        <p>One-of-a-kind pieces that reflect your personal style</p>
+                        <p>
+                            To be the leading brand for handmade home décor in the region — known for
+                            quality, trust, and the way we make people feel at home.
+                        </p>
                     </div>
                 </div>
             </section>
 
-            {/* Stats Section */}
-            <section className="stats-section" ref={statsRef}>
-                <div className="stats-grid">
-                    <div className="stat-item">
-                        <div className="stat-number" data-target="1000" data-suffix="+">0+</div>
-                        <div className="stat-label">Happy Customers</div>
-                    </div>
-                    <div className="stat-item">
-                        <div className="stat-number" data-target="500" data-suffix="+">0+</div>
-                        <div className="stat-label">Handmade Products</div>
-                    </div>
-                    <div className="stat-item">
-                        <div className="stat-number" data-target="50" data-suffix="+">0+</div>
-                        <div className="stat-label">Artisan Partners</div>
-                    </div>
-                    <div className="stat-item">
-                        <div className="stat-number" data-target="99" data-suffix="%">0%</div>
-                        <div className="stat-label">Satisfaction Rate</div>
+            {/* ─── 4. HOW WE CREATE ───────────────────────── */}
+            <section className="about-process">
+                <div className="about-process-inner">
+                    <h2 className="about-section-title">How We Create</h2>
+                    <p className="about-section-subtitle">Thoughtful steps. Beautiful results.</p>
+                    <div className="process-grid">
+                        {processSteps.map((step, i) => (
+                            <div className="process-step" key={i}>
+                                <div className="process-num">{step.num}</div>
+                                <div className="process-img-wrap">
+                                    <img src={step.img} alt={step.title} className="process-step-img" />
+                                </div>
+                                <h4>{step.title}</h4>
+                                <p>{step.desc}</p>
+                                {i < processSteps.length - 1 && <div className="process-connector"></div>}
+                            </div>
+                        ))}
                     </div>
                 </div>
             </section>
 
-            {/* Contact CTA Section */}
-            <section className="about-contact-cta" id="contact">
-                <div className="about-cta-inner">
-                    <div className="about-cta-info">
-                        <div className="about-cta-icons">
-                            <div className="about-cta-icon-box"><Phone size={20} /></div>
-                            <div className="about-cta-icon-box"><Mail size={20} /></div>
-                            <div className="about-cta-icon-box"><MapPin size={20} /></div>
-                        </div>
-                        <h2>هل لديك سؤال؟</h2>
-                        <p>فريقنا جاهز للمساعدة. تواصل معنا عبر البريد الإلكتروني أو الهاتف أو نموذج التواصل المخصص.</p>
-                        <div className="about-contact-details">
-                            <span><Mail size={15} /> info@warmtouch.store</span>
-                            <span><Phone size={15} /> +20 109 816 5967</span>
-                        </div>
+            {/* ─── 5. TEAM ─────────────────────────────────── */}
+            <section className="about-team">
+                <div className="about-team-inner">
+                    <h2 className="about-section-title">The People Behind WarmTouch</h2>
+                    <p className="about-section-subtitle">Real people. Real passion. Real care.</p>
+                    <div className="team-grid">
+                        {teamMembers.map((member, i) => (
+                            <div className="team-card" key={i}>
+                                <div className="team-img">
+                                    <img src="/images/people.png" alt={member.name} className="team-member-img" />
+                                </div>
+                                <div className="team-info">
+                                    <h4>{member.name}</h4>
+                                    <p>{member.role}</p>
+                                    <div className="team-socials">
+                                        <a href="#" aria-label={`${member.name} LinkedIn`}><Linkedin size={18} /></a>
+                                        <a href="#" aria-label={`${member.name} Instagram`}><Instagram size={18} /></a>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
                     </div>
-                    <Link to="/contact" className="about-contact-link" id="about-contact-us-btn">
-                        تواصل معنا
-                        <ArrowLeft size={20} />
+                </div>
+            </section>
+
+            {/* ─── 6. VALUES ───────────────────────────────── */}
+            <section className="about-values">
+                <div className="about-values-inner">
+                    <h2 className="about-section-title">Our Values</h2>
+                    <div className="values-grid">
+                        {values.map((v, i) => (
+                            <div className="value-card" key={i}>
+                                <div className="value-header">
+                                    <div className="value-icon">{v.icon}</div>
+                                    
+                                </div>
+                                <div className="value-content">
+                                    <h4>{v.title}</h4>
+                                    <p>{v.desc}</p>
+                                </div>
+                                {i < values.length - 1 && <div className="value-separator"></div>}
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* ─── 7. STATS ───────────────────────────────── */}
+            <section className="about-stats">
+                <div className="about-stats-bar">
+                    <div className="about-stat">
+                        <div className="stat-icon"><Smile size={55} /></div>
+                        <div className="about-stat-number" data-target="10000" data-suffix="+">0+</div>
+                        <div className="about-stat-label">Happy Customers</div>
+                    </div>
+                    <div className="stat-divider"></div>
+                    <div className="about-stat">
+                        <div className="stat-icon"><Package size={55} /></div>
+                        <div className="about-stat-number" data-target="500" data-suffix="+">0+</div>
+                        <div className="about-stat-label">Products Delivered</div>
+                    </div>
+                    <div className="stat-divider"></div>
+                    <div className="about-stat">
+                        <div className="stat-icon"><Users size={55} /></div>
+                        <div className="about-stat-number" data-target="50" data-suffix="+">0+</div>
+                        <div className="about-stat-label">Artisan Partners</div>
+                    </div>
+                    <div className="stat-divider"></div>
+                    <div className="about-stat">
+                        <div className="stat-icon"><Star size={55} /></div>
+                        <div className="about-stat-number" data-target="99" data-suffix="%">0%</div>
+                        <div className="about-stat-label">Satisfaction Rate</div>
+                    </div>
+                </div>
+            </section>
+
+            {/* ─── 8. CTA ─────────────────────────────────── */}
+            <section className="about-cta">
+                <div className="about-cta-bg">
+                    <img src="/images/ctaabout.png" alt="CTA background" className="about-cta-img" />
+                    <div className="about-cta-overlay"></div>
+                </div>
+                <div className="about-cta-content">
+                    <h2>Start Your Comfort Journey</h2>
+                    <p>Explore our collection of handmade treasures and bring warmth to every corner of your home.</p>
+                    <Link to="/allproducts" className="about-cta-btn">
+                        Explore Our Products <ArrowRight size={18} />
                     </Link>
                 </div>
-            </section>
-
-            {/* CTA Section */}
-            <section className="cta-section">
-                <h2>Ready to Add Warmth to Your Home?</h2>
-                <p>Explore our collection of handmade treasures</p>
-                <button className="cta-button" onClick={() => window.location.href = '/allproducts'}>
-                    Shop Now
-                </button>
             </section>
         </div>
     )
