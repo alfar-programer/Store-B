@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import './newsletter.css'
 
 const Newsletter = () => {
+    const { t } = useTranslation()
     const [email, setEmail] = useState('')
     const [status, setStatus] = useState('')
 
@@ -23,35 +25,35 @@ const Newsletter = () => {
             <div className="newsletter-v2-container">
                 <div className="newsletter-v2-content">
                     <h2 className="newsletter-v2-title">
-                        Get <span className="newsletter-v2-highlight">10% off</span> your first order
+                        {t('homePage.newsTitle1')} <span className="newsletter-v2-highlight">{t('homePage.newsHighlight')}</span> {t('homePage.newsTitle2')}
                     </h2>
                     <p className="newsletter-v2-desc">
-                        Join our community and be the first to know about new arrivals, exclusive offers, and home inspiration.
+                        {t('homePage.newsDesc')}
                     </p>
 
                     <form className="newsletter-v2-form" onSubmit={handleSubmit}>
                         <div className="newsletter-v2-input-group">
                             <input
                                 type="email"
-                                placeholder="Enter your email"
+                                placeholder={t('homePage.newsPlaceholder')}
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 className="newsletter-v2-input"
                                 required
                             />
                             <button type="submit" className="newsletter-v2-btn">
-                                Subscribe
+                                {t('homePage.newsBtn')}
                             </button>
                         </div>
 
                         {status === 'success' && (
                             <p className="newsletter-v2-status success">
-                                ✓ Thank you for subscribing!
+                                {t('homePage.newsSuccess')}
                             </p>
                         )}
                         {status === 'error' && (
                             <p className="newsletter-v2-status error">
-                                ✗ Please enter a valid email address
+                                {t('homePage.newsError')}
                             </p>
                         )}
                     </form>

@@ -6,6 +6,8 @@ import { useFavorites } from '../../context/FavoritesContext'
 import { useSearchParams, useNavigate, Link } from 'react-router-dom'
 import api from '../../services/api'
 import { API_BASE_URL, PLACEHOLDER_IMAGE } from '../../config'
+import { useLanguage } from '../../context/LanguageContext'
+import { useTranslation } from 'react-i18next'
 import './allproducts.css'
 import './allproducts-loading.css'
 
@@ -25,6 +27,8 @@ const AllProducts = () => {
     const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE)
     const { addToCart } = useCart()
     const { toggleFavorite, isFavorite } = useFavorites()
+    const { getProductField, lang } = useLanguage()
+    const { t } = useTranslation()
 
     const fetchProducts = async () => {
         try {
@@ -192,7 +196,7 @@ const handleAddToCart = (e, product) => {
     const button = e.currentTarget
     const originalText = button.textContent
 
-    button.textContent = '✓ تمت الإضافة!'
+    button.textContent = t('allProducts.added')
     button.style.background = 'linear-gradient(135deg, #48bb78 0%, #38a169 100%)'
 
     setTimeout(() => {
@@ -325,7 +329,7 @@ const handleAddToCart = (e, product) => {
                     </div>
                 ) : error ? (
                     <div className="error-state" style={{ textAlign: 'center', padding: '2rem', color: '#e53e3e' }}>
-                        <h3>Oops! Something went wrong.</h3>
+                        <h3>{t('allProducts.errorOops')}</h3>
                         <p>{error}</p>
                         <button
                             onClick={fetchProducts}
@@ -339,14 +343,14 @@ const handleAddToCart = (e, product) => {
                                 cursor: 'pointer'
                             }}
                         >
-                            Try Again
+                            {t('allProducts.errorTryAgain')}
                         </button>
                     </div>
                 ) : (
                     <>
                         <div className="products-header">
-                            <h2>All Products</h2>
-                            <p>Discover our handpicked selection of items</p>
+                            <h2>{t('allProducts.pageTitle')}</h2>
+                            <p>{t('allProducts.pageDesc')}</p>
                         </div>
 
                         {/* Category Navigation */}
@@ -355,7 +359,7 @@ const handleAddToCart = (e, product) => {
                                 className={`category-btn ${selectedCategory === 'All' ? 'active' : ''}`}
                                 onClick={() => handleCategoryChange('All')}
                             >
-                                All
+                                {t('allProducts.filterAll')}
                             </button>
                             {categories.map((category) => (
                                 <button
@@ -370,7 +374,7 @@ const handleAddToCart = (e, product) => {
 
                         {/* Sort Toolbar */}
                         <div className="sort-toolbar">
-                            <span className="sort-count">{filteredProducts.length} منتج</span>
+                            <span className="sort-count">{t('allProducts.productsCount', { count: filteredProducts.length })}</span>
                             <div className="sort-select-wrapper">
                                 <ArrowUpDown size={16} className="sort-icon" />
                                 <select
@@ -379,11 +383,11 @@ const handleAddToCart = (e, product) => {
                                     value={sortOrder}
                                     onChange={(e) => { setSortOrder(e.target.value); setVisibleCount(ITEMS_PER_PAGE) }}
                                 >
-                                    <option value="default">الترتيب الافتراضي</option>
-                                    <option value="newest">الأحدث أولاً</option>
-                                    <option value="price-asc">السعر: من الأقل للأعلى</option>
-                                    <option value="price-desc">السعر: من الأعلى للأقل</option>
-                                    <option value="discount">أعلى خصم</option>
+                                    <option value="default">{t('allProducts.sortDefault')}</option>
+                                    <option value="newest">{t('allProducts.sortNewest')}</option>
+                                    <option value="price-asc">{t('allProducts.sortPriceAsc')}</option>
+                                    <option value="price-desc">{t('allProducts.sortPriceDesc')}</option>
+                                    <option value="discount">{t('allProducts.sortDiscount')}</option>
                                 </select>
                             </div>
                         </div>
@@ -431,13 +435,13 @@ const handleAddToCart = (e, product) => {
                                                 className="quick-view-btn"
                                                 onClick={(e) => handleQuickView(e, product)}
                                             >
-                                            عرض سريع
+                                            {t('allProducts.btnQuickView')}
                                             </button>
                                         </div>
                                     </div>
                                     <div className="product-info">
-                                        <h3>{product.title}</h3>
-                                        <p className="product-description">{product.description}</p>
+                                        <h3>{getProductField(product, 'title')}</h3>
+                                        <p className="product-description">{getProductField(product, 'description')}</p>
                                         <div className="product-rating">
                                             <span className="stars">★★★★★</span>
                                             <span className="rating-value">{product.rating}</span>
@@ -457,7 +461,7 @@ const handleAddToCart = (e, product) => {
                                         {/* Stock indicator */}
                                         {typeof product.stock === 'number' && product.stock > 0 && product.stock < 10 && (
                                             <span style={{ fontSize: '0.7rem', color: '#d97706', fontWeight: '600', marginBottom: '4px', display: 'block' }}>
-                                                باقي {product.stock} فقط!
+                                                {t('allProducts.stockLeft', { count: product.stock })}
                                             </span>
                                         )}
                                         <button
@@ -466,7 +470,7 @@ const handleAddToCart = (e, product) => {
                                             style={typeof product.stock === 'number' && product.stock <= 0 ? { opacity: 0.5, cursor: 'not-allowed' } : {}}
                                             onClick={(e) => handleAddToCart(e, product)}
                                         >
-                                            {typeof product.stock === 'number' && product.stock <= 0 ? 'نفذت الكمية' : 'أضف للسلة'}
+                                            {typeof product.stock === 'number' && product.stock <= 0 ? t('allProducts.btnOutOfStock') : t('allProducts.btnAddToCart')}
                                         </button>
                                     </div>
                                 </Link>
@@ -477,13 +481,13 @@ const handleAddToCart = (e, product) => {
                         {hasMore && (
                             <div className="load-more-wrapper">
                                 <button className="load-more-btn" onClick={handleLoadMore}>
-                                    عرض المزيد
-                                    <span className="load-more-count">({filteredProducts.length - visibleCount} منتج إضافي)</span>
+                                    {t('allProducts.btnLoadMore')}
+                                    <span className="load-more-count">{t('allProducts.moreProductsCount', { count: filteredProducts.length - visibleCount })}</span>
                                 </button>
                             </div>
                         )}
                         {!hasMore && filteredProducts.length > ITEMS_PER_PAGE && (
-                            <p className="all-loaded-msg">✓ تم عرض جميع المنتجات</p>
+                            <p className="all-loaded-msg">{t('allProducts.allLoaded')}</p>
                         )}
 
                         {/* Quick View Modal */}
@@ -550,8 +554,8 @@ const handleAddToCart = (e, product) => {
                                         </div>
                                     </div>
                                     <div className="modal-details">
-                                        <h2>{selectedProduct.title}</h2>
-                                        <p className="modal-description">{selectedProduct.description}</p>
+                                        <h2>{getProductField(selectedProduct, 'title')}</h2>
+                                        <p className="modal-description">{getProductField(selectedProduct, 'description')}</p>
                                         <div className="modal-rating">
                                             <span className="stars">★★★★★</span>
                                             <span className="rating-value">{selectedProduct.rating}</span>
@@ -574,7 +578,7 @@ const handleAddToCart = (e, product) => {
                                                 closeModal()
                                             }}
                                         >
-                                            أضف للسلة
+                                            {typeof selectedProduct.stock === 'number' && selectedProduct.stock <= 0 ? t('allProducts.btnOutOfStock') : t('allProducts.btnAddToCart')}
                                         </button>
                                     </div>
                                 </div>

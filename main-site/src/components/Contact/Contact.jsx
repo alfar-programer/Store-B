@@ -1,9 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import { Helmet } from 'react-helmet-async'
 import { Phone, Mail, MapPin, Send, Clock, MessageCircle, CheckCircle } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
+import { useLanguage } from '../../context/LanguageContext'
 import './contact.css'
 
 const Contact = () => {
+    const { t } = useTranslation()
+    const { lang } = useLanguage()
+    
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -22,10 +27,10 @@ const Contact = () => {
         setStatus('sending')
 
         const to = 'info@warmtouch.store'
-        const subject = encodeURIComponent(formData.subject || 'رسالة من موقع Warm Touch')
+        const subject = encodeURIComponent(formData.subject || t('contactPage.defaultSubject'))
         const body = encodeURIComponent(
-            `الاسم: ${formData.name}\n` +
-            `البريد الإلكتروني: ${formData.email}\n\n` +
+            `${t('contactPage.emailBodyName')}: ${formData.name}\n` +
+            `${t('contactPage.emailBodyEmail')}: ${formData.email}\n\n` +
             `${formData.message}`
         )
 
@@ -43,8 +48,8 @@ const Contact = () => {
     return (
         <div className="contact-page">
             <Helmet>
-                <title>تواصل معنا | Contact Us — Warm Touch</title>
-                <meta name="description" content="تواصل مع فريق Warm Touch لأي استفسار أو دعم. Contact our team via email, phone, or the form below." />
+                <title>{t('contactPage.pageTitle')}</title>
+                <meta name="description" content={t('contactPage.pageDesc')} />
                 <link rel="canonical" href="https://www.warmtouch.store/contact" />
             </Helmet>
 
@@ -52,11 +57,11 @@ const Contact = () => {
             <section className="cp-hero">
                 <div className="cp-hero-bg" aria-hidden="true" />
                 <div className="cp-hero-content">
-                    <span className="cp-eyebrow">تواصل معنا</span>
-                    <h1 className="cp-hero-title">نحب أن نسمع منك</h1>
+                    <span className="cp-eyebrow">{t('contactPage.eyebrow')}</span>
+                    <h1 className="cp-hero-title">{t('contactPage.heroTitle')}</h1>
                     <p className="cp-hero-sub">
-                        هل لديك سؤال؟ مشكلة في طلب؟ أو فقط تريد أن تقول مرحبا؟<br />
-                        فريقنا جاهز للرد خلال 24 ساعة.
+                        {t('contactPage.heroSub1')}<br />
+                        {t('contactPage.heroSub2')}
                     </p>
                 </div>
             </section>
@@ -72,9 +77,9 @@ const Contact = () => {
                                 <Phone size={22} />
                             </div>
                             <div>
-                                <h3>الهاتف</h3>
+                                <h3>{t('contactPage.phone')}</h3>
                                 <p dir="ltr">+20 109 816 5967</p>
-                                <span className="cp-info-note">متاح من السبت للخميس</span>
+                                <span className="cp-info-note">{t('contactPage.phoneNote')}</span>
                             </div>
                         </div>
 
@@ -83,9 +88,9 @@ const Contact = () => {
                                 <Mail size={22} />
                             </div>
                             <div>
-                                <h3>البريد الإلكتروني</h3>
+                                <h3>{t('contactPage.email')}</h3>
                                 <p>info@warmtouch.store</p>
-                                <span className="cp-info-note">رد خلال 24 ساعة</span>
+                                <span className="cp-info-note">{t('contactPage.emailNote')}</span>
                             </div>
                         </div>
 
@@ -94,9 +99,9 @@ const Contact = () => {
                                 <MapPin size={22} />
                             </div>
                             <div>
-                                <h3>العنوان</h3>
-                                <p>مصر، الجيزة، أكتوبر — حديقة أكتوبر 247</p>
-                                <span className="cp-info-note">Egypt, Giza — October Garden 247</span>
+                                <h3>{t('contactPage.addressTitle')}</h3>
+                                <p>{lang === 'ar' ? t('contactPage.addressAr') : t('contactPage.addressEn')}</p>
+                                <span className="cp-info-note">{lang === 'ar' ? t('contactPage.addressEn') : t('contactPage.addressAr')}</span>
                             </div>
                         </div>
 
@@ -105,9 +110,9 @@ const Contact = () => {
                                 <Clock size={22} />
                             </div>
                             <div>
-                                <h3>ساعات العمل</h3>
-                                <p>السبت – الخميس</p>
-                                <span className="cp-info-note">10:00 ص — 8:00 م</span>
+                                <h3>{t('contactPage.hoursTitle')}</h3>
+                                <p>{t('contactPage.hoursDays')}</p>
+                                <span className="cp-info-note">{t('contactPage.hoursTime')}</span>
                             </div>
                         </div>
                     </aside>
@@ -117,19 +122,19 @@ const Contact = () => {
                         {status === 'success' ? (
                             <div className="cp-success-state">
                                 <CheckCircle size={64} className="cp-success-icon" />
-                                <h2>تم إرسال رسالتك!</h2>
-                                <p>شكرًا لتواصلك معنا. سيرد فريقنا خلال 24 ساعة.</p>
+                                <h2>{t('contactPage.successTitle')}</h2>
+                                <p>{t('contactPage.successDesc')}</p>
                             </div>
                         ) : (
                             <form className="cp-form" onSubmit={handleSubmit} noValidate>
                                 <div className="cp-form-header">
                                     <MessageCircle size={24} className="cp-form-icon" />
-                                    <h2>أرسل رسالة</h2>
+                                    <h2>{t('contactPage.formTitle')}</h2>
                                 </div>
 
                                 <div className="cp-form-row">
                                     <div className="cp-field">
-                                        <label htmlFor="contact-name">الاسم</label>
+                                        <label htmlFor="contact-name">{t('contactPage.labelName')}</label>
                                         <input
                                             id="contact-name"
                                             type="text"
@@ -137,11 +142,11 @@ const Contact = () => {
                                             value={formData.name}
                                             onChange={handleChange}
                                             required
-                                            placeholder="اسمك الكامل"
+                                            placeholder={t('contactPage.placeholderName')}
                                         />
                                     </div>
                                     <div className="cp-field">
-                                        <label htmlFor="contact-email">البريد الإلكتروني</label>
+                                        <label htmlFor="contact-email">{t('contactPage.labelEmail')}</label>
                                         <input
                                             id="contact-email"
                                             type="email"
@@ -156,7 +161,7 @@ const Contact = () => {
                                 </div>
 
                                 <div className="cp-field">
-                                    <label htmlFor="contact-subject">الموضوع</label>
+                                    <label htmlFor="contact-subject">{t('contactPage.labelSubject')}</label>
                                     <input
                                         id="contact-subject"
                                         type="text"
@@ -164,12 +169,12 @@ const Contact = () => {
                                         value={formData.subject}
                                         onChange={handleChange}
                                         required
-                                        placeholder="كيف يمكننا مساعدتك؟"
+                                        placeholder={t('contactPage.placeholderSubject')}
                                     />
                                 </div>
 
                                 <div className="cp-field">
-                                    <label htmlFor="contact-message">الرسالة</label>
+                                    <label htmlFor="contact-message">{t('contactPage.labelMessage')}</label>
                                     <textarea
                                         id="contact-message"
                                         name="message"
@@ -177,7 +182,7 @@ const Contact = () => {
                                         onChange={handleChange}
                                         required
                                         rows={6}
-                                        placeholder="اكتب رسالتك هنا..."
+                                        placeholder={t('contactPage.placeholderMessage')}
                                     />
                                 </div>
 
@@ -190,11 +195,11 @@ const Contact = () => {
                                     {status === 'sending' ? (
                                         <>
                                             <span className="cp-spinner" />
-                                            جارٍ الإرسال...
+                                            {t('contactPage.sending')}
                                         </>
                                     ) : (
                                         <>
-                                            إرسال الرسالة
+                                            {t('contactPage.submit')}
                                             <Send size={18} />
                                         </>
                                     )}

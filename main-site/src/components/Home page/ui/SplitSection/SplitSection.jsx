@@ -1,13 +1,16 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { Palette, Heart, Handshake, Shield } from 'lucide-react'
 import './splitsection.css'
 
 const SplitSection = () => {
+    const { t } = useTranslation()
+
     const features = [
-        { icon: <Palette size={25} />, label: 'Timeless Designs' },
-        { icon: <Heart size={25} />, label: 'Handmade with Love' },
-        { icon: <Handshake size={25} />, label: 'Made to Last' },
+        { icon: <Palette size={25} />, label: t('homePage.splitFeat1') },
+        { icon: <Heart size={25} />, label: t('homePage.splitFeat2') },
+        { icon: <Handshake size={25} />, label: t('homePage.splitFeat3') },
     ]
 
     return (
@@ -22,21 +25,19 @@ const SplitSection = () => {
 
                 {/* RIGHT: Content */}
                 <div className="split-content">
-                    <span className="split-eyebrow">MADE FOR REAL LIFE</span>
+                    <span className="split-eyebrow">{t('homePage.splitEyebrow')}</span>
                     <h2 className="split-title">
-                        Designed for Your<br />
-                        Everyday <span className="split-highlight">Comfort</span>
+                        {t('homePage.splitTitle1')}<br />
+                        {t('homePage.splitTitle2')} <span className="split-highlight">{t('homePage.splitHighlight')}</span>
                     </h2>
                     <p className="split-desc">
-                        Every piece we create is inspired by the beauty of
-                        simple living and the joy of coming home.
+                        {t('homePage.splitDesc1')}
                     </p>
                     <p className="split-desc">
-                        From cozy mornings to peaceful nights, WarmTouch
-                        is here to be part of your everyday moments.
+                        {t('homePage.splitDesc2')}
                     </p>
                     <Link to="/allproducts" className="split-btn">
-                        Learn More
+                        {t('homePage.splitBtn')}
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                             <path d="M5 12h14M12 5l7 7-7 7" />
                         </svg>

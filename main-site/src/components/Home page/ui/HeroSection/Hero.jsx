@@ -1,11 +1,13 @@
 import React, { useRef } from 'react'
 import { Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import './hero.css'
 import gsap from 'gsap'
 import { useGSAP } from '@gsap/react'
 
 const Hero = () => {
     const heroRef = useRef(null)
+    const { t } = useTranslation()
 
     useGSAP(() => {
         const tl = gsap.timeline({ defaults: { ease: 'power3.out' } })
@@ -30,25 +32,23 @@ const Hero = () => {
 
             <div className="hero-container">
                 <div className="hero-content">
-                    <span className="hero-eyebrow">Handmade with Love & Care</span>
+                    <span className="hero-eyebrow">{t('homePage.heroEyebrow')}</span>
                     <h1 className="hero-title">
-                        Feel Comfort.<br />
-                        Live <span className="hero-highlight">Better.</span>
+                        {t('homePage.heroTitleLine1')}<br />
+                        {t('homePage.heroTitleLine2')} <span className="hero-highlight">{t('homePage.heroTitleHighlight')}</span>
                     </h1>
                     <p className="hero-desc">
-                        Handmade décor and home accessories
-                        that turn every corner of your home
-                        into a place of warmth.
+                        {t('homePage.heroDesc')}
                     </p>
                     <div className="hero-buttons">
                         <Link to="/allproducts" className="btn-primary">
-                            Shop Now
+                            {t('homePage.heroBtnPrimary')}
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                 <path d="M5 12h14M12 5l7 7-7 7" />
                             </svg>
                         </Link>
                         <Link to="/allproducts" className="btn-secondary">
-                            Explore Collection
+                            {t('homePage.heroBtnSecondary')}
                         </Link>
                     </div>
 
@@ -61,7 +61,7 @@ const Hero = () => {
                             <div className="avatar avatar-4"><div className="image-placeholder"></div></div>
                         </div>
                         <span className="social-proof-text">
-                            <strong>10,000+</strong> Happy Customers
+                            <strong>{t('homePage.heroSocialProof')}</strong>
                         </span>
                     </div>
                 </div>
@@ -72,7 +72,7 @@ const Hero = () => {
                 <div className="mouse-icon">
                     <div className="mouse-wheel"></div>
                 </div>
-                <span>Scroll to explore</span>
+                <span>{t('homePage.heroScroll')}</span>
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="scroll-arrow">
                     <path d="m6 9 6 6 6-6" />
                 </svg>

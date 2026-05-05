@@ -17,6 +17,7 @@ import PrivateRoute from './components/PrivateRoute/PrivateRoute'
 
 import { AuthProvider } from './context/AuthContext'
 import { FavoritesProvider } from './context/FavoritesContext'
+import { useLanguage } from './context/LanguageContext'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import VerifyEmail from './pages/VerifyEmail'
@@ -26,6 +27,7 @@ import Favorites from './components/Favorites/Favorites'
 
 const App = () => {
   const [loading, setLoading] = useState(true)
+  const { isRTL } = useLanguage()
 
   useEffect(() => {
     const timer = setTimeout(() => setLoading(false), 1500)
@@ -39,7 +41,8 @@ const App = () => {
       <AuthProvider>
         <FavoritesProvider>
           <ScrollToTop />
-        <div>
+        {/* Layout is strictly LTR as requested by user */}
+        <div className="app-container">
           <Header />
           <SearchModal />
           <Routes>

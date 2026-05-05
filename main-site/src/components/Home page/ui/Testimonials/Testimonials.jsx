@@ -1,45 +1,47 @@
 import React, { useRef } from 'react'
 import { ChevronLeft, ChevronRight, Star } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import './testimonials.css'
 
 const Testimonials = () => {
     const scrollRef = useRef(null)
+    const { t } = useTranslation()
 
     const reviews = [
         {
             name: 'Nourash H.',
             verified: true,
-            text: 'المنتج رائع والتغليف ممتاز! كمية جودة غالبة والتوصيل كان سريع جداً.',
+            text: t('homePage.test1Text'),
             rating: 5,
         },
         {
             name: 'Omar K.',
             verified: true,
-            text: 'قطع مميزة سواء ديكورات أو مكرميات. بجد أفضل متجر يدوي.',
+            text: t('homePage.test2Text'),
             rating: 5,
         },
         {
             name: 'Sarah M.',
             verified: false,
-            text: 'أجمل هدايا يدوية ممكن تلاقيها. اشتريت ماجات للعائلة والكل حبها!',
+            text: t('homePage.test3Text'),
             rating: 5,
         },
         {
             name: 'Youssef T.',
             verified: false,
-            text: 'كله مصنوع بعناية فائقة ودقة في التفاصيل. شكراً ورم تاتش!',
+            text: t('homePage.test4Text'),
             rating: 5,
         },
         {
             name: 'Youssef DA.',
             verified: false,
-            text: 'كله مصنوع بعناية فائقة ودقة في التفاصيل. شكراً ورم تاتش!',
+            text: t('homePage.test5Text'),
             rating: 3,
         },
         {
             name: 'Youssef SA.',
             verified: false,
-            text: 'كله مصنوع بعناية فائقة ودقة في التفاصيل. شكراً ورم تاتش!',
+            text: t('homePage.test6Text'),
             rating: 4.5,
         },
     ]
@@ -56,14 +58,14 @@ const Testimonials = () => {
             <div className="testimonials-container">
                 {/* Header */}
                 <div className="testimonials-header">
-                    <h2 className="testimonials-title">Loved by Our Community</h2>
+                    <h2 className="testimonials-title">{t('homePage.testTitle')}</h2>
                     <div className="testimonials-summary">
                         <div className="summary-stars">
                             {[...Array(5)].map((_, i) => (
                                 <Star key={i} size={16} fill="#E8A838" color="#E8A838" />
                             ))}
                         </div>
-                        <span className="summary-text">4.8/5 from 1,200+ reviews</span>
+                        <span className="summary-text">{t('homePage.testSummary')}</span>
                     </div>
                 </div>
 

@@ -5,6 +5,8 @@ import { useCart } from '../../context/CartContext'
 import { useSearch } from '../../context/SearchContext'
 import { useAuth } from '../../context/AuthContext'
 import { useFavorites } from '../../context/FavoritesContext'
+import { useLanguage } from '../../context/LanguageContext'
+import { useTranslation } from 'react-i18next'
 import './header.css'
 
 const Header = () => {
@@ -15,6 +17,8 @@ const Header = () => {
     const { openSearch } = useSearch();
     const { user, logout } = useAuth();
     const { getFavoritesCount } = useFavorites();
+    const { lang, toggleLang, isRTL } = useLanguage();
+    const { t } = useTranslation();
     const cartCount = getCartCount();
     const favoritesCount = getFavoritesCount();
 
@@ -35,7 +39,7 @@ const Header = () => {
         <>
             {/* Announcement Bar */}
             <div className="announcement-bar">
-                <p>🚚 Free shipping on all orders over 1,000 EGP</p>
+                <p>{t('header.announcement')}</p>
             </div>
 
             <header className="main-header">
@@ -57,17 +61,17 @@ const Header = () => {
                     <nav className={`header-nav ${isMobileMenuOpen ? 'active' : ''}`}>
                         <ul>
                             {[
-                                { name: 'Home', path: '/' },
-                                { name: 'All Products', path: '/allproducts' },
-                                { name: 'About', path: '/about' },
-                                ...(user ? [{ name: 'My Orders', path: '/my-orders' }] : []),
+                                { name: t('nav.home'), path: '/' },
+                                { name: t('nav.allProducts'), path: '/allproducts' },
+                                { name: t('nav.about'), path: '/about' },
+                                ...(user ? [{ name: t('nav.myOrders'), path: '/my-orders' }] : []),
                                 ...(isMobileMenuOpen && user ? [
-                                    { name: 'My Profile', path: '/profile' },
-                                    ...(user.role === 'admin' ? [{ name: 'Admin Dashboard', path: `http://localhost:${import.meta.env.VITE_ADMIN_DASHBOARD_PORT || '5174'}`, external: true }] : [])
+                                    { name: t('nav.myProfile'), path: '/profile' },
+                                    ...(user.role === 'admin' ? [{ name: t('nav.adminDashboard'), path: `http://localhost:${import.meta.env.VITE_ADMIN_DASHBOARD_PORT || '5174'}`, external: true }] : [])
                                 ] : []),
                                 ...(isMobileMenuOpen && !user ? [
-                                    { name: 'Login', path: '/login' },
-                                    { name: 'Register', path: '/register' }
+                                    { name: t('nav.login'), path: '/login' },
+                                    { name: t('nav.register'), path: '/register' }
                                 ] : [])
                             ].map((item) => (
                                 <li key={item.name}>
@@ -95,7 +99,7 @@ const Header = () => {
                                         }}
                                         className="nav-link mobile-logout"
                                     >
-                                        Logout
+                                        {t('nav.logout')}
                                     </button>
                                 </li>
                             )}
@@ -104,6 +108,19 @@ const Header = () => {
 
                     {/* Right Actions */}
                     <div className="header-actions">
+                        {/* Premium Language Switcher */}
+                        <div 
+                            className={`lang-switcher-container ${lang === 'ar' ? 'is-ar' : ''}`}
+                            onClick={toggleLang}
+                            title={lang === 'ar' ? 'Switch to English' : 'التبديل للعربية'}
+                            role="button"
+                            tabIndex={0}
+                        >
+                            <div className="lang-switcher-pill"></div>
+                            <span className={`lang-option ${lang === 'en' ? 'active' : ''}`}>EN</span>
+                            <span className={`lang-option ${lang === 'ar' ? 'active' : ''}`}>ع</span>
+                        </div>
+
                         <button
                             className="icon-btn"
                             aria-label="Search"

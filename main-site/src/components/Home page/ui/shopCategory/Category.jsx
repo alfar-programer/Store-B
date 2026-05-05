@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import axios from 'axios'
+import { useTranslation } from 'react-i18next'
 import { API_BASE_URL, PLACEHOLDER_IMAGE } from '../../../../config'
 import './category.css'
 
@@ -9,6 +10,7 @@ const Category = () => {
     const [categories, setCategories] = useState([])
     const [loading, setLoading] = useState(true)
     const scrollRef = useRef(null)
+    const { t } = useTranslation()
 
     useEffect(() => {
         fetchCategories()
@@ -43,11 +45,11 @@ const Category = () => {
             <section className="categories-section">
                 <div className="categories-container">
                     <div className="categories-header">
-                        <span className="categories-eyebrow">SHOP BY CATEGORY</span>
-                        <h2 className="categories-title">Find what speaks to your home</h2>
+                        <span className="categories-eyebrow">{t('homePage.catEyebrow')}</span>
+                        <h2 className="categories-title">{t('homePage.catTitle')}</h2>
                     </div>
                     <div style={{ textAlign: 'center', padding: '3rem', color: 'var(--text-muted)' }}>
-                        Loading categories...
+                        {t('homePage.catLoading')}
                     </div>
                 </div>
             </section>
@@ -59,11 +61,11 @@ const Category = () => {
             <section className="categories-section">
                 <div className="categories-container">
                     <div className="categories-header">
-                        <span className="categories-eyebrow">SHOP BY CATEGORY</span>
-                        <h2 className="categories-title">Find what speaks to your home</h2>
+                        <span className="categories-eyebrow">{t('homePage.catEyebrow')}</span>
+                        <h2 className="categories-title">{t('homePage.catTitle')}</h2>
                     </div>
                     <div style={{ textAlign: 'center', padding: '3rem', color: 'var(--text-muted)' }}>
-                        No categories available.
+                        {t('homePage.catEmpty')}
                     </div>
                 </div>
             </section>
@@ -75,8 +77,8 @@ const Category = () => {
             <div className="categories-container">
                 {/* Header */}
                 <div className="categories-header">
-                    <span className="categories-eyebrow">SHOP BY CATEGORY</span>
-                    <h2 className="categories-title">Find what speaks to your home</h2>
+                    <span className="categories-eyebrow">{t('homePage.catEyebrow')}</span>
+                    <h2 className="categories-title">{t('homePage.catTitle')}</h2>
                 </div>
 
                 {/* Scroll Wrapper */}

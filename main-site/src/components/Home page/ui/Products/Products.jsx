@@ -6,6 +6,8 @@ import { Link } from 'react-router-dom'
 import { Heart } from 'lucide-react'
 import { useCart } from '../../../../context/CartContext'
 import { useFavorites } from '../../../../context/FavoritesContext'
+import { useLanguage } from '../../../../context/LanguageContext'
+import { useTranslation } from 'react-i18next'
 import { API_BASE_URL, PLACEHOLDER_IMAGE } from '../../../../config'
 import './products.css'
 
@@ -16,6 +18,8 @@ const Products = () => {
     const [isModalOpen, setIsModalOpen] = useState(false)
     const { addToCart } = useCart()
     const { toggleFavorite, isFavorite } = useFavorites()
+    const { getProductField, lang } = useLanguage()
+    const { t } = useTranslation()
 
     const fetchFeaturedProducts = async () => {
         try {
@@ -92,7 +96,7 @@ const handleAddToCart = (e, product) => {
     const button = e.currentTarget
     const originalText = button.textContent
 
-    button.textContent = '✓ تمت الإضافة!'
+    button.textContent = t('homePage.prodAdded')
     button.style.background = 'linear-gradient(135deg, #48bb78 0%, #38a169 100%)'
 
     setTimeout(() => {
@@ -129,17 +133,17 @@ const handleAddToCart = (e, product) => {
             </Helmet>
             <div className="products-container">
                 <div className="products-header">
-                    <h2>Featured Products</h2>
-                    <p>Discover our handpicked selection of premium items</p>
+                    <h2>{t('homePage.prodFeatured')}</h2>
+                    <p>{t('homePage.prodFeaturedDesc')}</p>
                 </div>
                 <div className="products-grid">
                     {loading ? (
                         <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '3rem', color: '#718096' }}>
-                            Loading featured products...
+                            {t('homePage.prodLoading')}
                         </div>
                     ) : products.length === 0 ? (
                         <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '3rem', color: '#718096' }}>
-                            No featured products available. Add products in the dashboard and mark them as featured!
+                            {t('homePage.prodEmpty')}
                         </div>
                     ) : (
                         products.map((product) => (
@@ -148,7 +152,7 @@ const handleAddToCart = (e, product) => {
                                     <div className="discount-badge">-{product.discount}%</div>
                                 )}
                                 <div className="product-image-wrapper">
-                                    <img src={parseImage(product.image)} alt={product.title} />
+                                    <img src={parseImage(product.image)} alt={getProductField(product, 'title')} />
                                     <button 
                                         className="favorite-btn"
                                         onClick={(e) => {
@@ -184,13 +188,13 @@ const handleAddToCart = (e, product) => {
                                             className="quick-view-btn"
                                             onClick={(e) => handleQuickView(e, product)}
                                         >
-                                            عرض سريع
+                                            {t('homePage.prodQuickView')}
                                         </button>
                                     </div>
                                 </div>
                                 <div className="product-info">
-                                    <h3>{product.title}</h3>
-                                    <p className="product-description">{product.description}</p>
+                                    <h3>{getProductField(product, 'title')}</h3>
+                                    <p className="product-description">{getProductField(product, 'description')}</p>
                                     <div className="product-rating">
                                         <span className="stars">★★★★★</span>
                                         <span className="rating-value">{product.rating}</span>
@@ -210,7 +214,7 @@ const handleAddToCart = (e, product) => {
                                     {/* Stock indicator */}
                                     {typeof product.stock === 'number' && product.stock > 0 && product.stock < 10 && (
                                         <span style={{ fontSize: '0.7rem', color: '#d97706', fontWeight: '600', marginBottom: '4px', display: 'block' }}>
-                                            باقي {product.stock} فقط!
+                                            {t('homePage.prodLeftOnly', { count: product.stock })}
                                         </span>
                                     )}
                                     <button
@@ -219,7 +223,7 @@ const handleAddToCart = (e, product) => {
                                         style={typeof product.stock === 'number' && product.stock <= 0 ? { opacity: 0.5, cursor: 'not-allowed' } : {}}
                                         onClick={(e) => handleAddToCart(e, product)}
                                     >
-                                        {typeof product.stock === 'number' && product.stock <= 0 ? 'نفذت الكمية' : 'أضف للسلة'}
+                                        {typeof product.stock === 'number' && product.stock <= 0 ? t('homePage.prodOutOfStock') : t('homePage.prodAddToCart')}
                                     </button>
                                 </div>
                             </Link>
@@ -268,8 +272,8 @@ const handleAddToCart = (e, product) => {
                             <img src={parseImage(selectedProduct.image)} alt={selectedProduct.title} />
                         </div>
                         <div className="modal-details">
-                            <h2>{selectedProduct.title}</h2>
-                            <p className="modal-description">{selectedProduct.description}</p>
+                            <h2>{getProductField(selectedProduct, 'title')}</h2>
+                            <p className="modal-description">{getProductField(selectedProduct, 'description')}</p>
                             <div className="modal-rating">
                                 <span className="stars">★★★★★</span>
                                 <span className="rating-value">{selectedProduct.rating}</span>
@@ -292,7 +296,7 @@ const handleAddToCart = (e, product) => {
                                     closeModal()
                                 }}
                             >
-                                أضف للسلة
+                                {typeof selectedProduct.stock === 'number' && selectedProduct.stock <= 0 ? t('homePage.prodOutOfStock') : t('homePage.prodAddToCart')}
                             </button>
                         </div>
                     </div>

@@ -3,6 +3,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { useCart } from '../../context/CartContext';
 import { useFavorites } from '../../context/FavoritesContext';
+import { useLanguage } from '../../context/LanguageContext';
 import api from '../../services/api';
 import { API_BASE_URL, PLACEHOLDER_IMAGE } from '../../config';
 import { Share2, ArrowLeft, Plus, Minus, X, Heart, ShoppingBag, Truck, ShieldCheck, RotateCcw, Hand, Leaf, Sparkles, CheckCircle, ChevronLeft, ChevronRight, Star, Eye } from 'lucide-react';
@@ -11,6 +12,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import ReviewsSection from './ReviewsSection';
 import { useRecentlyViewed } from '../../hooks/useRecentlyViewed';
 import RecentlyViewed from '../RecentlyViewed/RecentlyViewed';
+import { useTranslation } from 'react-i18next';
 import './ProductDetail.css';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -21,6 +23,8 @@ const ProductDetail = () => {
     const { addToCart } = useCart();
     const { toggleFavorite, isFavorite } = useFavorites();
     const { addToRecentlyViewed, recentlyViewed } = useRecentlyViewed();
+    const { getProductField, lang } = useLanguage();
+    const { t } = useTranslation();
 
     const [product, setProduct] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -288,9 +292,9 @@ const ProductDetail = () => {
     if (notFound) {
         return (
             <div className="product-detail-error">
-                <h2>Product Not Found</h2>
-                <p>This product doesn't exist or has been removed.</p>
-                <Link to="/allproducts" className="btn-primary">Browse all products</Link>
+                <h2>{t('productDetail.notFoundTitle')}</h2>
+                <p>{t('productDetail.notFoundDesc')}</p>
+                <Link to="/allproducts" className="btn-primary">{t('productDetail.browseAll')}</Link>
             </div>
         );
     }
@@ -298,9 +302,9 @@ const ProductDetail = () => {
     if (error || !product) {
         return (
             <div className="product-detail-error">
-                <h2>Something went wrong</h2>
+                <h2>{t('productDetail.errorTitle')}</h2>
                 <p>{error}</p>
-                <button onClick={() => window.location.reload()} className="btn-primary">Try refreshing</button>
+                <button onClick={() => window.location.reload()} className="btn-primary">{t('productDetail.tryRefreshing')}</button>
             </div>
         );
     }
@@ -311,19 +315,24 @@ const ProductDetail = () => {
     const ratingValue = typeof ratingObj === 'object' ? ratingObj.average : ratingObj; // Handle old vs phase 0 struct
     const ratingCount = typeof ratingObj === 'object' ? ratingObj.count : 0;
 
+    // Bilingual display helpers
+    const displayTitle = getProductField(product, 'title');
+    const displayDescription = getProductField(product, 'description');
+
     return (
         <div className="product-detail-container">
             <Helmet>
-                <title>{`${product.title} — WarmTouch`}</title>
-                <meta name="description" content={product.description ? product.description.substring(0, 155) : ''} />
+                <title>{`${displayTitle} — WarmTouch`}</title>
+                <meta name="description" content={displayDescription ? displayDescription.substring(0, 155) : ''} />
+                <html lang={lang} />
             </Helmet>
 
             <nav className="breadcrumb-nav">
-                <Link to="/">Home</Link>
+                <Link to="/">{t('productDetail.home')}</Link>
                 <span className="chevron">&gt;</span>
                 <Link to="/allproducts">{product.category}</Link>
                 <span className="chevron">&gt;</span>
-                <span className="current-page">{product.title}</span>
+                <span className="current-page">{displayTitle}</span>
             </nav>
 
             <div className="product-hero-split">
@@ -342,10 +351,10 @@ const ProductDetail = () => {
                         )}
                         
                         {product?.discount > 0 && (
-                            <div className="sale-badge">SALE -{product.discount}%</div>
+                            <div className="sale-badge">{t('productDetail.sale')} -{product.discount}%</div>
                         )}
                         {product?.createdAt && (new Date() - new Date(product.createdAt)) < 14 * 24 * 60 * 60 * 1000 && (
-                            <span className="badge-new">New</span>
+                            <span className="badge-new">{t('productDetail.new')}</span>
                         )}
                         <div className="main-image-container" onClick={() => setIsLightboxOpen(true)}>
                             <img 
@@ -380,14 +389,14 @@ const ProductDetail = () => {
                         <button className="share-circle" onClick={handleCopyShare}><Share2 size={18} /></button>
                     </div>
 
-                    <h1 className="display-title">{product.title}</h1>
+                    <h1 className="display-title">{displayTitle}</h1>
                     
                     <div className="rating-summary-row">
                         <div className="stars-row">
                             {[1,2,3,4,5].map(s => <span key={s} className={`star-ui ${s <= Math.round(ratingValue) ? 'filled' : ''}`}>★</span>)}
                         </div>
                         <span className="rating-score">{ratingValue > 0 ? ratingValue.toFixed(1) : '0.0'}</span>
-                        <span className="review-link">({ratingCount} {ratingCount === 1 ? 'review' : 'reviews'})</span>
+                        <span className="review-link">({ratingCount} {ratingCount === 1 ? t('productDetail.review') : t('productDetail.reviews')})</span>
                     </div>
 
                     <div className="price-tag-row">
@@ -396,11 +405,11 @@ const ProductDetail = () => {
 
                     <div className="inventory-status">
                         {product.stock > 0 && product.stock < 10 ? (
-                            <><span className="dot orange-dot"></span><span className="status-text">Only {product.stock} left in stock!</span></>
+                            <><span className="dot orange-dot"></span><span className="status-text">{t('productDetail.onlyLeft', { count: product.stock })}</span></>
                         ) : product.stock >= 10 ? (
-                            <><span className="dot green-dot"></span><span className="status-text">In stock</span></>
+                            <><span className="dot green-dot"></span><span className="status-text">{t('productDetail.inStock')}</span></>
                         ) : (
-                            <><span className="dot red-dot"></span><span className="status-text">Out of stock</span></>
+                            <><span className="dot red-dot"></span><span className="status-text">{t('productDetail.outOfStock')}</span></>
                         )}
                     </div>
 
@@ -412,7 +421,7 @@ const ProductDetail = () => {
                         </div>
                         <button className="add-cart-primary" onClick={handleAddToCart}>
                             <ShoppingBag size={20} />
-                            <span>Add to Cart</span>
+                            <span>{t('productDetail.addToCart')}</span>
                         </button>
                         <button 
                             className="wishlist-btn-ui"
@@ -430,34 +439,34 @@ const ProductDetail = () => {
                     <div className="feature-icon-strip">
                         <div className="f-item">
                             <div className="f-icon purple"><Hand size={18} /></div>
-                            <div className="f-label">Handmade With Love</div>
+                            <div className="f-label">{t('productDetail.featHandmade')}</div>
                         </div>
                         <div className="f-item">
                             <div className="f-icon green"><Leaf size={18} /></div>
-                            <div className="f-label">Eco-friendly Materials</div>
+                            <div className="f-label">{t('productDetail.featEco')}</div>
                         </div>
                         <div className="f-item">
                             <div className="f-icon gray"><Truck size={18} /></div>
-                            <div className="f-label">Cash on Delivery</div>
+                            <div className="f-label">{t('productDetail.featCod')}</div>
                         </div>
                         <div className="f-item">
                             <div className="f-icon orange"><RotateCcw size={18} /></div>
-                            <div className="f-label">Easy Returns</div>
+                            <div className="f-label">{t('productDetail.featReturns')}</div>
                         </div>
                     </div>
 
                     <div className="info-attribute-bars">
                         <div className="attr-bar">
-                            <span className="attr-label">Category:</span>
+                            <span className="attr-label">{t('productDetail.lblCategory')}</span>
                             <span className="attr-val">{product.category}</span>
                         </div>
                         <div className="attr-bar">
-                            <span className="attr-label">SKU/ID:</span>
+                            <span className="attr-label">{t('productDetail.lblSku')}</span>
                             <span className="attr-val">{product.id}</span>
                         </div>
                         <div className="attr-bar">
-                            <span className="attr-label">Delivery:</span>
-                            <span className="attr-val">Cash on Delivery</span>
+                            <span className="attr-label">{t('productDetail.lblDelivery')}</span>
+                            <span className="attr-val">{t('productDetail.featCod')}</span>
                         </div>
                     </div>
                 </div>
@@ -466,9 +475,9 @@ const ProductDetail = () => {
             {/* Split Section: About vs Reviews */}
             <div className="product-split-details">
                 <div className="about-col">
-                    <h2 className="col-title">About this product</h2>
+                    <h2 className="col-title">{t('productDetail.aboutTitle')}</h2>
                     <div className="about-desc-ar">
-                        <p>{product.description || 'طقم كوسترات مكون من 5 قطع مصنوعه يدوياً بخيوط قطنية طبيعية. تصميم أنيق يضفي لمسة دافئة وجمالية على طاولتك ويحمي الأسطح من الحرارة والرطوبة.'}</p>
+                        <p>{product.description || t('productDetail.aboutFallbackDesc')}</p>
                     </div>
                     <ul className="checkmark-list">
                         <li><span className="check">✓</span> مصنوع من خيوط قطنية طبيعية</li>
@@ -478,7 +487,7 @@ const ProductDetail = () => {
                     </ul>
                     <div className="unique-box">
                         <div className="u-icon"><RotateCcw size={18} /></div>
-                        <p>Each piece is uniquely handmade, small variations are part of the charm.</p>
+                        <p>{t('productDetail.uniqueNotice')}</p>
                     </div>
                 </div>
 
@@ -489,7 +498,7 @@ const ProductDetail = () => {
             {(!recLoading && recommendations.length < 2) ? null : (
                 <div className="recommendations-section">
                     <div className="section-header-row">
-                        <h2>You may also like</h2>
+                        <h2>{t('productDetail.youMayLike')}</h2>
                         <div className="slider-controls">
                             <button className="slider-arrow" onClick={() => scrollRecSlider('left')} disabled={recLoading}>
                                 <ChevronLeft size={20} />
@@ -524,7 +533,7 @@ const ProductDetail = () => {
                                                 <div className="rv-discount-badge">-{item.discount}%</div>
                                             )}
                                             <div className="rv-image-wrapper">
-                                                <img src={img} alt={item.title} loading="lazy" />
+                                                <img src={img} alt={getProductField(item, 'title')} loading="lazy" />
                                                 <button 
                                                     className="rv-favorite-btn"
                                                     onClick={(e) => {
@@ -544,13 +553,13 @@ const ProductDetail = () => {
                                                         className="rv-quick-view-btn"
                                                         onClick={(e) => handleRecQuickView(e, item)}
                                                     >
-                                                        Quick View
+                                                        {t('productDetail.quickView')}
                                                     </button>
                                                 </div>
                                             </div>
                                             <div className="rv-info">
-                                                <h3 className="rv-title">{item.title}</h3>
-                                                <p className="rv-description">{item.description || ""}</p>
+                                                <h3 className="rv-title">{getProductField(item, 'title')}</h3>
+                                                <p className="rv-description">{getProductField(item, 'description') || ""}</p>
                                                 <div className="rv-rating-row">
                                                     <span className="rv-stars">
                                                         {[...Array(5)].map((_, i) => (
@@ -649,7 +658,7 @@ const ProductDetail = () => {
                                     setTimeout(() => setShowToast(false), 2000);
                                 }}
                             >
-                                Add to Cart
+                                {t('productDetail.addToCart')}
                             </button>
                         </div>
                     </div>
@@ -686,7 +695,7 @@ const ProductDetail = () => {
                     <div className="lb-content" onClick={e => e.stopPropagation()}>
                         <img src={images[currentImageIndex]} alt="Product Large View" />
                         <div className="lb-caption">
-                            {product.title} - Image {currentImageIndex + 1} of {images.length}
+                            {product.title} - {t('productDetail.imageOf', { current: currentImageIndex + 1, total: images.length })}
                         </div>
                     </div>
                 </div>
@@ -696,7 +705,7 @@ const ProductDetail = () => {
             {showToast && (
                 <div className="share-toast">
                     <CheckCircle size={20} />
-                    <span>Link copied to clipboard!</span>
+                    <span>{t('productDetail.linkCopied')}</span>
                 </div>
             )}
         </div>

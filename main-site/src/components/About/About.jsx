@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet-async'
 import { Link } from 'react-router-dom'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { useTranslation } from 'react-i18next'
 import {
     Heart, Eye, Target, Shield, Star, Truck,
     Package, Brush, CheckCircle, Gift,
@@ -15,6 +16,7 @@ gsap.registerPlugin(ScrollTrigger)
 
 const About = () => {
     const pageRef = useRef(null)
+    const { t } = useTranslation()
 
     useEffect(() => {
         const ctx = gsap.context(() => {
@@ -82,31 +84,31 @@ const About = () => {
     }, [])
 
     const teamMembers = [
-        { name: 'Nouran Ahmed', role: 'Founder & CEO' },
-        { name: 'Omar Khaled', role: 'Head of Design' },
-        { name: 'Sara Mostafa', role: 'Artisan Liaison' },
-        { name: 'Youssef Tarek', role: 'Operations Manager' },
+        { name: 'Nouran Ahmed', role: t('about.roleFounder') },
+        { name: 'Omar Khaled', role: t('about.roleDesign') },
+        { name: 'Sara Mostafa', role: t('about.roleArtisan') },
+        { name: 'Youssef Tarek', role: t('about.roleOperations') },
     ]
 
     const processSteps = [
-        { num: 1, img: '/images/plante.png', title: 'Sourcing Materials', desc: 'We carefully select natural, sustainable materials that are safe and long-lasting.' },
-        { num: 2, img: '/images/handmade.png', title: 'Crafting Products', desc: 'Skilled artisans craft each piece with attention to detail and passion.' },
-        { num: 3, img: '/images/lens.png', title: 'Quality Check', desc: 'Every item goes through rigorous quality checks to ensure perfection.' },
-        { num: 4, img: '/images/box.png', title: 'Careful Delivery', desc: 'We pack with care and deliver on time — because you deserve the best.' },
+        { num: 1, img: '/images/plante.png', title: t('about.step1Title'), desc: t('about.step1Desc') },
+        { num: 2, img: '/images/handmade.png', title: t('about.step2Title'), desc: t('about.step2Desc') },
+        { num: 3, img: '/images/lens.png', title: t('about.step3Title'), desc: t('about.step3Desc') },
+        { num: 4, img: '/images/box.png', title: t('about.step4Title'), desc: t('about.step4Desc') },
     ]
 
     const values = [
-        { icon: <Leaf size={55} />, title: 'Simplicity', desc: 'Simple designs that bring peace and balance to your space.' },
-        { icon: <Heart size={55} />, title: 'Comfort', desc: 'Everything we create is made to make you feel at home.' },
-        { icon: <Shield size={55} />, title: 'Quality', desc: 'We never compromise on materials or craftsmanship. Ever.' },
-        { icon: <Handshake size={55} />, title: 'Trust', desc: 'Honest communication, reliable service, and lasting relationships.' },
+        { icon: <Leaf size={55} />, title: t('about.valSimplicityTitle'), desc: t('about.valSimplicityDesc') },
+        { icon: <Heart size={55} />, title: t('about.valComfortTitle'), desc: t('about.valComfortDesc') },
+        { icon: <Shield size={55} />, title: t('about.valQualityTitle'), desc: t('about.valQualityDesc') },
+        { icon: <Handshake size={55} />, title: t('about.valTrustTitle'), desc: t('about.valTrustDesc') },
     ]
 
     return (
         <div className="about-page" ref={pageRef}>
             <Helmet>
-                <title>About Warm Touch | Handmade Macrame & Home Decor | من نحن</title>
-                <meta name="description" content="Discover Warm Touch's story - handcrafted macrame, artisan mugs, and unique home decor made with love. اكتشف قصة وارم تاتش - منتجات يدوية بحب." />
+                <title>{t('about.pageTitle')} | Warm Touch | Handmade Macrame</title>
+                <meta name="description" content={t('about.storyP1')} />
                 <link rel="canonical" href="https://www.warmtotuch.store/about" />
                 <script type="application/ld+json">
                     {JSON.stringify({
@@ -134,10 +136,10 @@ const About = () => {
                 </div>
                 
                 <div className="about-hero-inner">
-                    <h1 className="about-hero-title">Our Story</h1>
-                    <h2 className="about-hero-subtitle">Built Around <br /> Comfort & Simplicity</h2>
+                    <h1 className="about-hero-title">{t('about.heroTitle')}</h1>
+                    <h2 className="about-hero-subtitle">{t('about.heroSubtitle')}</h2>
                     <p className="about-hero-desc">
-                        At WarmTouch, we believe that the little things at home make the biggest difference.
+                        {t('about.heroDesc')}
                     </p>
                 </div>
             </section>
@@ -149,25 +151,14 @@ const About = () => {
                     <div className="about-decoration-leaf leaf-story-right"></div>
                 </div>
                 <div className="about-story-content">
-                    <h2 className="about-section-title">Our Story</h2>
+                    <h2 className="about-section-title">{t('about.storyTitle')}</h2>
                     <div className="about-divider">
                         <span className="divider-leaf">❧</span>
                     </div>
                     <div className="about-story-text">
-                        <p>
-                            WarmTouch was born from a simple belief: your home should be your favorite place.
-                            In a world that moves too fast, we create handmade pieces that bring warmth,
-                            beauty, and calm into everyday life.
-                        </p>
-                        <p>
-                            We noticed how mass-produced home décor often feels cold and without connection.
-                            Our mission is to change that — by supporting local artisans and offering
-                            thoughtfully made products that stand the test of time.
-                        </p>
-                        <p>
-                            Every item we make carries a story, a purpose, and a whole lot of heart.
-                            Thank you for being part of ours.
-                        </p>
+                        <p>{t('about.storyP1')}</p>
+                        <p>{t('about.storyP2')}</p>
+                        <p>{t('about.storyP3')}</p>
                     </div>
                 </div>
             </section>
@@ -180,12 +171,9 @@ const About = () => {
                             <div className="mv-icon-wrap">
                                 <Target size={50} />
                             </div>
-                            <h3>Our Mission</h3>
+                            <h3>{t('about.missionTitle')}</h3>
                         </div>
-                        <p>
-                            To create handmade home essentials that combine beauty, function, and comfort
-                            — while supporting talented artisans and sustainable practices.
-                        </p>
+                        <p>{t('about.missionDesc')}</p>
                     </div>
                     <div className="mv-divider"></div>
                     <div className="mv-card">
@@ -193,12 +181,9 @@ const About = () => {
                             <div className="mv-icon-wrap">
                                 <Eye size={50} />
                             </div>
-                            <h3>Our Vision</h3>
+                            <h3>{t('about.visionTitle')}</h3>
                         </div>
-                        <p>
-                            To be the leading brand for handmade home décor in the region — known for
-                            quality, trust, and the way we make people feel at home.
-                        </p>
+                        <p>{t('about.visionDesc')}</p>
                     </div>
                 </div>
             </section>
@@ -206,8 +191,8 @@ const About = () => {
             {/* ─── 4. HOW WE CREATE ───────────────────────── */}
             <section className="about-process">
                 <div className="about-process-inner">
-                    <h2 className="about-section-title">How We Create</h2>
-                    <p className="about-section-subtitle">Thoughtful steps. Beautiful results.</p>
+                    <h2 className="about-section-title">{t('about.processTitle')}</h2>
+                    <p className="about-section-subtitle">{t('about.processSubtitle')}</p>
                     <div className="process-grid">
                         {processSteps.map((step, i) => (
                             <div className="process-step" key={i}>
@@ -227,8 +212,8 @@ const About = () => {
             {/* ─── 5. TEAM ─────────────────────────────────── */}
             <section className="about-team">
                 <div className="about-team-inner">
-                    <h2 className="about-section-title">The People Behind WarmTouch</h2>
-                    <p className="about-section-subtitle">Real people. Real passion. Real care.</p>
+                    <h2 className="about-section-title">{t('about.teamTitle')}</h2>
+                    <p className="about-section-subtitle">{t('about.teamSubtitle')}</p>
                     <div className="team-grid">
                         {teamMembers.map((member, i) => (
                             <div className="team-card" key={i}>
@@ -252,7 +237,7 @@ const About = () => {
             {/* ─── 6. VALUES ───────────────────────────────── */}
             <section className="about-values">
                 <div className="about-values-inner">
-                    <h2 className="about-section-title">Our Values</h2>
+                    <h2 className="about-section-title">{t('about.valuesTitle')}</h2>
                     <div className="values-grid">
                         {values.map((v, i) => (
                             <div className="value-card" key={i}>
@@ -277,25 +262,25 @@ const About = () => {
                     <div className="about-stat">
                         <div className="stat-icon"><Smile size={55} /></div>
                         <div className="about-stat-number" data-target="10000" data-suffix="+">0+</div>
-                        <div className="about-stat-label">Happy Customers</div>
+                        <div className="about-stat-label">{t('about.statCustomers')}</div>
                     </div>
                     <div className="stat-divider"></div>
                     <div className="about-stat">
                         <div className="stat-icon"><Package size={55} /></div>
                         <div className="about-stat-number" data-target="500" data-suffix="+">0+</div>
-                        <div className="about-stat-label">Products Delivered</div>
+                        <div className="about-stat-label">{t('about.statProducts')}</div>
                     </div>
                     <div className="stat-divider"></div>
                     <div className="about-stat">
                         <div className="stat-icon"><Users size={55} /></div>
                         <div className="about-stat-number" data-target="50" data-suffix="+">0+</div>
-                        <div className="about-stat-label">Artisan Partners</div>
+                        <div className="about-stat-label">{t('about.statArtisans')}</div>
                     </div>
                     <div className="stat-divider"></div>
                     <div className="about-stat">
                         <div className="stat-icon"><Star size={55} /></div>
                         <div className="about-stat-number" data-target="99" data-suffix="%">0%</div>
-                        <div className="about-stat-label">Satisfaction Rate</div>
+                        <div className="about-stat-label">{t('about.statSatisfaction')}</div>
                     </div>
                 </div>
             </section>
@@ -307,10 +292,10 @@ const About = () => {
                     <div className="about-cta-overlay"></div>
                 </div>
                 <div className="about-cta-content">
-                    <h2>Start Your Comfort Journey</h2>
-                    <p>Explore our collection of handmade treasures and bring warmth to every corner of your home.</p>
+                    <h2>{t('about.ctaTitle')}</h2>
+                    <p>{t('about.ctaDesc')}</p>
                     <Link to="/allproducts" className="about-cta-btn">
-                        Explore Our Products <ArrowRight size={18} />
+                        {t('about.ctaBtn')} <ArrowRight size={18} />
                     </Link>
                 </div>
             </section>

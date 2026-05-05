@@ -1,28 +1,31 @@
 import React from 'react'
 import { Award, Gem, Truck, Users } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import './trustbadges.css'
 
 const TrustBadges = () => {
+    const { t } = useTranslation()
+
     const badges = [
         {
             icon: <Award size={28} strokeWidth={1.6} />,
-            title: 'Premium Quality',
-            description: 'Hand-crafted with care using the finest materials'
+            title: t('homePage.trustPremium'),
+            description: t('homePage.trustPremiumDesc')
         },
         {
             icon: <Gem size={28} strokeWidth={1.6} />,
-            title: 'Affordable Luxury',
-            description: 'Beautiful pieces at prices you\'ll love'
+            title: t('homePage.trustAffordable'),
+            description: t('homePage.trustAffordableDesc')
         },
         {
             icon: <Truck size={28} strokeWidth={1.6} />,
-            title: 'Fast Delivery',
-            description: 'Quick and reliable delivery across Egypt'
+            title: t('homePage.trustFast'),
+            description: t('homePage.trustFastDesc')
         },
         {
             icon: <Users size={28} strokeWidth={1.6} />,
-            title: 'Trusted by Thousands',
-            description: '10,000+ customers love shopping with us'
+            title: t('homePage.trustUsers'),
+            description: t('homePage.trustUsersDesc')
         }
     ]
 
