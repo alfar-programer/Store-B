@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react'
 import { Helmet } from 'react-helmet-async'
-import { Heart, ArrowUpDown } from 'lucide-react'
+import { Heart, ArrowUpDown, ShoppingBag } from 'lucide-react'
 import { useCart } from '../../context/CartContext'
 import { useFavorites } from '../../context/FavoritesContext'
 import { useSearchParams, useNavigate, Link } from 'react-router-dom'
@@ -194,14 +194,18 @@ const handleAddToCart = (e, product) => {
     addToCart(product)
 
     const button = e.currentTarget
-    const originalText = button.textContent
+    const originalContent = button.innerHTML
 
     button.textContent = t('allProducts.added')
     button.style.background = 'linear-gradient(135deg, #48bb78 0%, #38a169 100%)'
+    button.style.width = 'auto'
+    button.style.padding = '0 15px'
 
     setTimeout(() => {
-        button.textContent = originalText
+        button.innerHTML = originalContent
         button.style.background = ''
+        button.style.width = ''
+        button.style.padding = ''
     }, 2000)
 }
 
@@ -446,6 +450,12 @@ const handleAddToCart = (e, product) => {
                                             <span className="stars">★★★★★</span>
                                             <span className="rating-value">{product.rating}</span>
                                         </div>
+                                        {/* Stock indicator - Moved here */}
+                                        {typeof product.stock === 'number' && product.stock > 0 && product.stock < 10 && (
+                                            <span style={{ fontSize: '0.75rem', color: '#d97706', fontWeight: '600', marginTop: '8px', display: 'block' }}>
+                                                {t('allProducts.stockLeft', { count: product.stock })}
+                                            </span>
+                                        )}
                                     </div>
                                     <div className="product-footer">
                                         <div className="price-wrapper">
@@ -458,19 +468,13 @@ const handleAddToCart = (e, product) => {
                                                 <span className="price">{parseFloat(product.price).toFixed(2)} EGP</span>
                                             )}
                                         </div>
-                                        {/* Stock indicator */}
-                                        {typeof product.stock === 'number' && product.stock > 0 && product.stock < 10 && (
-                                            <span style={{ fontSize: '0.7rem', color: '#d97706', fontWeight: '600', marginBottom: '4px', display: 'block' }}>
-                                                {t('allProducts.stockLeft', { count: product.stock })}
-                                            </span>
-                                        )}
                                         <button
                                             className="add-to-cart-btn"
                                             disabled={typeof product.stock === 'number' && product.stock <= 0}
-                                            style={typeof product.stock === 'number' && product.stock <= 0 ? { opacity: 0.5, cursor: 'not-allowed' } : {}}
+                                            style={typeof product.stock === 'number' && product.stock <= 0 ? { opacity: 0.5, cursor: 'not-allowed' } : { display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                                             onClick={(e) => handleAddToCart(e, product)}
                                         >
-                                            {typeof product.stock === 'number' && product.stock <= 0 ? t('allProducts.btnOutOfStock') : t('allProducts.btnAddToCart')}
+                                            {typeof product.stock === 'number' && product.stock <= 0 ? t('allProducts.btnOutOfStock') : <ShoppingBag size={20} />}
                                         </button>
                                     </div>
                                 </Link>
@@ -560,6 +564,12 @@ const handleAddToCart = (e, product) => {
                                             <span className="stars">★★★★★</span>
                                             <span className="rating-value">{selectedProduct.rating}</span>
                                         </div>
+                                        {/* Stock indicator - Moved here */}
+                                        {typeof selectedProduct.stock === 'number' && selectedProduct.stock > 0 && selectedProduct.stock < 10 && (
+                                            <div className="modal-stock-warning" style={{ fontSize: '0.9rem', color: '#d97706', fontWeight: '600', marginBottom: '8px' }}>
+                                                {t('allProducts.stockLeft', { count: selectedProduct.stock })}
+                                            </div>
+                                        )}
                                         <div className="modal-price-section">
                                             {selectedProduct.discount > 0 ? (
                                                 <>
@@ -573,12 +583,13 @@ const handleAddToCart = (e, product) => {
                                         </div>
                                         <button
                                             className="modal-add-to-cart"
+                                            style={typeof selectedProduct.stock === 'number' && selectedProduct.stock <= 0 ? { opacity: 0.5, cursor: 'not-allowed' } : { display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
                                             onClick={(e) => {
-                                                handleAddToCart(selectedProduct, e)
+                                                handleAddToCart(e, selectedProduct)
                                                 closeModal()
                                             }}
                                         >
-                                            {typeof selectedProduct.stock === 'number' && selectedProduct.stock <= 0 ? t('allProducts.btnOutOfStock') : t('allProducts.btnAddToCart')}
+                                            {typeof selectedProduct.stock === 'number' && selectedProduct.stock <= 0 ? t('allProducts.btnOutOfStock') : <><ShoppingBag size={20} /> {t('allProducts.btnAddToCart')}</>}
                                         </button>
                                     </div>
                                 </div>

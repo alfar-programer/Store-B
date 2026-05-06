@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react'
 import { Helmet } from 'react-helmet-async'
 import axios from 'axios'
 import { Link } from 'react-router-dom'
-import { Heart } from 'lucide-react'
+import { Heart, ShoppingBag } from 'lucide-react'
 import { useCart } from '../../../../context/CartContext'
 import { useFavorites } from '../../../../context/FavoritesContext'
 import { useLanguage } from '../../../../context/LanguageContext'
@@ -94,14 +94,18 @@ const handleAddToCart = (e, product) => {
     addToCart(product)
 
     const button = e.currentTarget
-    const originalText = button.textContent
+    const originalContent = button.innerHTML
 
     button.textContent = t('homePage.prodAdded')
     button.style.background = 'linear-gradient(135deg, #48bb78 0%, #38a169 100%)'
+    button.style.width = 'auto'
+    button.style.padding = '0 15px'
 
     setTimeout(() => {
-        button.textContent = originalText
+        button.innerHTML = originalContent
         button.style.background = ''
+        button.style.width = ''
+        button.style.padding = ''
     }, 2000)
 }
 
@@ -192,40 +196,40 @@ const handleAddToCart = (e, product) => {
                                         </button>
                                     </div>
                                 </div>
-                                <div className="product-info">
-                                    <h3>{getProductField(product, 'title')}</h3>
-                                    <p className="product-description">{getProductField(product, 'description')}</p>
-                                    <div className="product-rating">
-                                        <span className="stars">★★★★★</span>
-                                        <span className="rating-value">{product.rating}</span>
-                                    </div>
-                                </div>
-                                <div className="product-footer">
-                                    <div className="price-wrapper">
-                                        {product.discount > 0 ? (
-                                            <>
-                                                <span className="price">{(parseFloat(product.price) * (1 - product.discount / 100)).toFixed(2)} <small>EGP</small></span>
-                                                <span className="original-price">{parseFloat(product.price).toFixed(2)} <small>EGP</small></span>
-                                            </>
-                                        ) : (
-                                            <span className="price">{parseFloat(product.price).toFixed(2)} <small>EGP</small></span>
+                                    <div className="product-info">
+                                        <h3>{getProductField(product, 'title')}</h3>
+                                        <p className="product-description">{getProductField(product, 'description')}</p>
+                                        <div className="product-rating">
+                                            <span className="stars">★★★★★</span>
+                                            <span className="rating-value">{product.rating}</span>
+                                        </div>
+                                        {/* Stock indicator - Moved here as requested */}
+                                        {typeof product.stock === 'number' && product.stock > 0 && product.stock < 10 && (
+                                            <span style={{ fontSize: '0.75rem', color: '#d97706', fontWeight: '600', marginTop: '8px', display: 'block' }}>
+                                                {t('homePage.prodLeftOnly', { count: product.stock })}
+                                            </span>
                                         )}
                                     </div>
-                                    {/* Stock indicator */}
-                                    {typeof product.stock === 'number' && product.stock > 0 && product.stock < 10 && (
-                                        <span style={{ fontSize: '0.7rem', color: '#d97706', fontWeight: '600', marginBottom: '4px', display: 'block' }}>
-                                            {t('homePage.prodLeftOnly', { count: product.stock })}
-                                        </span>
-                                    )}
-                                    <button
-                                        className="add-to-cart-btn"
-                                        disabled={typeof product.stock === 'number' && product.stock <= 0}
-                                        style={typeof product.stock === 'number' && product.stock <= 0 ? { opacity: 0.5, cursor: 'not-allowed' } : {}}
-                                        onClick={(e) => handleAddToCart(e, product)}
-                                    >
-                                        {typeof product.stock === 'number' && product.stock <= 0 ? t('homePage.prodOutOfStock') : t('homePage.prodAddToCart')}
-                                    </button>
-                                </div>
+                                    <div className="product-footer">
+                                        <div className="price-wrapper">
+                                            {product.discount > 0 ? (
+                                                <>
+                                                    <span className="price">{(parseFloat(product.price) * (1 - product.discount / 100)).toFixed(2)} <small>EGP</small></span>
+                                                    <span className="original-price">{parseFloat(product.price).toFixed(2)} <small>EGP</small></span>
+                                                </>
+                                            ) : (
+                                                <span className="price">{parseFloat(product.price).toFixed(2)} <small>EGP</small></span>
+                                            )}
+                                        </div>
+                                        <button
+                                            className="add-to-cart-btn"
+                                            disabled={typeof product.stock === 'number' && product.stock <= 0}
+                                            style={typeof product.stock === 'number' && product.stock <= 0 ? { opacity: 0.5, cursor: 'not-allowed' } : { display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                                            onClick={(e) => handleAddToCart(e, product)}
+                                        >
+                                            {typeof product.stock === 'number' && product.stock <= 0 ? t('homePage.prodOutOfStock') : <ShoppingBag size={20} />}
+                                        </button>
+                                    </div>
                             </Link>
                         ))
                     )}
@@ -278,6 +282,12 @@ const handleAddToCart = (e, product) => {
                                 <span className="stars">★★★★★</span>
                                 <span className="rating-value">{selectedProduct.rating}</span>
                             </div>
+                            {/* Stock indicator - Moved here */}
+                            {typeof selectedProduct.stock === 'number' && selectedProduct.stock > 0 && selectedProduct.stock < 10 && (
+                                <div className="modal-stock-warning" style={{ fontSize: '0.9rem', color: '#d97706', fontWeight: '600', marginBottom: '8px' }}>
+                                    {t('homePage.prodLeftOnly', { count: selectedProduct.stock })}
+                                </div>
+                            )}
                             <div className="modal-price-section">
                                 {selectedProduct.discount > 0 ? (
                                     <>
@@ -291,12 +301,13 @@ const handleAddToCart = (e, product) => {
                             </div>
                             <button
                                 className="modal-add-to-cart"
+                                style={typeof selectedProduct.stock === 'number' && selectedProduct.stock <= 0 ? { opacity: 0.5, cursor: 'not-allowed' } : { display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
                                 onClick={(e) => {
-                                    handleAddToCart(selectedProduct, e)
+                                    handleAddToCart(e, selectedProduct)
                                     closeModal()
                                 }}
                             >
-                                {typeof selectedProduct.stock === 'number' && selectedProduct.stock <= 0 ? t('homePage.prodOutOfStock') : t('homePage.prodAddToCart')}
+                                {typeof selectedProduct.stock === 'number' && selectedProduct.stock <= 0 ? t('homePage.prodOutOfStock') : <><ShoppingBag size={20} /> {t('homePage.prodAddToCart')}</>}
                             </button>
                         </div>
                     </div>

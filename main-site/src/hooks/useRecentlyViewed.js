@@ -25,9 +25,12 @@ export const useRecentlyViewed = () => {
             const lightProduct = {
                 id: product.id,
                 title: product.title,
+                title_ar: product.title_ar,
+                description: product.description,
+                description_ar: product.description_ar,
                 price: product.price,
                 discount: product.discount,
-                images: product.images, 
+                images: product.images || product.image, 
                 rating: product.rating,
                 stock: product.stock
             };

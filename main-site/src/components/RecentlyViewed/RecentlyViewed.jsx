@@ -1,4 +1,5 @@
 import React from 'react';
+import { createPortal } from 'react-dom';
 import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { Star, Heart, ShoppingBag, ChevronLeft, ChevronRight } from 'lucide-react';
@@ -6,6 +7,8 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useCart } from '../../context/CartContext';
 import { useFavorites } from '../../context/FavoritesContext';
+import { useLanguage } from '../../context/LanguageContext';
+import { useTranslation } from 'react-i18next';
 import { API_BASE_URL, PLACEHOLDER_IMAGE } from '../../config';
 import './RecentlyViewed.css';
 
@@ -59,6 +62,8 @@ const RecentlyViewed = ({ products, currentProductId }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const { addToCart } = useCart();
     const { toggleFavorite, isFavorite } = useFavorites();
+    const { getProductField } = useLanguage();
+    const { t } = useTranslation();
     const containerRef = useRef(null);
     const scrollRef = useRef(null);
     const cardsRef = useRef([]);
@@ -131,7 +136,7 @@ const RecentlyViewed = ({ products, currentProductId }) => {
         addToCart(product);
         const button = e.currentTarget;
         const originalText = button.innerHTML;
-        button.innerHTML = '✓ Added!';
+        button.innerHTML = `✓ ${t('homePage.prodAdded') || 'Added!'}`;
         button.style.background = 'linear-gradient(135deg, #48bb78 0%, #38a169 100%)';
         setTimeout(() => {
             button.innerHTML = originalText;
@@ -145,8 +150,8 @@ const RecentlyViewed = ({ products, currentProductId }) => {
         <section className="recently-viewed-section" ref={containerRef}>
             <div className="rv-container">
                 <div className="rv-header">
-                    <h2>Recently Viewed</h2>
-                    <p>Continue where you left off</p>
+                    <h2>{t('recentlyViewed.title') || 'Recently Viewed'}</h2>
+                    <p>{t('recentlyViewed.subtitle') || 'Continue where you left off'}</p>
                     <div className="rv-slider-controls">
                         <button className="rv-arrow" onClick={() => scrollRvSlider('left')}>
                             <ChevronLeft size={24} />
@@ -170,7 +175,7 @@ const RecentlyViewed = ({ products, currentProductId }) => {
                                     <div className="rv-discount-badge">-{product.discount}%</div>
                                 )}
                                 <div className="rv-image-wrapper">
-                                    <img src={parseImage(product.image || product.images)} alt={product.title} loading="lazy" />
+                                    <img src={parseImage(product.image || product.images)} alt={getProductField(product, 'title')} loading="lazy" />
                                     <button 
                                         className="rv-favorite-btn"
                                         onClick={(e) => {
@@ -195,8 +200,8 @@ const RecentlyViewed = ({ products, currentProductId }) => {
                                     </div>
                                 </div>
                                 <div className="rv-info">
-                                    <h3 className="rv-title">{product.title}</h3>
-                                    <p className="rv-description">{product.description || ""}</p>
+                                    <h3 className="rv-title">{getProductField(product, 'title')}</h3>
+                                    <p className="rv-description">{getProductField(product, 'description') || ""}</p>
                                     <div className="rv-rating-row">
                                         <span className="rv-stars">
                                             {[...Array(5)].map((_, i) => (
@@ -212,6 +217,12 @@ const RecentlyViewed = ({ products, currentProductId }) => {
                                             })()}
                                         </span>
                                     </div>
+                                    {/* Stock indicator */}
+                                    {typeof product.stock === 'number' && product.stock > 0 && product.stock < 10 && (
+                                        <div className="rv-stock-warning" style={{ fontSize: '0.75rem', color: '#d97706', fontWeight: '600', width: '100%', marginBottom: '8px' }}>
+                                            {t('homePage.prodLeftOnly', { count: product.stock }) || `Only ${product.stock} left!`}
+                                        </div>
+                                    )}
                                 </div>
                                 <div className="rv-footer">
                                     <div className="rv-price-wrapper">
@@ -227,6 +238,7 @@ const RecentlyViewed = ({ products, currentProductId }) => {
                                     <button
                                         className="rv-add-to-cart-btn"
                                         disabled={typeof product.stock === 'number' && product.stock <= 0}
+                                        style={typeof product.stock === 'number' && product.stock <= 0 ? { opacity: 0.5, cursor: 'not-allowed' } : {}}
                                         onClick={(e) => handleAddToCart(e, product)}
                                     >
                                         <ShoppingBag size={18} />
@@ -239,7 +251,7 @@ const RecentlyViewed = ({ products, currentProductId }) => {
             </div>
 
             {/* Quick View Modal */}
-            {isModalOpen && selectedProduct && (
+            {isModalOpen && selectedProduct && createPortal(
                 <div className={`rv-modal-overlay active`} onClick={closeModal}>
                     <div className="rv-modal-content" onClick={(e) => e.stopPropagation()}>
                         <button className="rv-modal-close" onClick={closeModal}>×</button>
@@ -258,11 +270,11 @@ const RecentlyViewed = ({ products, currentProductId }) => {
                                     color={isFavorite(selectedProduct.id) ? '#ef4444' : '#6b7280'}
                                 />
                             </button>
-                            <img src={parseImage(selectedProduct.image || selectedProduct.images)} alt={selectedProduct.title} />
+                            <img src={parseImage(selectedProduct.image || selectedProduct.images)} alt={getProductField(selectedProduct, 'title')} />
                         </div>
                         <div className="rv-modal-details">
-                            <h2>{selectedProduct.title}</h2>
-                            <p className="rv-modal-description">{selectedProduct.description}</p>
+                            <h2>{getProductField(selectedProduct, 'title')}</h2>
+                            <p className="rv-modal-description">{getProductField(selectedProduct, 'description')}</p>
                             <div className="rv-modal-rating">
                                 <span className="rv-stars">
                                     {[...Array(5)].map((_, i) => (
@@ -278,6 +290,12 @@ const RecentlyViewed = ({ products, currentProductId }) => {
                                     })()}
                                 </span>
                             </div>
+                            {/* Modal Stock Indicator */}
+                            {typeof selectedProduct.stock === 'number' && selectedProduct.stock > 0 && selectedProduct.stock < 10 && (
+                                <div className="rv-modal-stock-warning" style={{ color: '#d97706', fontWeight: '600', marginBottom: '12px', fontSize: '0.9rem' }}>
+                                    {t('homePage.prodLeftOnly', { count: selectedProduct.stock }) || `Only ${selectedProduct.stock} left!`}
+                                </div>
+                            )}
                             <div className="rv-modal-price-section">
                                 {selectedProduct.discount > 0 ? (
                                     <>
@@ -295,12 +313,14 @@ const RecentlyViewed = ({ products, currentProductId }) => {
                                     handleAddToCart(e, selectedProduct);
                                     closeModal();
                                 }}
+                                disabled={typeof selectedProduct.stock === 'number' && selectedProduct.stock <= 0}
+                                style={typeof selectedProduct.stock === 'number' && selectedProduct.stock <= 0 ? { opacity: 0.5, cursor: 'not-allowed' } : { display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}
                             >
-                                Add to Cart
+                                {typeof selectedProduct.stock === 'number' && selectedProduct.stock <= 0 ? t('homePage.prodOutOfStock') || 'Out of Stock' : <><ShoppingBag size={20} /> {t('homePage.prodAddToCart') || 'Add to Cart'}</>}
                             </button>
                         </div>
                     </div>
-                </div>
+                </div>, document.body
             )}
         </section>
     );

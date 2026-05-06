@@ -139,14 +139,6 @@
     "noAccount": "ليس لديك حساب؟",
     "hasAccount": "لديك حساب بالفعل؟"
   },
-  "allProducts": {
-    "title": "جميع المنتجات",
-    "filterBy": "تصفية حسب",
-    "sortBy": "ترتيب حسب",
-    "allCategories": "جميع الفئات",
-    "noProducts": "لا توجد منتجات في هذه الفئة",
-    "showing": "عرض {{count}} منتج"
-  },
   "homePage": {
     "heroEyebrow": "صُنع بحب وعناية",
     "heroTitleLine1": "اشعر بالراحة.",
@@ -288,6 +280,10 @@
     "defaultSubject": "رسالة من موقع Warm Touch",
     "emailBodyName": "الاسم",
     "emailBodyEmail": "البريد الإلكتروني"
+  },
+  "recentlyViewed": {
+    "title": "منتجات شاهدتها مؤخراً",
+    "subtitle": "أكمل من حيث توقفت"
   },
   "language": {
     "switch": "English",

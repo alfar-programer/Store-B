@@ -103,6 +103,9 @@ const ProductDetail = () => {
             addToRecentlyViewed({
                 id: product.id,
                 title: product.title,
+                title_ar: product.title_ar,
+                description: product.description,
+                description_ar: product.description_ar,
                 price: product.price,
                 discount: product.discount,
                 images: product.image || product.images,
@@ -477,7 +480,7 @@ const ProductDetail = () => {
                 <div className="about-col">
                     <h2 className="col-title">{t('productDetail.aboutTitle')}</h2>
                     <div className="about-desc-ar">
-                        <p>{product.description || t('productDetail.aboutFallbackDesc')}</p>
+                        <p>{displayDescription || t('productDetail.aboutFallbackDesc')}</p>
                     </div>
                     <ul className="checkmark-list">
                         <li><span className="check">✓</span> مصنوع من خيوط قطنية طبيعية</li>
@@ -568,6 +571,12 @@ const ProductDetail = () => {
                                                     </span>
                                                     <span className="rv-rating-value">{Number(ratingVal).toFixed(1)}</span>
                                                 </div>
+                                                {/* Stock indicator */}
+                                                {typeof item.stock === 'number' && item.stock > 0 && item.stock < 10 && (
+                                                    <div className="rv-stock-warning" style={{ fontSize: '0.75rem', color: '#d97706', fontWeight: '600', width: '100%', marginBottom: '8px' }}>
+                                                        {t('homePage.prodLeftOnly', { count: item.stock }) || `Only ${item.stock} left!`}
+                                                    </div>
+                                                )}
                                             </div>
                                             <div className="rv-footer">
                                                 <div className="rv-price-wrapper">
@@ -623,11 +632,11 @@ const ProductDetail = () => {
                                     color={isFavorite(selectedRecProduct.id) ? '#ef4444' : '#6b7280'}
                                 />
                             </button>
-                            <img src={cleanImageUrl((getImages(selectedRecProduct.image || selectedRecProduct.images))[0])} alt={selectedRecProduct.title} />
+                            <img src={cleanImageUrl((getImages(selectedRecProduct.image || selectedRecProduct.images))[0])} alt={getProductField(selectedRecProduct, 'title')} />
                         </div>
                         <div className="rv-modal-details">
-                            <h2>{selectedRecProduct.title}</h2>
-                            <p className="rv-modal-description">{selectedRecProduct.description}</p>
+                            <h2>{getProductField(selectedRecProduct, 'title')}</h2>
+                            <p className="rv-modal-description">{getProductField(selectedRecProduct, 'description')}</p>
                             <div className="rv-modal-rating">
                                 <span className="rv-stars">
                                     {[...Array(5)].map((_, i) => (
@@ -638,6 +647,12 @@ const ProductDetail = () => {
                                     {Number(selectedRecProduct.rating?.average || selectedRecProduct.rating || 5).toFixed(1)}
                                 </span>
                             </div>
+                            {/* Modal Stock Indicator */}
+                            {typeof selectedRecProduct.stock === 'number' && selectedRecProduct.stock > 0 && selectedRecProduct.stock < 10 && (
+                                <div className="rv-modal-stock-warning" style={{ color: '#d97706', fontWeight: '600', marginBottom: '12px', fontSize: '0.9rem' }}>
+                                    {t('homePage.prodLeftOnly', { count: selectedRecProduct.stock }) || `Only ${selectedRecProduct.stock} left!`}
+                                </div>
+                            )}
                             <div className="rv-modal-price-section">
                                 {selectedRecProduct.discount > 0 ? (
                                     <>
@@ -657,8 +672,10 @@ const ProductDetail = () => {
                                     setShowToast(true);
                                     setTimeout(() => setShowToast(false), 2000);
                                 }}
+                                disabled={typeof selectedRecProduct.stock === 'number' && selectedRecProduct.stock <= 0}
+                                style={typeof selectedRecProduct.stock === 'number' && selectedRecProduct.stock <= 0 ? { opacity: 0.5, cursor: 'not-allowed' } : { display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}
                             >
-                                {t('productDetail.addToCart')}
+                                {typeof selectedRecProduct.stock === 'number' && selectedRecProduct.stock <= 0 ? t('homePage.prodOutOfStock') || 'Out of Stock' : <><ShoppingBag size={20} /> {t('productDetail.addToCart')}</>}
                             </button>
                         </div>
                     </div>

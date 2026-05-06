@@ -139,14 +139,6 @@
     "noAccount": "Don't have an account?",
     "hasAccount": "Already have an account?"
   },
-  "allProducts": {
-    "title": "All Products",
-    "filterBy": "Filter by",
-    "sortBy": "Sort by",
-    "allCategories": "All Categories",
-    "noProducts": "No products in this category",
-    "showing": "Showing {{count}} products"
-  },
   "homePage": {
     "heroEyebrow": "Handmade with Love & Care",
     "heroTitleLine1": "Feel Comfort.",
@@ -288,6 +280,10 @@
     "defaultSubject": "Message from Warm Touch website",
     "emailBodyName": "Name",
     "emailBodyEmail": "Email"
+  },
+  "recentlyViewed": {
+    "title": "Recently Viewed",
+    "subtitle": "Continue where you left off"
   },
   "language": {
     "switch": "عربي",
