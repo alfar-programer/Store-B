@@ -638,6 +638,14 @@
    RESPONSIVE
    ═══════════════════════════════════════════════════ */
 
+/* ─── DESKTOP SMALL (≤ 1024px) ─────────────────────── */
+@media (max-width: 1024px) {
+    .values-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 30px;
+    }
+}
+
 /* ─── TABLET (≤ 768px) ───────────────────────────── */
 @media (max-width: 768px) {
     .about-hero {
@@ -686,7 +694,7 @@
     }
 
     /* Values → 2 cols */
-    .values-row {
+    .values-grid {
         grid-template-columns: repeat(2, 1fr);
         gap: 24px;
     }
@@ -735,7 +743,11 @@
         margin-right: auto;
     }
 
-    /* Values → 2 cols stays (matching reference) */
+    /* Values → 1 col */
+    .values-grid {
+        grid-template-columns: 1fr;
+        gap: 24px;
+    }
 
     /* Stats → 2 cols stays */
 
