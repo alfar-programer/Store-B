@@ -2,13 +2,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
 
 :root {
-    --primary-color: #4f46e5;
-    --primary-light: #818cf8;
-    --primary-dark: #3730a3;
+    --primary-color: #A67C52;
+    --primary-light: #8B6340;
+    --primary-dark: #6B4A2E;
     --secondary-color: #ec4899;
-    --text-dark: #0f172a;
-    --text-medium: #334155;
-    --text-light: #64748b;
+    --text-dark: #2D2118;
+    --text-medium: #5C4735;
+    --text-light: #8B6340;
     --bg-light: #f8fafc;
     --glass-bg: rgba(255, 255, 255, 0.7);
     --glass-border: rgba(255, 255, 255, 0.5);
