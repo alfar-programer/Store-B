@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import axios from 'axios'
 import { useTranslation } from 'react-i18next'
+import { useLanguage } from '../../../../context/LanguageContext'
 import { API_BASE_URL, PLACEHOLDER_IMAGE } from '../../../../config'
 import './category.css'
 
@@ -11,6 +12,7 @@ const Category = () => {
     const [loading, setLoading] = useState(true)
     const scrollRef = useRef(null)
     const { t } = useTranslation()
+    const { getCategoryField } = useLanguage()
 
     useEffect(() => {
         fetchCategories()
@@ -110,8 +112,10 @@ const Category = () => {
                                     )}
                                 </div>
                                 <div className="cat-info">
-                                    <h3 className="cat-name">{cat.name}</h3>
-                                    {cat.description && <p className="cat-count">{cat.description}</p>}
+                                    <h3 className="cat-name">{getCategoryField(cat, 'name')}</h3>
+                                    {(cat.description || cat.description_ar) && (
+                                        <p className="cat-count">{getCategoryField(cat, 'description')}</p>
+                                    )}
                                 </div>
                             </Link>
                         ))}

@@ -15,6 +15,7 @@ const ITEMS_PER_PAGE = 12
 
 const AllProducts = () => {
     const [products, setProducts] = useState([])
+    const [categoriesData, setCategoriesData] = useState([])
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(null)
     const [selectedProduct, setSelectedProduct] = useState(null)
@@ -27,7 +28,7 @@ const AllProducts = () => {
     const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE)
     const { addToCart } = useCart()
     const { toggleFavorite, isFavorite } = useFavorites()
-    const { getProductField, lang } = useLanguage()
+    const { getProductField, getCategoryField, lang } = useLanguage()
     const { t } = useTranslation()
 
     const fetchProducts = async () => {
@@ -55,6 +56,22 @@ const AllProducts = () => {
     // Fetch products from backend API
     useEffect(() => {
         fetchProducts()
+    }, [])
+
+    // Fetch categories to build an English→Arabic name map for the filter buttons
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const res = await fetch(`${API_BASE_URL}/categories`)
+                if (res.ok) {
+                    const data = await res.json()
+                    setCategoriesData(Array.isArray(data) ? data : [])
+                }
+            } catch {
+                // silently ignore — buttons fall back to English names
+            }
+        }
+        fetchCategories()
     }, [])
 
     const parseImage = (imageField) => {
@@ -100,6 +117,13 @@ const AllProducts = () => {
         const uniqueCategories = [...new Set(products.map(product => product.category))]
         return uniqueCategories.sort()
     }, [products])
+
+    // Map English category name → full category object (for translation)
+    const categoryMap = useMemo(() => {
+        const map = {}
+        categoriesData.forEach(cat => { map[cat.name] = cat })
+        return map
+    }, [categoriesData])
 
     // Filter products based on selected category
     const filteredProducts = useMemo(() => {
@@ -371,7 +395,7 @@ const handleAddToCart = (e, product) => {
                                     className={`category-btn ${selectedCategory === category ? 'active' : ''}`}
                                     onClick={() => handleCategoryChange(category)}
                                 >
-                                    {category}
+                                    {getCategoryField(categoryMap[category], 'name') || category}
                                 </button>
                             ))}
                         </div>
