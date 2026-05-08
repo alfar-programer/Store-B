@@ -67,7 +67,7 @@ const Header = () => {
                                 ...(user ? [{ name: t('nav.myOrders'), path: '/my-orders' }] : []),
                                 ...(isMobileMenuOpen && user ? [
                                     { name: t('nav.myProfile'), path: '/profile' },
-                                    ...(user.role === 'admin' ? [{ name: t('nav.adminDashboard'), path: `http://localhost:${import.meta.env.VITE_ADMIN_DASHBOARD_PORT || '5174'}`, external: true }] : [])
+                                    ...(user.role === 'admin' ? [{ name: t('nav.adminDashboard'), path: import.meta.env.VITE_ADMIN_DASHBOARD_URL || 'https://store-b-dashboard-production.up.railway.app/login', external: true }] : [])
                                 ] : []),
                                 ...(isMobileMenuOpen && !user ? [
                                     { name: t('nav.login'), path: '/login' },
@@ -173,7 +173,7 @@ const Header = () => {
                                     <Link to="/profile" className="dropdown-item">My Profile</Link>
                                     <Link to="/my-orders" className="dropdown-item">My Orders</Link>
                                     {user.role === 'admin' && (
-                                        <a href={`http://localhost:${import.meta.env.VITE_ADMIN_DASHBOARD_PORT || '5174'}`} className="dropdown-item">
+                                        <a href={import.meta.env.VITE_ADMIN_DASHBOARD_URL || 'https://store-b-dashboard-production.up.railway.app/login'} className="dropdown-item" target="_blank" rel="noopener noreferrer">
                                             Admin Dashboard
                                         </a>
                                     )}
