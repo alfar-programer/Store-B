@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { X, AlertCircle, CheckCircle, Info, AlertTriangle } from 'lucide-react';
-import './CustomAlert.css';
+import styles from './CustomAlert.module.css';
 
 const CustomAlert = ({ message, type = 'error', onClose, duration = 5000 }) => {
     const [isVisible, setIsVisible] = useState(false);
@@ -22,26 +22,26 @@ const CustomAlert = ({ message, type = 'error', onClose, duration = 5000 }) => {
 
     const getIcon = () => {
         switch (type) {
-            case 'success': return <CheckCircle className="alert-icon success" />;
-            case 'warning': return <AlertTriangle className="alert-icon warning" />;
-            case 'info': return <Info className="alert-icon info" />;
-            default: return <AlertCircle className="alert-icon error" />;
+            case 'success': return <CheckCircle className={`${styles.alertIcon} ${styles.success}`} />;
+            case 'warning': return <AlertTriangle className={`${styles.alertIcon} ${styles.warning}`} />;
+            case 'info': return <Info className={`${styles.alertIcon} ${styles.info}`} />;
+            default: return <AlertCircle className={`${styles.alertIcon} ${styles.error}`} />;
         }
     };
 
     return (
         <div className={`custom-alert-overlay ${isVisible ? 'visible' : ''}`}>
             <div className={`custom-alert-box ${type} ${isVisible ? 'visible' : ''}`}>
-                <div className="alert-content">
+                <div className={`${styles.alertContent}`}>
                     {getIcon()}
-                    <p className="alert-message">{message}</p>
+                    <p className={`${styles.alertMessage}`}>{message}</p>
                 </div>
-                <button className="alert-close-btn" onClick={handleClose}>
+                <button className={`${styles.alertCloseBtn}`} onClick={handleClose}>
                     <X size={18} />
                 </button>
-                <div className="alert-progress-bar">
+                <div className={`${styles.alertProgressBar}`}>
                     <div
-                        className="alert-progress-fill"
+                        className={`${styles.alertProgressFill}`}
                         style={{ animationDuration: `${duration}ms` }}
                     />
                 </div>

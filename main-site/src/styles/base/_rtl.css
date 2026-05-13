@@ -1,0 +1,75 @@
+/* =============================================
+   RTL / Arabic Font Support
+   Applied automatically when dir="rtl" is set
+   ============================================= */
+
+/* Arabic font for all RTL content */
+[dir="rtl"] {
+    font-family: 'Cairo', 'DM Sans', -apple-system, sans-serif;
+    text-align: right;
+}
+
+/* RTL flex direction reversal */
+[dir="rtl"] .header-actions,
+[dir="rtl"] .cart-item,
+[dir="rtl"] .product-hero-split,
+[dir="rtl"] .hero-gallery-side {
+    flex-direction: row-reverse;
+}
+
+/* RTL nav alignment */
+[dir="rtl"] .header-nav ul {
+    flex-direction: row-reverse;
+}
+
+/* RTL announcement bar */
+[dir="rtl"] .announcement-bar {
+    direction: rtl;
+}
+
+/* RTL product card text */
+[dir="rtl"] .product-card,
+[dir="rtl"] .product-info,
+[dir="rtl"] .product-title,
+[dir="rtl"] .product-description {
+    text-align: right;
+}
+
+/* RTL breadcrumb */
+[dir="rtl"] .breadcrumb-nav {
+    flex-direction: row-reverse;
+}
+
+/* RTL price alignment */
+[dir="rtl"] .price-tag-row,
+[dir="rtl"] .amount-main,
+[dir="rtl"] .rv-price {
+    text-align: right;
+    direction: rtl;
+}
+
+/* RTL rating row */
+[dir="rtl"] .rating-summary-row,
+[dir="rtl"] .stars-row {
+    flex-direction: row-reverse;
+}
+
+/* RTL input fields */
+[dir="rtl"] input,
+[dir="rtl"] textarea,
+[dir="rtl"] select {
+    text-align: right;
+    direction: rtl;
+}
+
+/* RTL about description */
+[dir="rtl"] .about-desc-ar,
+[dir="rtl"] .checkmark-list {
+    text-align: right;
+}
+
+/* RTL footer */
+[dir="rtl"] .footer-grid {
+    direction: rtl;
+    text-align: right;
+}

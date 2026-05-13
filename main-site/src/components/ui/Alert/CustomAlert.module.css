@@ -1,4 +1,4 @@
-.custom-alert-overlay {
+.customAlertOverlay {
     position: fixed;
     top: 20px;
     left: 50%;
@@ -11,7 +11,7 @@
     transition: all 0.3s ease;
 }
 
-.custom-alert-box {
+.customAlertBox {
     min-width: 320px;
     max-width: 450px;
     background: rgba(255, 255, 255, 0.9);
@@ -32,39 +32,39 @@
     overflow: hidden;
 }
 
-.custom-alert-box.visible {
+.customAlertBox.visible {
     opacity: 1;
     transform: translateY(0) scale(1);
 }
 
-.alert-content {
+.alertContent {
     display: flex;
     align-items: center;
     gap: 12px;
     flex: 1;
 }
 
-.alert-icon {
+.alertIcon {
     flex-shrink: 0;
 }
 
-.alert-icon.error {
+.alertIcon.error {
     color: #ff4d4f;
 }
 
-.alert-icon.success {
+.alertIcon.success {
     color: #52c41a;
 }
 
-.alert-icon.warning {
+.alertIcon.warning {
     color: #faad14;
 }
 
-.alert-icon.info {
+.alertIcon.info {
     color: #1890ff;
 }
 
-.alert-message {
+.alertMessage {
     margin: 0;
     color: #262626;
     font-size: 15px;
@@ -72,7 +72,7 @@
     line-height: 1.4;
 }
 
-.alert-close-btn {
+.alertCloseBtn {
     background: transparent;
     border: none;
     color: #8c8c8c;
@@ -86,13 +86,13 @@
     margin-left: 12px;
 }
 
-.alert-close-btn:hover {
+.alertCloseBtn:hover {
     background: rgba(0, 0, 0, 0.05);
     color: #595959;
 }
 
 /* Progress Bar */
-.alert-progress-bar {
+.alertProgressBar {
     position: absolute;
     bottom: 0;
     left: 0;
@@ -101,26 +101,26 @@
     background: rgba(0, 0, 0, 0.05);
 }
 
-.alert-progress-fill {
+.alertProgressFill {
     height: 100%;
     width: 100%;
     transform-origin: left;
     animation: alert-progress linear forwards;
 }
 
-.error .alert-progress-fill {
+.error .alertProgressFill {
     background: #ff4d4f;
 }
 
-.success .alert-progress-fill {
+.success .alertProgressFill {
     background: #52c41a;
 }
 
-.warning .alert-progress-fill {
+.warning .alertProgressFill {
     background: #faad14;
 }
 
-.info .alert-progress-fill {
+.info .alertProgressFill {
     background: #1890ff;
 }
 
@@ -135,18 +135,18 @@
 }
 
 /* Specific Types */
-.custom-alert-box.error {
+.customAlertBox.error {
     border-left: 4px solid #ff4d4f;
 }
 
-.custom-alert-box.success {
+.customAlertBox.success {
     border-left: 4px solid #52c41a;
 }
 
-.custom-alert-box.warning {
+.customAlertBox.warning {
     border-left: 4px solid #faad14;
 }
 
-.custom-alert-box.info {
+.customAlertBox.info {
     border-left: 4px solid #1890ff;
 }

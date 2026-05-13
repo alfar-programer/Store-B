@@ -5,7 +5,7 @@ import { Helmet } from 'react-helmet-async';
 import { useAuth } from '../context/AuthContext';
 import GoogleLoginButton from '../components/ui/GoogleLoginButton';
 import YetiAuth from '../components/ui/YetiAuth';
-import './Auth.css';
+import styles from './Auth.module.css';
 
 const Login = () => {
     const [email, setEmail] = useState('');
@@ -47,13 +47,13 @@ const Login = () => {
     };
 
     return (
-        <div className="auth-container">
+        <div className={`${styles.authContainer}`}>
             <Helmet>
                 <title>تسجيل الدخول | Login – Warm Touch</title>
                 <meta name="robots" content="noindex, nofollow" />
                 <link rel="canonical" href="https://www.warmtotuch.store/login" />
             </Helmet>
-            <div className="auth-box">
+            <div className={`${styles.authBox}`}>
                 <h2>Welcome Back</h2>
 
                 <YetiAuth
@@ -62,10 +62,10 @@ const Login = () => {
                     showPassword={showPassword}
                 />
 
-                {error && <div className="error-message">{error}</div>}
+                {error && <div className={`${styles.errorMessage}`}>{error}</div>}
 
                 <form onSubmit={handleSubmit} autoComplete="off">
-                    <div className="form-group">
+                    <div className={`${styles.formGroup}`}>
                         <label>Email Address</label>
                         <input
                             type="email"
@@ -77,12 +77,12 @@ const Login = () => {
                             className={fieldErrors.email ? 'input-error' : ''}
                             required
                         />
-                        {fieldErrors.email && <div className="field-error">{fieldErrors.email}</div>}
+                        {fieldErrors.email && <div className={`${styles.fieldError}`}>{fieldErrors.email}</div>}
                     </div>
 
-                    <div className="form-group">
+                    <div className={`${styles.formGroup}`}>
                         <label>Password</label>
-                        <div className="password-wrapper">
+                        <div className={`${styles.passwordWrapper}`}>
                             <input
                                 type={showPassword ? "text" : "password"}
                                 value={password}
@@ -95,26 +95,26 @@ const Login = () => {
                             />
                             <button
                                 type="button"
-                                className="toggle-password-btn"
+                                className={`${styles.togglePasswordBtn}`}
                                 onClick={() => setShowPassword(!showPassword)}
                                 onFocus={() => setFocusedField('password-toggle')}
                             >
                                 {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                             </button>
                         </div>
-                        {fieldErrors.password && <div className="field-error">{fieldErrors.password}</div>}
+                        {fieldErrors.password && <div className={`${styles.fieldError}`}>{fieldErrors.password}</div>}
                     </div>
 
-                    <button type="submit" className="auth-btn">Log in</button>
+                    <button type="submit" className={`${styles.authBtn}`}>Log in</button>
                 </form>
 
-                <div className="divider">
+                <div className={`${styles.divider}`}>
                     <span>OR</span>
                 </div>
 
                 <GoogleLoginButton />
 
-                <div className="auth-footer">
+                <div className={`${styles.authFooter}`}>
                     <p>Don't have an account? <Link to="/register">Sign up</Link></p>
                 </div>
             </div>

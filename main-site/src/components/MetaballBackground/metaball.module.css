@@ -1,4 +1,4 @@
-.metaball-container {
+.metaballContainer {
     position: absolute;
     top: 0;
     left: 0;
@@ -8,7 +8,7 @@
     pointer-events: none;
 }
 
-.metaball-container canvas {
+.metaballContainer canvas {
     display: block;
     width: 100% !important;
     height: 100% !important;

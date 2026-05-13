@@ -1,6 +1,6 @@
 
 
-.rating-overview-card {
+.ratingOverviewCard {
     display: flex;
     background-color: var(--bg-secondary, #faf9f6);
     border-radius: 12px;
@@ -9,7 +9,7 @@
     margin-bottom: 24px;
 }
 
-.big-score {
+.bigScore {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -19,7 +19,7 @@
     padding-right: 32px;
 }
 
-.big-score h3 {
+.bigScore h3 {
     font-size: 3.5rem;
     font-weight: 700;
     color: var(--text-primary);
@@ -27,18 +27,18 @@
     line-height: 1;
 }
 
-.big-score .stars-row {
+.bigScore .starsRow {
     display: flex;
     gap: 4px;
     margin-bottom: 8px;
 }
 
-.big-score span {
+.bigScore span {
     font-size: 0.85rem;
     color: var(--text-secondary);
 }
 
-.rating-bars {
+.ratingBars {
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -46,19 +46,19 @@
     gap: 8px;
 }
 
-.bar-row {
+.barRow {
     display: flex;
     align-items: center;
     gap: 12px;
     font-size: 0.875rem;
 }
 
-.b-label {
+.bLabel {
     min-width: 50px;
     color: var(--text-secondary);
 }
 
-.b-track {
+.bTrack {
     flex: 1;
     height: 8px;
     background-color: #e5e7eb;
@@ -66,20 +66,20 @@
     overflow: hidden;
 }
 
-.b-fill {
+.bFill {
     height: 100%;
     background-color: #f5b223; /* Star yellow */
     border-radius: 4px;
 }
 
-.b-count {
+.bCount {
     min-width: 30px;
     text-align: right;
     color: var(--text-secondary);
 }
 
 /* Reviews Actions Bar */
-.reviews-actions-bar {
+.reviewsActionsBar {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
@@ -88,18 +88,18 @@
     gap: 16px;
 }
 
-.filters-group {
+.filtersGroup {
     display: flex;
     gap: 12px;
 }
 
-.custom-select {
+.customSelect {
     position: relative;
     display: flex;
     align-items: center;
 }
 
-.custom-select select {
+.customSelect select {
     appearance: none;
     background-color: white;
     border: 1px solid #e5e7eb;
@@ -112,23 +112,23 @@
     transition: border-color 0.2s ease;
 }
 
-.custom-select select:focus {
+.customSelect select:focus {
     border-color: var(--accent-primary);
 }
 
-.custom-select svg {
+.customSelect svg {
     position: absolute;
     right: 12px;
     pointer-events: none;
     color: var(--text-secondary);
 }
 
-.write-review-container {
+.writeReviewContainer {
     display: flex;
     justify-content: flex-end;
 }
 
-.write-review-btn {
+.writeReviewBtn {
     background: linear-gradient(135deg, #8b6f47, #d4a574);
     color: white;
     border: none;
@@ -141,14 +141,14 @@
     box-shadow: 0 4px 12px rgba(139, 111, 71, 0.2);
 }
 
-.write-review-btn:hover {
+.writeReviewBtn:hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 20px rgba(139, 111, 71, 0.3);
     filter: brightness(1.1);
 }
 
 /* Write Review Form */
-.write-review-form {
+.writeReviewForm {
     background-color: var(--bg-secondary, #faf9f6);
     border: 1px solid #e5e7eb;
     border-radius: 12px;
@@ -157,41 +157,41 @@
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
 }
 
-.write-review-form h4 {
+.writeReviewForm h4 {
     margin: 0 0 16px 0;
     font-size: 1.1rem;
     color: var(--text-primary);
 }
 
-.form-stars {
+.formStars {
     margin-bottom: 16px;
 }
 
-.form-stars label {
+.formStars label {
     display: block;
     font-size: 0.9rem;
     color: var(--text-secondary);
     margin-bottom: 8px;
 }
 
-.interactive-stars {
+.interactiveStars {
     display: flex;
     gap: 4px;
 }
 
-.input-group {
+.inputGroup {
     margin-bottom: 16px;
 }
 
-.input-group label {
+.inputGroup label {
     display: block;
     font-size: 0.9rem;
     color: var(--text-primary);
     margin-bottom: 8px;
 }
 
-.input-group input,
-.input-group textarea {
+.inputGroup input,
+.inputGroup textarea {
     width: 100%;
     padding: 12px;
     border: 1px solid #e5e7eb;
@@ -202,12 +202,12 @@
     transition: border-color 0.2s ease;
 }
 
-.input-group input:focus,
-.input-group textarea:focus {
+.inputGroup input:focus,
+.inputGroup textarea:focus {
     border-color: var(--accent-primary);
 }
 
-.char-count {
+.charCount {
     display: block;
     text-align: right;
     font-size: 0.75rem;
@@ -215,7 +215,7 @@
     margin-top: 4px;
 }
 
-.error-msg {
+.errorMsg {
     color: #ef4444;
     background-color: #fee2e2;
     padding: 12px;
@@ -224,7 +224,7 @@
     margin-bottom: 16px;
 }
 
-.success-msg {
+.successMsg {
     color: #059669;
     background-color: #d1fae5;
     padding: 12px;
@@ -233,13 +233,13 @@
     margin-bottom: 16px;
 }
 
-.form-actions {
+.formActions {
     display: flex;
     justify-content: flex-end;
     gap: 12px;
 }
 
-.btn-cancel {
+.btnCancel {
     padding: 10px 20px;
     background: transparent;
     border: 1px solid #e5e7eb;
@@ -249,7 +249,7 @@
     font-weight: 500;
 }
 
-.btn-submit {
+.btnSubmit {
     padding: 10px 24px;
     background: linear-gradient(135deg,#8b6f47,#d4a574);
     color: white;
@@ -259,20 +259,20 @@
     font-weight: 500;
 }
 
-.btn-submit:disabled {
+.btnSubmit:disabled {
     opacity: 0.6;
     cursor: not-allowed;
 }
 
 /* Reviews List Styles */
-.reviews-list {
+.reviewsList {
     display: flex;
     flex-direction: column;
     gap: 24px;
     margin-bottom: 32px;
 }
 
-.rev-card {
+.revCard {
     background-color: white;
     border: 1px solid #e5e7eb;
     border-radius: 12px;
@@ -280,18 +280,18 @@
     transition: box-shadow 0.2s ease;
 }
 
-.rev-card:hover {
+.revCard:hover {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
 }
 
-.rev-header {
+.revHeader {
     display: flex;
     align-items: flex-start;
     gap: 16px;
     margin-bottom: 12px;
 }
 
-.rev-avatar {
+.revAvatar {
     width: 44px;
     height: 44px;
     border-radius: 50%;
@@ -303,13 +303,13 @@
     font-size: 1.2rem;
 }
 
-.rev-user {
+.revUser {
     flex: 1;
     display: flex;
     flex-direction: column;
 }
 
-.rev-user strong {
+.revUser strong {
     color: var(--text-primary);
     font-size: 1rem;
 }
@@ -323,31 +323,31 @@
     margin-top: 2px;
 }
 
-.rev-time {
+.revTime {
     font-size: 0.85rem;
     color: var(--text-secondary);
 }
 
-.rev-stars {
+.revStars {
     display: flex;
     gap: 2px;
     margin-bottom: 12px;
 }
 
-.rev-card-title {
+.revCardTitle {
     margin: 0 0 8px 0;
     font-size: 1.05rem;
     color: var(--text-primary);
 }
 
-.rev-body {
+.revBody {
     color: var(--text-secondary);
     font-size: 0.95rem;
     line-height: 1.6;
     margin: 0 0 16px 0;
 }
 
-.rev-feedback {
+.revFeedback {
     display: flex;
     align-items: center;
     gap: 12px;
@@ -355,17 +355,17 @@
     border-top: 1px solid #f3f4f6;
 }
 
-.rev-feedback span {
+.revFeedback span {
     font-size: 0.85rem;
     color: var(--text-secondary);
 }
 
-.feedback-btns {
+.feedbackBtns {
     display: flex;
     gap: 8px;
 }
 
-.f-btn {
+.fBtn {
     display: flex;
     align-items: center;
     gap: 6px;
@@ -380,29 +380,29 @@
     outline: none;
 }
 
-.f-btn:hover:not(:disabled) {
+.fBtn:hover:not(:disabled) {
     background-color: #f3f4f6;
     border-color: #d1d5db;
 }
 
-.f-btn.active.f-up {
+.fBtn.active.fUp {
     background-color: #d1fae5;
     border-color: #10b981;
     color: #065f46;
 }
 
-.f-btn.active.f-down {
+.fBtn.active.fDown {
     background-color: #fee2e2;
     border-color: #ef4444;
     color: #991b1b;
 }
 
-.f-btn:disabled {
+.fBtn:disabled {
     cursor: default;
     opacity: 0.7;
 }
 
-.load-more-btn {
+.loadMoreBtn {
     display: block;
     width: 100%;
     padding: 16px;
@@ -415,12 +415,12 @@
     transition: all 0.2s ease;
 }
 
-.load-more-btn:hover {
+.loadMoreBtn:hover {
     background-color: #f9fafb;
     border-color: #d1d5db;
 }
 
-.reviews-loading, .no-reviews {
+.reviewsLoading, .noReviews {
     text-align: center;
     padding: 40px;
     color: var(--text-secondary);
@@ -430,7 +430,7 @@
 
 
 /* Modal Styles */
-.review-modal-overlay {
+.reviewModalOverlay {
     position: fixed;
     top: 0;
     left: 0;
@@ -446,7 +446,7 @@
     animation: fadeIn 0.3s ease;
 }
 
-.review-modal-content {
+.reviewModalContent {
     background-color: white;
     border-radius: 20px;
     width: 100%;
@@ -457,7 +457,7 @@
     overflow: hidden;
 }
 
-.modal-close-btn {
+.modalCloseBtn {
     position: absolute;
     top: 20px;
     right: 20px;
@@ -475,47 +475,47 @@
     z-index: 10;
 }
 
-.modal-close-btn:hover {
+.modalCloseBtn:hover {
     background-color: #e5e7eb;
     color: var(--text-primary);
     transform: rotate(90deg);
 }
 
-.review-modal-content .write-review-form {
+.reviewModalContent .writeReviewForm {
     border: none;
     box-shadow: none;
     padding: 40px;
     margin: 0;
 }
 
-.review-modal-content h3 {
+.reviewModalContent h3 {
     margin: 0 0 8px 0;
     font-size: 1.75rem;
     font-weight: 700;
     color: var(--text-primary);
 }
 
-.modal-subtitle {
+.modalSubtitle {
     color: var(--text-secondary);
     margin-bottom: 32px;
     font-size: 0.95rem;
 }
 
-.write-review-form .form-stars {
+.writeReviewForm .formStars {
     background: #fafafa;
     padding: 20px;
     border-radius: 12px;
     margin-bottom: 24px;
 }
 
-.write-review-form .input-group input,
-.write-review-form .input-group textarea {
+.writeReviewForm .inputGroup input,
+.writeReviewForm .inputGroup textarea {
     background-color: #f9fafb;
     border: 1px solid #f3f4f6;
 }
 
-.write-review-form .input-group input:focus,
-.write-review-form .input-group textarea:focus {
+.writeReviewForm .inputGroup input:focus,
+.writeReviewForm .inputGroup textarea:focus {
     background-color: white;
     border-color: var(--accent-primary);
     box-shadow: 0 0 0 4px rgba(212, 165, 116, 0.1);
@@ -538,30 +538,30 @@
 }
 
 @media (max-width: 768px) {
-    .rating-overview-card {
+    .ratingOverviewCard {
         flex-direction: column;
         gap: 24px;
     }
     
-    .big-score {
+    .bigScore {
         border-right: none;
         border-bottom: 1px solid #e5e7eb;
         padding-right: 0;
         padding-bottom: 24px;
     }
 
-    .write-review-container {
+    .writeReviewContainer {
         justify-content: flex-start;
     }
 
-    .review-modal-content {
+    .reviewModalContent {
         max-width: 100%;
         height: auto;
         max-height: 90vh;
         overflow-y: auto;
     }
     
-    .review-modal-content .write-review-form {
+    .reviewModalContent .writeReviewForm {
         padding: 30px 20px;
     }
 }

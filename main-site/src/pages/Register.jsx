@@ -5,7 +5,7 @@ import { Helmet } from 'react-helmet-async';
 import { useAuth } from '../context/AuthContext';
 import GoogleLoginButton from '../components/ui/GoogleLoginButton';
 import YetiAuth from '../components/ui/YetiAuth';
-import './Auth.css';
+import styles from './Auth.module.css';
 
 const Register = () => {
     const [name, setName] = useState('');
@@ -52,13 +52,13 @@ const Register = () => {
     };
 
     return (
-        <div className="auth-container">
+        <div className={`${styles.authContainer}`}>
             <Helmet>
                 <title>إنشاء حساب | Register – Warm Touch</title>
                 <meta name="robots" content="noindex, nofollow" />
                 <link rel="canonical" href="https://www.warmtotuch.store/register" />
             </Helmet>
-            <div className="auth-box">
+            <div className={`${styles.authBox}`}>
                 <YetiAuth
                     emailLength={email.length}
                     focusedField={focusedField}
@@ -67,10 +67,10 @@ const Register = () => {
 
                 <h2>Create Account</h2>
 
-                {error && <div className="error-message">{error}</div>}
+                {error && <div className={`${styles.errorMessage}`}>{error}</div>}
 
                 <form onSubmit={handleSubmit} autoComplete="off">
-                    <div className="form-group">
+                    <div className={`${styles.formGroup}`}>
                         <label>Full Name</label>
                         <input
                             type="text"
@@ -82,10 +82,10 @@ const Register = () => {
                             className={fieldErrors.name ? 'input-error' : ''}
                             required
                         />
-                        {fieldErrors.name && <div className="field-error">{fieldErrors.name}</div>}
+                        {fieldErrors.name && <div className={`${styles.fieldError}`}>{fieldErrors.name}</div>}
                     </div>
 
-                    <div className="form-group">
+                    <div className={`${styles.formGroup}`}>
                         <label>Phone Number</label>
                         <input
                             type="tel"
@@ -97,10 +97,10 @@ const Register = () => {
                             className={fieldErrors.phone ? 'input-error' : ''}
                             required
                         />
-                        {fieldErrors.phone && <div className="field-error">{fieldErrors.phone}</div>}
+                        {fieldErrors.phone && <div className={`${styles.fieldError}`}>{fieldErrors.phone}</div>}
                     </div>
 
-                    <div className="form-group">
+                    <div className={`${styles.formGroup}`}>
                         <label>Email Address</label>
                         <input
                             type="email"
@@ -112,12 +112,12 @@ const Register = () => {
                             className={fieldErrors.email ? 'input-error' : ''}
                             required
                         />
-                        {fieldErrors.email && <div className="field-error">{fieldErrors.email}</div>}
+                        {fieldErrors.email && <div className={`${styles.fieldError}`}>{fieldErrors.email}</div>}
                     </div>
 
-                    <div className="form-group">
+                    <div className={`${styles.formGroup}`}>
                         <label>Password</label>
-                        <div className="password-wrapper">
+                        <div className={`${styles.passwordWrapper}`}>
                             <input
                                 type={showPassword ? "text" : "password"}
                                 value={password}
@@ -130,26 +130,26 @@ const Register = () => {
                             />
                             <button
                                 type="button"
-                                className="toggle-password-btn"
+                                className={`${styles.togglePasswordBtn}`}
                                 onClick={() => setShowPassword(!showPassword)}
                                 onFocus={() => setFocusedField('password-toggle')}
                             >
                                 {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                             </button>
                         </div>
-                        {fieldErrors.password && <div className="field-error">{fieldErrors.password}</div>}
+                        {fieldErrors.password && <div className={`${styles.fieldError}`}>{fieldErrors.password}</div>}
                     </div>
 
-                    <button type="submit" className="auth-btn">Sign Up</button>
+                    <button type="submit" className={`${styles.authBtn}`}>Sign Up</button>
                 </form>
 
-                <div className="divider">
+                <div className={`${styles.divider}`}>
                     <span>OR</span>
                 </div>
 
                 <GoogleLoginButton />
 
-                <div className="auth-footer">
+                <div className={`${styles.authFooter}`}>
                     <p>Already have an account? <Link to="/login">Login</Link></p>
                 </div>
             </div>

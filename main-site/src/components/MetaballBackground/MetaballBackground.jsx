@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import * as THREE from 'three';
-import './metaball.css';
+import styles from './metaball.module.css';
 
 const MetaballBackground = () => {
     const containerRef = useRef(null);
@@ -510,7 +510,7 @@ const MetaballBackground = () => {
         };
     }, []);
 
-    return <div ref={containerRef} className="metaball-container" />;
+    return <div ref={containerRef} className={`${styles.metaballContainer}`} />;
 };
 
 export default MetaballBackground;

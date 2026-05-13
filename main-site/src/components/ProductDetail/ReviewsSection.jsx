@@ -3,7 +3,7 @@ import api from '../../services/api';
 import { Star, ThumbsUp, ThumbsDown, CheckCircle, ChevronDown, X } from 'lucide-react';
 import gsap from 'gsap';
 import { ScrollTrigger as GSAPScrollTrigger } from 'gsap/ScrollTrigger';
-import './ReviewsSection.css';
+import styles from './ReviewsSection.module.css';
 
 gsap.registerPlugin(GSAPScrollTrigger);
 
@@ -179,39 +179,39 @@ const ReviewsSection = ({ productId, initialRating }) => {
                 {/* Scroll anchor not needed since we're in the section, but kept for design match */}
             </div>
 
-            <div className="rating-overview-card">
-                <div className="big-score">
+            <div className={`${styles.ratingOverviewCard}`}>
+                <div className={`${styles.bigScore}`}>
                     <h3>{averageRating > 0 ? averageRating.toFixed(1) : '0.0'}</h3>
-                    <div className="stars-row">
+                    <div className={`${styles.starsRow}`}>
                         {[1, 2, 3, 4, 5].map(star => (
                             <Star key={star} size={20} fill={star <= averageRating ? "#f5b223" : "none"} color={star <= averageRating ? "#f5b223" : "#d1d5db"} />
                         ))}
                     </div>
                     <span>Based on {totalReviews} reviews</span>
                 </div>
-                <div className="rating-bars">
+                <div className={`${styles.ratingBars}`}>
                     {[5, 4, 3, 2, 1].map((r, index) => {
                         const count = initialRating?.distribution?.[r] || 0;
                         return (
-                            <div key={r} className="bar-row">
-                                <span className="b-label">{r} Stars</span>
-                                <div className="b-track">
+                            <div key={r} className={`${styles.barRow}`}>
+                                <span className={`${styles.bLabel}`}>{r} Stars</span>
+                                <div className={`${styles.bTrack}`}>
                                     <div 
-                                        className="b-fill" 
+                                        className={`${styles.bFill}`} 
                                         ref={el => barsRef.current[index] = el}
                                         style={{ width: '0%' }}
                                     ></div>
                                 </div>
-                                <span className="b-count">{count}</span>
+                                <span className={`${styles.bCount}`}>{count}</span>
                             </div>
                         );
                     })}
                 </div>
             </div>
 
-            <div className="reviews-actions-bar">
-                <div className="filters-group">
-                    <div className="custom-select">
+            <div className={`${styles.reviewsActionsBar}`}>
+                <div className={`${styles.filtersGroup}`}>
+                    <div className={`${styles.customSelect}`}>
                         <select value={filter} onChange={(e) => { setFilter(e.target.value); setPage(1); }}>
                             <option value="all">All Ratings</option>
                             <option value="5">5 Stars</option>
@@ -222,7 +222,7 @@ const ReviewsSection = ({ productId, initialRating }) => {
                         </select>
                         <ChevronDown size={16} />
                     </div>
-                    <div className="custom-select">
+                    <div className={`${styles.customSelect}`}>
                         <select value={sort} onChange={(e) => { setSort(e.target.value); setPage(1); }}>
                             <option value="recent">Most Recent</option>
                             <option value="highest">Highest Rated</option>
@@ -233,27 +233,27 @@ const ReviewsSection = ({ productId, initialRating }) => {
                     </div>
                 </div>
 
-                <div className="write-review-container">
-                    <button className="write-review-btn" onClick={() => setShowWriteForm(true)}>
+                <div className={`${styles.writeReviewContainer}`}>
+                    <button className={`${styles.writeReviewBtn}`} onClick={() => setShowWriteForm(true)}>
                         Write a Review
                     </button>
                 </div>
             </div>
 
             {showWriteForm && (
-                <div className="review-modal-overlay" onClick={() => setShowWriteForm(false)}>
-                    <div className="review-modal-content" onClick={(e) => e.stopPropagation()}>
-                        <button className="modal-close-btn" onClick={() => setShowWriteForm(false)}>
+                <div className={`${styles.reviewModalOverlay}`} onClick={() => setShowWriteForm(false)}>
+                    <div className={`${styles.reviewModalContent}`} onClick={(e) => e.stopPropagation()}>
+                        <button className={`${styles.modalCloseBtn}`} onClick={() => setShowWriteForm(false)}>
                             <X size={24} />
                         </button>
                         
-                        <form className="write-review-form" onSubmit={handleSubmitReview}>
+                        <form className={`${styles.writeReviewForm}`} onSubmit={handleSubmitReview}>
                             <h3>Share your experience</h3>
-                            <p className="modal-subtitle">Your feedback helps others make better choices.</p>
+                            <p className={`${styles.modalSubtitle}`}>Your feedback helps others make better choices.</p>
                             
-                            <div className="form-stars">
+                            <div className={`${styles.formStars}`}>
                                 <label>Your Rating *</label>
-                                <div className="interactive-stars">
+                                <div className={`${styles.interactiveStars}`}>
                                     {[1, 2, 3, 4, 5].map(star => (
                                         <Star 
                                             key={star} 
@@ -269,7 +269,7 @@ const ReviewsSection = ({ productId, initialRating }) => {
                                 </div>
                             </div>
                             
-                            <div className="input-group">
+                            <div className={`${styles.inputGroup}`}>
                                 <label>Review Title</label>
                                 <input 
                                     type="text" 
@@ -280,7 +280,7 @@ const ReviewsSection = ({ productId, initialRating }) => {
                                 />
                             </div>
 
-                            <div className="input-group">
+                            <div className={`${styles.inputGroup}`}>
                                 <label>Your Review *</label>
                                 <textarea 
                                     maxLength="1000"
@@ -290,15 +290,15 @@ const ReviewsSection = ({ productId, initialRating }) => {
                                     placeholder="Tell us what you liked or didn't like"
                                     rows="5"
                                 ></textarea>
-                                <span className="char-count">{newBody.length}/1000</span>
+                                <span className={`${styles.charCount}`}>{newBody.length}/1000</span>
                             </div>
 
-                            {submitError && <div className="error-msg">{submitError}</div>}
-                            {submitStatus === 'success' && <div className="success-msg">Thank you! Your review will appear after moderation.</div>}
+                            {submitError && <div className={`${styles.errorMsg}`}>{submitError}</div>}
+                            {submitStatus === 'success' && <div className={`${styles.successMsg}`}>Thank you! Your review will appear after moderation.</div>}
 
-                            <div className="form-actions">
-                                <button type="button" className="btn-cancel" onClick={() => setShowWriteForm(false)}>Cancel</button>
-                                <button type="submit" className="btn-submit" disabled={submitStatus === 'loading' || newRating === 0}>
+                            <div className={`${styles.formActions}`}>
+                                <button type="button" className={`${styles.btnCancel}`} onClick={() => setShowWriteForm(false)}>Cancel</button>
+                                <button type="submit" className={`${styles.btnSubmit}`} disabled={submitStatus === 'loading' || newRating === 0}>
                                     {submitStatus === 'loading' ? 'Submitting...' : 'Submit Review'}
                                 </button>
                             </div>
@@ -307,40 +307,40 @@ const ReviewsSection = ({ productId, initialRating }) => {
                 </div>
             )}
 
-            <div className="reviews-list">
+            <div className={`${styles.reviewsList}`}>
                 {loading && page === 1 ? (
-                    <div className="reviews-loading">Loading reviews...</div>
+                    <div className={`${styles.reviewsLoading}`}>Loading reviews...</div>
                 ) : (!reviews || reviews.length === 0) ? (
-                    <div className="no-reviews">
+                    <div className={`${styles.noReviews}`}>
                         <p>No reviews found matching your criteria.</p>
                     </div>
                 ) : (
                     (reviews || []).map(review => (
-                        <div key={review.id} className="rev-card">
-                            <div className="rev-header">
-                                <div className="rev-avatar" style={{backgroundColor: '#bca188'}}>
+                        <div key={review.id} className={`${styles.revCard}`}>
+                            <div className={`${styles.revHeader}`}>
+                                <div className={`${styles.revAvatar}`} style={{backgroundColor: '#bca188'}}>
                                     {review.user?.name?.[0] || 'A'}
                                 </div>
-                                <div className="rev-user">
+                                <div className={`${styles.revUser}`}>
                                     <strong>{review.user?.name || 'Anonymous'}</strong>
                                     {review.verifiedPurchase && (
-                                        <span className="verified"><CheckCircle size={12} /> Verified Purchase</span>
+                                        <span className={`${styles.verified}`}><CheckCircle size={12} /> Verified Purchase</span>
                                     )}
                                 </div>
-                                <span className="rev-time">
+                                <span className={`${styles.revTime}`}>
                                     {new Date(review.createdAt).toLocaleDateString()}
                                 </span>
                             </div>
-                            <div className="rev-stars">
+                            <div className={`${styles.revStars}`}>
                                 {[1, 2, 3, 4, 5].map(star => (
                                     <Star key={star} size={14} fill={star <= review.rating ? "#f5b223" : "none"} color={star <= review.rating ? "#f5b223" : "#d1d5db"} />
                                 ))}
                             </div>
-                            {review.title && <h5 className="rev-card-title">{review.title}</h5>}
-                            <p className="rev-body">{review.body}</p>
-                            <div className="rev-feedback">
+                            {review.title && <h5 className={`${styles.revCardTitle}`}>{review.title}</h5>}
+                            <p className={`${styles.revBody}`}>{review.body}</p>
+                            <div className={`${styles.revFeedback}`}>
                                 <span>Was this helpful?</span>
-                                <div className="feedback-btns">
+                                <div className={`${styles.feedbackBtns}`}>
                                     <button 
                                         className={`f-btn f-up ${votedReviews[review.id] === 'helpful' ? 'active' : ''} ${votedReviews[review.id] ? 'disabled' : ''}`} 
                                         onClick={() => handleVote(review.id, 'helpful')}
@@ -363,7 +363,7 @@ const ReviewsSection = ({ productId, initialRating }) => {
             </div>
             
             {pagination && page < pagination.totalPages && (
-                <button className="load-more-btn" onClick={handleLoadMore}>
+                <button className={`${styles.loadMoreBtn}`} onClick={handleLoadMore}>
                     Load more reviews
                 </button>
             )}

@@ -1,0 +1,61 @@
+/* ============================================================
+   COLOR TOKENS (Strict Original Fidelity)
+   ============================================================ */
+:root {
+    /* ===== WARM PALETTE ===== */
+    --warm-50: #FDF8F3;
+    --warm-100: #F5EDE3;
+    --warm-200: #EDE0D0;
+    --warm-300: #D4B896;
+    --warm-400: #C4A27A;
+    --warm-500: #A67C52;
+    --warm-600: #8B6340;
+    --warm-700: #6B4A2E;
+    --warm-800: #4A3320;
+    --warm-900: #2D2118;
+
+    /* ===== BACKGROUNDS ===== */
+    --bg-primary: #ffffff;
+    --bg-secondary: #FDF8F3;
+    --bg-tertiary: #F5EDE3;
+    --bg-warm: #F9F3EC;
+
+    /* ===== TEXT COLORS ===== */
+    --text-primary: #2D2118;
+    --text-secondary: #6B5A4E;
+    --text-muted: #9B8B7E;
+
+    /* ===== ACCENT COLORS ===== */
+    --accent-primary: #A67C52;
+    --accent-hover: #8B6340;
+    --accent-dark: #6B4A2E;
+    --accent-light: #D4B896;
+
+    /* ===== BORDERS ===== */
+    --border-color: #EDE0D0;
+    --border-light: #F5EDE3;
+
+    /* ===== GRADIENTS ===== */
+    --gradient-primary: linear-gradient(135deg, #A67C52 0%, #8B6340 100%);
+    --gradient-warm: linear-gradient(135deg, #F5EDE3 0%, #FDF8F3 100%);
+    --gradient-card: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    --gradient-danger: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+
+    /* ===== SEMANTIC COLORS ===== */
+    --success-color: #48bb78;
+    --error-color: #e53e3e;
+    --warning-color: #ed8936;
+    --info-color: #4299e1;
+
+    /* ===== NEUTRAL GRAYS ===== */
+    --gray-50: #f9fafb;
+    --gray-100: #f3f4f6;
+    --gray-200: #e5e7eb;
+    --gray-300: #d1d5db;
+    --gray-400: #9ca3af;
+    --gray-500: #6b7280;
+    --gray-600: #4b5563;
+    --gray-700: #374151;
+    --gray-800: #1f2937;
+    --gray-900: #111827;
+}

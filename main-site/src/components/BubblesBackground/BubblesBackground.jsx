@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import './bubbles.css';
+import styles from './bubbles.module.css';
 
 const BubblesBackground = ({ bubbleColor = 'rgba(255, 255, 255, 0.4)' }) => {
     const [bubbles, setBubbles] = useState([]);
@@ -34,9 +34,9 @@ const BubblesBackground = ({ bubbleColor = 'rgba(255, 255, 255, 0.4)' }) => {
     }, [bubbleColor]);
 
     return (
-        <div className="bubbles-container">
+        <div className={`${styles.bubblesContainer}`}>
             {bubbles.map((bubble) => (
-                <div key={bubble.id} className="bubble" style={bubble.style} />
+                <div key={bubble.id} className={`${styles.bubble}`} style={bubble.style} />
             ))}
         </div>
     );

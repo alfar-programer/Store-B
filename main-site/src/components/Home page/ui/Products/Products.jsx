@@ -9,7 +9,7 @@ import { useFavorites } from '../../../../context/FavoritesContext'
 import { useLanguage } from '../../../../context/LanguageContext'
 import { useTranslation } from 'react-i18next'
 import { API_BASE_URL, PLACEHOLDER_IMAGE } from '../../../../config'
-import './products.css'
+import styles from './products.module.css'
 
 const Products = () => {
     const [products, setProducts] = useState([])
@@ -24,7 +24,10 @@ const Products = () => {
     const fetchFeaturedProducts = async () => {
         try {
             const response = await axios.get(`${API_BASE_URL}/products/featured`)
-            setProducts(response.data)
+            const productsArray = Array.isArray(response.data)
+                ? response.data
+                : (response.data?.data ?? [])
+            setProducts(productsArray)
             setLoading(false)
         } catch (error) {
             console.error('Error fetching featured products:', error)
@@ -110,7 +113,7 @@ const handleAddToCart = (e, product) => {
 }
 
     return (
-        <section className="products-section">
+        <section className={`${styles.productsSection}`}>
             <Helmet>
                 {selectedProduct && isModalOpen && (
                     <script type="application/ld+json">
@@ -135,12 +138,12 @@ const handleAddToCart = (e, product) => {
                     </script>
                 )}
             </Helmet>
-            <div className="products-container">
-                <div className="products-header">
+            <div className={`${styles.productsContainer}`}>
+                <div className={`${styles.productsHeader}`}>
                     <h2>{t('homePage.prodFeatured')}</h2>
                     <p>{t('homePage.prodFeaturedDesc')}</p>
                 </div>
-                <div className="products-grid">
+                <div className={`${styles.productsGrid}`}>
                     {loading ? (
                         <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '3rem', color: '#718096' }}>
                             {t('homePage.prodLoading')}
@@ -151,11 +154,11 @@ const handleAddToCart = (e, product) => {
                         </div>
                     ) : (
                         products.map((product) => (
-                            <Link to={`/product/${product.id}`} className="product-card" key={product.id} style={{ textDecoration: 'none', color: 'inherit', display: 'flex', flexDirection: 'column' }}>
+                            <Link to={`/product/${product.id}`} className={`${styles.productCard}`} key={product.id} style={{ textDecoration: 'none', color: 'inherit', display: 'flex', flexDirection: 'column' }}>
                                 {product.discount > 0 && (
-                                    <div className="discount-badge">-{product.discount}%</div>
+                                    <div className={`${styles.discountBadge}`}>-{product.discount}%</div>
                                 )}
-                                <div className="product-image-wrapper">
+                                <div className={`${styles.productImageWrapper}`}>
                                     <img src={parseImage(product.image)} alt={getProductField(product, 'title')} />
                                     <button 
                                         className="favorite-btn"
@@ -187,21 +190,21 @@ const handleAddToCart = (e, product) => {
                                             color={isFavorite(product.id) ? '#ef4444' : '#6b7280'}
                                         />
                                     </button>
-                                    <div className="product-overlay">
+                                    <div className={`${styles.productOverlay}`}>
                                         <button
-                                            className="quick-view-btn"
+                                            className={`${styles.quickViewBtn}`}
                                             onClick={(e) => handleQuickView(e, product)}
                                         >
                                             {t('homePage.prodQuickView')}
                                         </button>
                                     </div>
                                 </div>
-                                    <div className="product-info">
+                                    <div className={`${styles.productInfo}`}>
                                         <h3>{getProductField(product, 'title')}</h3>
-                                        <p className="product-description">{getProductField(product, 'description')}</p>
-                                        <div className="product-rating">
-                                            <span className="stars">★★★★★</span>
-                                            <span className="rating-value">{product.rating}</span>
+                                        <p className={`${styles.productDescription}`}>{getProductField(product, 'description')}</p>
+                                        <div className={`${styles.productRating}`}>
+                                            <span className={`${styles.stars}`}>★★★★★</span>
+                                            <span className={`${styles.ratingValue}`}>{product.rating}</span>
                                         </div>
                                         {/* Stock indicator - Moved here as requested */}
                                         {typeof product.stock === 'number' && product.stock > 0 && product.stock < 10 && (
@@ -210,19 +213,19 @@ const handleAddToCart = (e, product) => {
                                             </span>
                                         )}
                                     </div>
-                                    <div className="product-footer">
-                                        <div className="price-wrapper">
+                                    <div className={`${styles.productFooter}`}>
+                                        <div className={`${styles.priceWrapper}`}>
                                             {product.discount > 0 ? (
                                                 <>
-                                                    <span className="price">{(parseFloat(product.price) * (1 - product.discount / 100)).toFixed(2)} <small>EGP</small></span>
-                                                    <span className="original-price">{parseFloat(product.price).toFixed(2)} <small>EGP</small></span>
+                                                    <span className={`${styles.price}`}>{(parseFloat(product.price) * (1 - product.discount / 100)).toFixed(2)} <small>EGP</small></span>
+                                                    <span className={`${styles.originalPrice}`}>{parseFloat(product.price).toFixed(2)} <small>EGP</small></span>
                                                 </>
                                             ) : (
-                                                <span className="price">{parseFloat(product.price).toFixed(2)} <small>EGP</small></span>
+                                                <span className={`${styles.price}`}>{parseFloat(product.price).toFixed(2)} <small>EGP</small></span>
                                             )}
                                         </div>
                                         <button
-                                            className="add-to-cart-btn"
+                                            className={`${styles.addToCartBtn}`}
                                             disabled={typeof product.stock === 'number' && product.stock <= 0}
                                             style={typeof product.stock === 'number' && product.stock <= 0 ? { opacity: 0.5, cursor: 'not-allowed' } : { display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                                             onClick={(e) => handleAddToCart(e, product)}
@@ -239,10 +242,10 @@ const handleAddToCart = (e, product) => {
 
             {/* Quick View Modal */}
             {isModalOpen && selectedProduct && (
-                <div className={`modal-overlay ${isModalOpen ? 'active' : ''}`} onClick={closeModal}>
-                    <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-                        <button className="modal-close" onClick={closeModal}>×</button>
-                        <div className="modal-image-wrapper" style={{ position: 'relative' }}>
+                <div className={`${styles.modalOverlay} ${isModalOpen ? 'active' : ''}`} onClick={closeModal}>
+                    <div className={`${styles.modalContent}`} onClick={(e) => e.stopPropagation()}>
+                        <button className={`${styles.modalClose}`} onClick={closeModal}>×</button>
+                        <div className={`${styles.modalImageWrapper}`} style={{ position: 'relative' }}>
                             <button 
                                 className="favorite-btn"
                                 onClick={(e) => {
@@ -275,12 +278,12 @@ const handleAddToCart = (e, product) => {
                             </button>
                             <img src={parseImage(selectedProduct.image)} alt={selectedProduct.title} />
                         </div>
-                        <div className="modal-details">
+                        <div className={`${styles.modalDetails}`}>
                             <h2>{getProductField(selectedProduct, 'title')}</h2>
-                            <p className="modal-description">{getProductField(selectedProduct, 'description')}</p>
-                            <div className="modal-rating">
-                                <span className="stars">★★★★★</span>
-                                <span className="rating-value">{selectedProduct.rating}</span>
+                            <p className={`${styles.modalDescription}`}>{getProductField(selectedProduct, 'description')}</p>
+                            <div className={`${styles.modalRating}`}>
+                                <span className={`${styles.stars}`}>★★★★★</span>
+                                <span className={`${styles.ratingValue}`}>{selectedProduct.rating}</span>
                             </div>
                             {/* Stock indicator - Moved here */}
                             {typeof selectedProduct.stock === 'number' && selectedProduct.stock > 0 && selectedProduct.stock < 10 && (
@@ -288,19 +291,19 @@ const handleAddToCart = (e, product) => {
                                     {t('homePage.prodLeftOnly', { count: selectedProduct.stock })}
                                 </div>
                             )}
-                            <div className="modal-price-section">
+                            <div className={`${styles.modalPriceSection}`}>
                                 {selectedProduct.discount > 0 ? (
                                     <>
-                                        <span className="modal-price">{(parseFloat(selectedProduct.price) * (1 - selectedProduct.discount / 100)).toFixed(2)} <small>EGP</small></span>
-                                        <span className="modal-original-price">{parseFloat(selectedProduct.price).toFixed(2)} <small>EGP</small></span>
-                                        <span className="modal-discount-badge">-{selectedProduct.discount}% OFF</span>
+                                        <span className={`${styles.modalPrice}`}>{(parseFloat(selectedProduct.price) * (1 - selectedProduct.discount / 100)).toFixed(2)} <small>EGP</small></span>
+                                        <span className={`${styles.modalOriginalPrice}`}>{parseFloat(selectedProduct.price).toFixed(2)} <small>EGP</small></span>
+                                        <span className={`${styles.modalDiscountBadge}`}>-{selectedProduct.discount}% OFF</span>
                                     </>
                                 ) : (
-                                    <span className="modal-price">{parseFloat(selectedProduct.price).toFixed(2)} <small>EGP</small></span>
+                                    <span className={`${styles.modalPrice}`}>{parseFloat(selectedProduct.price).toFixed(2)} <small>EGP</small></span>
                                 )}
                             </div>
                             <button
-                                className="modal-add-to-cart"
+                                className={`${styles.modalAddToCart}`}
                                 style={typeof selectedProduct.stock === 'number' && selectedProduct.stock <= 0 ? { opacity: 0.5, cursor: 'not-allowed' } : { display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
                                 onClick={(e) => {
                                     handleAddToCart(e, selectedProduct)

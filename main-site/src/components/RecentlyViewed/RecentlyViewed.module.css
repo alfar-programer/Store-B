@@ -1,5 +1,5 @@
 /* Recently Viewed Section */
-.recently-viewed-section {
+.recentlyViewedSection {
     padding: 80px 20px;
     background: var(--bg-primary);
     position: relative;
@@ -7,7 +7,7 @@
     transition: background-color 0.3s ease;
 }
 
-.rv-container {
+.rvContainer {
     max-width: 1400px;
     margin: 0 auto;
     position: relative;
@@ -15,7 +15,7 @@
 }
 
 /* Scroll Container */
-.rv-scroll-container {
+.rvScrollContainer {
     width: 100%;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
@@ -25,23 +25,23 @@
     -ms-overflow-style: none; /* IE/Edge */
 }
 
-.rv-scroll-container::-webkit-scrollbar {
+.rvScrollContainer::-webkit-scrollbar {
     display: none; /* Hide scrollbar Chrome/Safari/Blink */
 }
 
 /* Header - Match Products Header */
-.rv-header {
+.rvHeader {
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
     margin-bottom: 60px;
 }
 
-.rv-header-text {
+.rvHeaderText {
     flex: 1;
 }
 
-.rv-header h2 {
+.rvHeader h2 {
     font-size: clamp(2.5rem, 5vw, 4rem);
     font-weight: 700;
     color: var(--text-primary);
@@ -51,7 +51,7 @@
     display: inline-block;
 }
 
-.rv-header h2::after {
+.rvHeader h2::after {
     content: '';
     position: absolute;
     bottom: -15px;
@@ -62,7 +62,7 @@
     border-radius: 2px;
 }
 
-.rv-header p {
+.rvHeader p {
     font-size: 1.2rem;
     color: var(--text-secondary);
     margin-top: 25px;
@@ -70,13 +70,13 @@
 }
 
 /* Slider Controls */
-.rv-slider-controls {
+.rvSliderControls {
     display: flex;
     gap: 15px;
     margin-bottom: 10px;
 }
 
-.rv-arrow {
+.rvArrow {
     width: 50px;
     height: 50px;
     border-radius: 50%;
@@ -91,7 +91,7 @@
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
 }
 
-.rv-arrow:hover {
+.rvArrow:hover {
     background: linear-gradient(135deg,#8b6f47,#d4a574);
     color: white;
     border-color: #8b6f47;
@@ -99,18 +99,18 @@
     box-shadow: 0 8px 25px rgba(139, 111, 71, 0.3);
 }
 
-.rv-arrow:active {
+.rvArrow:active {
     transform: translateY(0) scale(0.95);
 }
 
-.rv-track {
+.rvTrack {
     display: flex;
     gap: 35px;
     padding-bottom: 10px;
 }
 
-/* Product Card - Match .product-card */
-.rv-card {
+/* Product Card - Match .productCard */
+.rvCard {
     flex: 0 0 320px;
     background: var(--bg-secondary);
     border: 1px solid var(--border-color);
@@ -126,13 +126,13 @@
     flex-direction: column;
 }
 
-.rv-card:hover {
+.rvCard:hover {
     transform: translateY(-12px) scale(1.02);
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
 }
 
 /* Discount Badge */
-.rv-discount-badge {
+.rvDiscountBadge {
     position: absolute;
     top: 15px;
     left: 15px;
@@ -147,7 +147,7 @@
 }
 
 /* Image Wrapper */
-.rv-image-wrapper {
+.rvImageWrapper {
     position: relative;
     width: 100%;
     aspect-ratio: 1 / 1;
@@ -155,19 +155,19 @@
     background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
 }
 
-.rv-image-wrapper img {
+.rvImageWrapper img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     transition: transform 0.6s ease;
 }
 
-.rv-card:hover .rv-image-wrapper img {
+.rvCard:hover .rvImageWrapper img {
     transform: scale(1.15);
 }
 
 /* Favorite Button */
-.rv-favorite-btn {
+.rvFavoriteBtn {
     position: absolute;
     top: 10px;
     right: 10px;
@@ -184,12 +184,12 @@
     transition: transform 0.2s ease, color 0.2s ease;
 }
 
-.rv-favorite-btn:hover {
+.rvFavoriteBtn:hover {
     transform: scale(1.1);
 }
 
 /* Overlay & Quick View */
-.rv-overlay {
+.rvOverlay {
     position: absolute;
     top: 0;
     left: 0;
@@ -203,11 +203,11 @@
     transition: opacity 0.4s ease;
 }
 
-.rv-card:hover .rv-overlay {
+.rvCard:hover .rvOverlay {
     opacity: 1;
 }
 
-.rv-quick-view-btn {
+.rvQuickViewBtn {
     padding: 10px 25px;
     background: white;
     color: #8B6F47;
@@ -221,22 +221,22 @@
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
-.rv-card:hover .rv-quick-view-btn {
+.rvCard:hover .rvQuickViewBtn {
     transform: translateY(0);
 }
 
-.rv-quick-view-btn:hover {
+.rvQuickViewBtn:hover {
     transform: translateY(-3px);
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
 }
 
 /* Card Content Info */
-.rv-info {
+.rvInfo {
     padding: 18px 20px;
     flex-grow: 1;
 }
 
-.rv-title {
+.rvTitle {
     font-size: 1.4rem;
     font-weight: 600;
     color: var(--text-primary);
@@ -247,11 +247,11 @@
     text-overflow: ellipsis;
 }
 
-.rv-card:hover .rv-title {
+.rvCard:hover .rvTitle {
     color: var(--accent-primary);
 }
 
-.rv-description {
+.rvDescription {
     font-size: 0.95rem;
     color: var(--text-secondary);
     line-height: 1.6;
@@ -265,28 +265,28 @@
 }
 
 /* Rating */
-.rv-rating-row {
+.rvRatingRow {
     display: flex;
     align-items: center;
     gap: 8px;
     margin-bottom: 5px;
 }
 
-.rv-stars {
+.rvStars {
     color: #fbbf24;
     font-size: 1rem;
     letter-spacing: 2px;
     display: flex;
 }
 
-.rv-rating-value {
+.rvRatingValue {
     font-size: 0.9rem;
     color: var(--gray-600);
     font-weight: 500;
 }
 
 /* Footer Section */
-.rv-footer {
+.rvFooter {
     padding: 0 20px 18px;
     display: flex;
     align-items: center;
@@ -294,13 +294,13 @@
     gap: 15px;
 }
 
-.rv-price-wrapper {
+.rvPriceWrapper {
     display: flex;
     flex-direction: column;
     gap: 2px;
 }
 
-.rv-price {
+.rvPrice {
     font-size: 1.6rem;
     font-weight: 700;
     color: #8B6F47;
@@ -310,14 +310,14 @@
     background-clip: text;
 }
 
-.rv-original-price {
+.rvOriginalPrice {
     font-size: 0.85rem;
     color: var(--text-muted);
     text-decoration: line-through;
 }
 
 /* Add to Cart Button */
-.rv-add-to-cart-btn {
+.rvAddToCartBtn {
     width: 45px;
     height: 45px;
     background: linear-gradient(135deg, #8B6F47 0%, #D4A574 100%);
@@ -332,13 +332,13 @@
     box-shadow: 0 4px 15px rgba(139, 111, 71, 0.3);
 }
 
-.rv-add-to-cart-btn:hover {
+.rvAddToCartBtn:hover {
     transform: translateY(-3px) rotate(8deg);
     box-shadow: 0 8px 25px rgba(139, 111, 71, 0.5);
 }
 
 /* Modal Styles - Match Products CSS */
-.rv-modal-overlay {
+.rvModalOverlay {
     position: fixed;
     top: 0;
     left: 0;
@@ -355,7 +355,7 @@
     animation: fadeIn 0.3s ease forwards;
 }
 
-.rv-modal-overlay.active {
+.rvModalOverlay.active {
     visibility: visible;
     opacity: 1;
 }
@@ -366,7 +366,7 @@
     }
 }
 
-.rv-modal-content {
+.rvModalContent {
     background: var(--bg-primary);
     border-radius: 20px;
     max-width: 900px;
@@ -393,7 +393,7 @@
     }
 }
 
-.rv-modal-close {
+.rvModalClose {
     position: absolute;
     top: 15px;
     right: 15px;
@@ -412,11 +412,11 @@
     z-index: 10;
 }
 
-.rv-modal-close:hover {
+.rvModalClose:hover {
     transform: rotate(90deg) scale(1.1);
 }
 
-.rv-modal-image-wrapper {
+.rvModalImageWrapper {
     width: 100%;
     aspect-ratio: 1/1;
     border-radius: 15px;
@@ -425,13 +425,13 @@
     position: relative;
 }
 
-.rv-modal-image-wrapper img {
+.rvModalImageWrapper img {
     width: 100%;
     height: 100%;
     object-fit: contain;
 }
 
-.rv-modal-favorite-btn {
+.rvModalFavoriteBtn {
     position: absolute;
     top: 10px;
     right: 10px;
@@ -444,27 +444,27 @@
     z-index: 10;
 }
 
-.rv-modal-details {
+.rvModalDetails {
     display: flex;
     flex-direction: column;
     gap: 20px;
     justify-content: center;
 }
 
-.rv-modal-description {
+.rvModalDescription {
     font-size: 1.1rem;
     color: var(--text-secondary);
     line-height: 1.8;
 }
 
-.rv-modal-price-section {
+.rvModalPriceSection {
     display: flex;
     align-items: center;
     gap: 15px;
     flex-wrap: wrap;
 }
 
-.rv-modal-price {
+.rvModalPrice {
     font-size: 2.5rem;
     font-weight: 700;
     background: var(--gradient-primary);
@@ -473,13 +473,13 @@
     background-clip: text;
 }
 
-.rv-modal-original-price {
+.rvModalOriginalPrice {
     font-size: 1.2rem;
     color: var(--text-muted);
     text-decoration: line-through;
 }
 
-.rv-modal-discount-badge {
+.rvModalDiscountBadge {
     padding: 6px 12px;
     background: var(--gradient-danger);
     color: white;
@@ -488,7 +488,7 @@
     font-weight: 600;
 }
 
-.rv-modal-add-to-cart {
+.rvModalAddToCart {
     padding: 16px 40px;
     background: linear-gradient(135deg, #8B6F47 0%, #D4A574 100%);
     color: white;
@@ -503,21 +503,21 @@
 
 /* Responsive Design */
 @media (max-width: 1024px) {
-    .rv-card {
+    .rvCard {
         flex: 0 0 280px;
     }
 }
 
 @media (max-width: 768px) {
-    .rv-header h2 {
+    .rvHeader h2 {
         font-size: 2.5rem;
     }
     
-    .rv-card {
+    .rvCard {
         flex: 0 0 260px;
     }
 
-    .rv-modal-content {
+    .rvModalContent {
         grid-template-columns: 1fr;
         max-height: 85vh;
         padding: 30px 20px;
@@ -525,59 +525,59 @@
 }
 
 @media (max-width: 480px) {
-    .rv-header h2 {
+    .rvHeader h2 {
         font-size: 2rem;
     }
 
-    .rv-track {
+    .rvTrack {
         gap: 12px;
     }
 
-    .rv-card {
+    .rvCard {
         flex: 0 0 160px;
         border-radius: 12px;
     }
 
-    .rv-info {
+    .rvInfo {
         padding: 12px;
     }
 
-    .rv-title {
+    .rvTitle {
         font-size: 0.95rem;
         margin-bottom: 4px;
     }
 
-    .rv-description {
+    .rvDescription {
         display: none;
     }
 
-    .rv-stars {
+    .rvStars {
         font-size: 0.8rem;
     }
 
-    .rv-footer {
+    .rvFooter {
         padding: 0 12px 12px;
         flex-direction: column;
         align-items: stretch;
     }
 
-    .rv-price {
+    .rvPrice {
         font-size: 1.1rem;
     }
 
-    .rv-add-to-cart-btn {
+    .rvAddToCartBtn {
         width: 100%;
         height: 35px;
         border-radius: 8px;
     }
 
     /* Modal Mobile Adjustments */
-    .rv-modal-overlay {
+    .rvModalOverlay {
         padding: 10px;
         align-items: flex-end;
     }
 
-    .rv-modal-content {
+    .rvModalContent {
         padding: 20px;
         border-radius: 20px 20px 0 0;
         max-height: 85vh;
@@ -585,7 +585,7 @@
         grid-template-columns: 1fr;
     }
 
-    .rv-modal-close {
+    .rvModalClose {
         top: 15px;
         right: 15px;
         width: 32px;
@@ -593,22 +593,22 @@
         font-size: 18px;
     }
 
-    .rv-modal-image-wrapper {
+    .rvModalImageWrapper {
         min-height: 180px;
         max-height: 250px;
         border-radius: 12px;
     }
 
-    .rv-modal-details h2 {
+    .rvModalDetails h2 {
         font-size: 1.4rem;
     }
 
-    .rv-modal-description {
+    .rvModalDescription {
         font-size: 0.95rem;
         line-height: 1.5;
     }
 
-    .rv-modal-price {
+    .rvModalPrice {
         font-size: 1.8rem;
     }
 }

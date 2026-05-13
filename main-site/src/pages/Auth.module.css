@@ -7,7 +7,7 @@
     --text-color: #353538;
 }
 
-.auth-container {
+.authContainer {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -17,7 +17,7 @@
     font-family: 'Source Sans Pro', sans-serif;
 }
 
-.auth-box {
+.authBox {
     display: block;
     width: 100%;
     max-width: 400px;
@@ -31,7 +31,7 @@
     box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.05);
 }
 
-.auth-box h2 {
+.authBox h2 {
     font-size: 1.5rem;
     color: var(--dark-blue);
     margin-bottom: 25px;
@@ -39,7 +39,7 @@
     font-weight: 700;
 }
 
-.auth-subtitle {
+.authSubtitle {
     display: none;
     /* Hide subtitle for cleaner look */
 }
@@ -86,17 +86,17 @@
 }
 
 /* Form Groups */
-.form-group {
+.formGroup {
     margin: 0 0 1.5em;
     padding: 0;
     position: relative;
 }
 
-.form-group:last-of-type {
+.formGroup:last-of-type {
     margin-bottom: 0;
 }
 
-.form-group label {
+.formGroup label {
     margin: 0 0 8px;
     display: block;
     font-size: 1rem;
@@ -104,7 +104,7 @@
     font-weight: 700;
 }
 
-.form-group input {
+.formGroup input {
     display: block;
     margin: 0;
     padding: 0 1em;
@@ -120,14 +120,14 @@
     transition: box-shadow .2s linear, border-color .25s ease-out;
 }
 
-.form-group input:focus {
+.formGroup input:focus {
     outline: none;
     box-shadow: 0px 2px 8px rgba(0, 0, 0, .08);
     border: solid 2px var(--med-blue);
 }
 
 /* Button */
-.auth-btn {
+.authBtn {
     display: block;
     margin: 0;
     padding: 0 1em;
@@ -145,18 +145,18 @@
     margin-top: 20px;
 }
 
-.auth-btn:hover,
-.auth-btn:active {
+.authBtn:hover,
+.authBtn:active {
     background-color: var(--dark-blue);
 }
 
 /* Password Toggle */
-.password-wrapper {
+.passwordWrapper {
     position: relative;
     width: 100%;
 }
 
-.toggle-password-btn {
+.togglePasswordBtn {
     position: absolute;
     top: 50%;
     right: 15px;
@@ -173,20 +173,20 @@
     opacity: 0.6;
 }
 
-.toggle-password-btn:hover {
+.togglePasswordBtn:hover {
     color: var(--dark-blue);
     opacity: 1;
 }
 
 /* Footer & Extras */
-.auth-footer {
+.authFooter {
     margin-top: 25px;
     text-align: center;
     font-size: 15px;
     color: #666;
 }
 
-.auth-footer a {
+.authFooter a {
     color: var(--dark-blue);
     font-weight: 700;
     text-decoration: none;
@@ -213,7 +213,7 @@
     font-weight: 500;
 }
 
-.error-message {
+.errorMessage {
     background: #fee2e2;
     color: #dc2626;
     padding: 12px;
@@ -223,11 +223,11 @@
     text-align: center;
 }
 
-.input-error {
+.inputError {
     border-color: #dc2626 !important;
 }
 
-.field-error {
+.fieldError {
     color: #dc2626;
     font-size: 13px;
     margin-top: 6px;
@@ -235,7 +235,7 @@
 
 /* Responsive */
 @media (max-width: 480px) {
-    .auth-box {
+    .authBox {
         padding: 1.5em;
     }
 

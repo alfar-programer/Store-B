@@ -1,7 +1,7 @@
 import { Camera, Mesh, Plane, Program, Renderer, Texture, Transform } from 'ogl';
 import { useEffect, useRef } from 'react';
 
-import './CircularGallery.css';
+import styles from './CircularGallery.module.css';
 
 function debounce(func, wait) {
     let timeout;
@@ -471,5 +471,5 @@ export default function CircularGallery({
             app.destroy();
         };
     }, [items, bend, textColor, borderRadius, font, scrollSpeed, scrollEase]);
-    return <div className="circular-gallery" ref={containerRef} />;
+    return <div className={`${styles.circularGallery}`} ref={containerRef} />;
 }

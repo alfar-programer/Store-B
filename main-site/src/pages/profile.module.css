@@ -1,12 +1,12 @@
 /* Profile Page Redesign */
-.profile-container {
+.profileContainer {
     min-height: 100vh;
     background: #f8fafc;
     padding: 120px 20px 60px;
     font-family: 'Inter', sans-serif;
 }
 
-.profile-content {
+.profileContent {
     max-width: 1200px;
     margin: 0 auto;
     display: grid;
@@ -16,12 +16,12 @@
 }
 
 /* Sidebar & Profile Card */
-.profile-sidebar {
+.profileSidebar {
     position: sticky;
     top: 100px;
 }
 
-.profile-card {
+.profileCard {
     background: white;
     border-radius: 24px;
     padding: 30px;
@@ -33,20 +33,20 @@
     transition: transform 0.3s ease;
 }
 
-.profile-card:hover {
+.profileCard:hover {
     transform: translateY(-5px);
     box-shadow: 0 15px 50px rgba(0, 0, 0, 0.08);
 }
 
-.image-container {
+.imageContainer {
     position: relative;
     width: 120px;
     height: 120px;
     margin: 0 auto 20px;
 }
 
-.profile-img,
-.profile-img-placeholder {
+.profileImg,
+.profileImgPlaceholder {
     width: 120px;
     height: 120px;
     border-radius: 50%;
@@ -55,7 +55,7 @@
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
 }
 
-.profile-img-placeholder {
+.profileImgPlaceholder {
     background: linear-gradient(135deg, #e0e7ff 0%, #fae8ff 100%);
     display: flex;
     align-items: center;
@@ -63,7 +63,7 @@
     color: var(--accent-primary);
 }
 
-.upload-btn {
+.uploadBtn {
     position: absolute;
     bottom: 0px;
     right: 0px;
@@ -80,25 +80,25 @@
     transition: all 0.2s ease;
 }
 
-.upload-btn:hover {
+.uploadBtn:hover {
     background: #4f46e5;
     transform: scale(1.1);
 }
 
-.user-name {
+.userName {
     font-size: 24px;
     font-weight: 700;
     color: #111827;
     margin-bottom: 5px;
 }
 
-.user-email {
+.userEmail {
     font-size: 15px;
     color: #6b7280;
     margin-bottom: 15px;
 }
 
-.user-badge {
+.userBadge {
     display: inline-block;
     padding: 6px 16px;
     background: #eff6ff;
@@ -110,7 +110,7 @@
 }
 
 /* Buttons */
-.btn-primary {
+.btnPrimary {
     width: 100%;
     display: flex;
     align-items: center;
@@ -127,11 +127,11 @@
     transition: all 0.2s ease;
 }
 
-.btn-primary:hover {
+.btnPrimary:hover {
     background: var(--warm-900);
 }
 
-.btn-secondary {
+.btnSecondary {
     width: 100%;
     display: flex;
     align-items: center;
@@ -148,22 +148,22 @@
     transition: all 0.2s ease;
 }
 
-.btn-secondary:hover {
+.btnSecondary:hover {
     background: #f9fafb;
     border-color: #d1d5db;
 }
 
 /* Edit Form */
-.edit-form {
+.editForm {
     text-align: left;
     margin-top: 20px;
 }
 
-.form-group {
+.formGroup {
     margin-bottom: 20px;
 }
 
-.form-group label {
+.formGroup label {
     display: block;
     font-size: 13px;
     font-weight: 600;
@@ -171,7 +171,7 @@
     margin-bottom: 8px;
 }
 
-.form-input {
+.formInput {
     width: 100%;
     padding: 12px;
     border: 1px solid #e5e7eb;
@@ -181,18 +181,18 @@
     outline: none;
 }
 
-.form-input:focus {
+.formInput:focus {
     border-color: var(--accent-primary);
     box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
 }
 
-.form-input.disabled {
+.formInput.disabled {
     background: #f3f4f6;
     color: #9ca3af;
     cursor: not-allowed;
 }
 
-.input-hint {
+.inputHint {
     display: block;
     font-size: 12px;
     color: #9ca3af;
@@ -200,14 +200,14 @@
     font-style: italic;
 }
 
-.form-actions {
+.formActions {
     display: flex;
     gap: 10px;
     margin-top: 30px;
 }
 
 /* Orders Section */
-.orders-section {
+.ordersSection {
     background: white;
     border-radius: 24px;
     padding: 40px;
@@ -215,13 +215,13 @@
     border: 1px solid rgba(0, 0, 0, 0.03);
 }
 
-.section-header {
+.sectionHeader {
     margin-bottom: 30px;
     border-bottom: 2px solid #f3f4f6;
     padding-bottom: 20px;
 }
 
-.section-header h2 {
+.sectionHeader h2 {
     display: flex;
     align-items: center;
     gap: 12px;
@@ -230,89 +230,89 @@
     margin: 0 0 8px 0;
 }
 
-.section-subtitle {
+.sectionSubtitle {
     color: #6b7280;
     margin: 0;
     font-size: 15px;
 }
 
 /* Empty State */
-.empty-state {
+.emptyState {
     text-align: center;
     padding: 60px 0;
 }
 
-.empty-state svg {
+.emptyState svg {
     color: #e5e7eb;
     margin-bottom: 20px;
 }
 
-.empty-state h3 {
+.emptyState h3 {
     font-size: 20px;
     color: #111827;
     margin: 0 0 10px 0;
 }
 
-.empty-state p {
+.emptyState p {
     color: #6b7280;
     margin-bottom: 30px;
 }
 
-.shop-btn {
+.shopBtn {
     width: auto;
     display: inline-flex;
     padding: 12px 30px;
     background: var(--gradient-primary);
 }
 
-.shop-btn:hover {
+.shopBtn:hover {
     opacity: 0.9;
     background: var(--gradient-primary);
 }
 
 /* Orders List */
-.orders-list {
+.ordersList {
     display: flex;
     flex-direction: column;
     gap: 20px;
 }
 
-.order-item-card {
+.orderItemCard {
     border: 1px solid #e5e7eb;
     border-radius: 16px;
     padding: 24px;
     transition: all 0.2s ease;
 }
 
-.order-item-card:hover {
+.orderItemCard:hover {
     border-color: #c7d2fe;
     box-shadow: 0 8px 24px rgba(99, 102, 241, 0.05);
 }
 
-.order-top {
+.orderTop {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
 }
 
-.order-id-group {
+.orderIdGroup {
     display: flex;
     flex-direction: column;
 }
 
-.order-number {
+.orderNumber {
     font-weight: 700;
     color: #111827;
     font-size: 18px;
 }
 
-.order-date {
+.orderDate {
     font-size: 14px;
     color: #6b7280;
 }
 
-.order-status-badge {
+.orderStatusBadge {
     padding: 6px 14px;
     border-radius: 30px;
     font-size: 13px;
@@ -321,13 +321,13 @@
     letter-spacing: 0.5px;
 }
 
-.status-delivered {
+.statusDelivered {
     background: #ecfdf5;
     color: #059669;
     border: 1px solid #d1fae5;
 }
 
-.order-products {
+.orderProducts {
     display: flex;
     gap: 12px;
     overflow-x: auto;
@@ -336,12 +336,12 @@
     border-bottom: 1px solid #f3f4f6;
 }
 
-.product-preview {
+.productPreview {
     position: relative;
     flex-shrink: 0;
 }
 
-.product-preview img {
+.productPreview img {
     width: 70px;
     height: 70px;
     border-radius: 10px;
@@ -349,7 +349,7 @@
     border: 1px solid #e5e7eb;
 }
 
-.product-qty {
+.productQty {
     position: absolute;
     bottom: -6px;
     right: -6px;
@@ -366,24 +366,24 @@
     border: 2px solid white;
 }
 
-.order-footer {
+.orderFooter {
     display: flex;
     justify-content: flex-end;
     align-items: center;
 }
 
-.order-total {
+.orderTotal {
     text-align: right;
 }
 
-.order-total .label {
+.orderTotal .label {
     display: block;
     font-size: 12px;
     color: #6b7280;
     margin-bottom: 2px;
 }
 
-.order-total .amount {
+.orderTotal .amount {
     display: block;
     font-size: 20px;
     font-weight: 800;
@@ -391,7 +391,7 @@
 }
 
 /* Loading */
-.profile-loading {
+.profileLoading {
     min-height: 100vh;
     display: flex;
     justify-content: center;
@@ -399,7 +399,7 @@
     background: #f8fafc;
 }
 
-.loading-spinner {
+.loadingSpinner {
     width: 40px;
     height: 40px;
     border: 3px solid #e5e7eb;
@@ -408,7 +408,7 @@
     animation: spin 0.8s linear infinite;
 }
 
-.uploading-spinner {
+.uploadingSpinner {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -430,34 +430,34 @@
 
 /* Responsiveness */
 @media (max-width: 900px) {
-    .profile-content {
+    .profileContent {
         grid-template-columns: 1fr;
         gap: 30px;
     }
 
-    .profile-sidebar {
+    .profileSidebar {
         position: static;
     }
 
-    .profile-card {
+    .profileCard {
         padding: 24px;
     }
 }
 
 @media (max-width: 600px) {
-    .profile-container {
+    .profileContainer {
         padding: 100px 15px 40px;
     }
 
-    .section-header h2 {
+    .sectionHeader h2 {
         font-size: 20px;
     }
 
-    .order-number {
+    .orderNumber {
         font-size: 16px;
     }
 
-    .order-total .amount {
+    .orderTotal .amount {
         font-size: 18px;
     }
 }

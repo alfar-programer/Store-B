@@ -4,7 +4,7 @@ import { API_BASE_URL } from '../config';
 import { User, Camera, Package, Calendar, DollarSign, ShoppingBag, Edit2, Save, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import CustomAlert from '../components/ui/Alert/CustomAlert';
-import './profile.css';
+import styles from './profile.module.css';
 
 const Profile = () => {
     const { user } = useAuth();
@@ -186,8 +186,8 @@ const Profile = () => {
 
     if (loading) {
         return (
-            <div className="profile-loading">
-                <div className="loading-spinner"></div>
+            <div className={`${styles.profileLoading}`}>
+                <div className={`${styles.loadingSpinner}`}></div>
             </div>
         );
     }
@@ -199,21 +199,21 @@ const Profile = () => {
     const deliveredOrders = orders.filter(order => (order.status || '').toLowerCase() === 'delivered');
 
     return (
-        <div className="profile-container">
-            <div className="profile-content">
+        <div className={`${styles.profileContainer}`}>
+            <div className={`${styles.profileContent}`}>
                 {/* Profile Sidebar / Card */}
-                <aside className="profile-sidebar">
-                    <div className="profile-card">
+                <aside className={`${styles.profileSidebar}`}>
+                    <div className={`${styles.profileCard}`}>
                         <div className="profile-header-image">
-                            <div className="image-container">
+                            <div className={`${styles.imageContainer}`}>
                                 {displayData?.profileImage ? (
-                                    <img src={displayData.profileImage} alt="Profile" className="profile-img" />
+                                    <img src={displayData.profileImage} alt="Profile" className={`${styles.profileImg}`} />
                                 ) : (
-                                    <div className="profile-img-placeholder">
+                                    <div className={`${styles.profileImgPlaceholder}`}>
                                         <User size={48} />
                                     </div>
                                 )}
-                                <label className="upload-btn" title="Change Profile Photo">
+                                <label className={`${styles.uploadBtn}`} title="Change Profile Photo">
                                     <Camera size={18} />
                                     <input
                                         type="file"
@@ -223,50 +223,50 @@ const Profile = () => {
                                         hidden
                                     />
                                 </label>
-                                {uploading && <div className="uploading-spinner"></div>}
+                                {uploading && <div className={`${styles.uploadingSpinner}`}></div>}
                             </div>
                         </div>
 
                         <div className="profile-info-display">
                             {!isEditing ? (
                                 <>
-                                    <h2 className="user-name">{displayData?.name || 'User'}</h2>
-                                    <p className="user-email">{displayData?.email}</p>
-                                    <div className="user-badge">
+                                    <h2 className={`${styles.userName}`}>{displayData?.name || 'User'}</h2>
+                                    <p className={`${styles.userEmail}`}>{displayData?.email}</p>
+                                    <div className={`${styles.userBadge}`}>
                                         {displayData?.role === 'admin' ? 'Administrator' : 'Verified Customer'}
                                     </div>
-                                    <button className="btn-primary edit-btn" onClick={() => setIsEditing(true)}>
+                                    <button className={`${styles.btnPrimary} edit-btn`} onClick={() => setIsEditing(true)}>
                                         <Edit2 size={16} /> Edit Profile
                                     </button>
                                 </>
                             ) : (
-                                <div className="edit-form">
-                                    <div className="form-group">
+                                <div className={`${styles.editForm}`}>
+                                    <div className={`${styles.formGroup}`}>
                                         <label>Full Name</label>
                                         <input
                                             type="text"
                                             value={editForm.name}
                                             onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
-                                            className="form-input"
+                                            className={`${styles.formInput}`}
                                             autoFocus
                                         />
                                     </div>
-                                    <div className="form-group">
+                                    <div className={`${styles.formGroup}`}>
                                         <label>Email Address</label>
                                         <input
                                             type="email"
                                             value={editForm.email}
                                             disabled
-                                            className="form-input disabled"
+                                            className={`${styles.formInput} ${styles.disabled}`}
                                             title="Email cannot be changed"
                                         />
-                                        <span className="input-hint">Email cannot be changed associated with account</span>
+                                        <span className={`${styles.inputHint}`}>Email cannot be changed associated with account</span>
                                     </div>
-                                    <div className="form-actions">
-                                        <button className="btn-primary save-btn" onClick={handleUpdateProfile}>
+                                    <div className={`${styles.formActions}`}>
+                                        <button className={`${styles.btnPrimary} save-btn`} onClick={handleUpdateProfile}>
                                             <Save size={16} /> Save
                                         </button>
-                                        <button className="btn-secondary cancel-btn" onClick={() => setIsEditing(false)}>
+                                        <button className={`${styles.btnSecondary} cancel-btn`} onClick={() => setIsEditing(false)}>
                                             <X size={16} /> Cancel
                                         </button>
                                     </div>
@@ -278,48 +278,48 @@ const Profile = () => {
 
                 {/* Main Content - Order History */}
                 <main className="profile-main">
-                    <div className="orders-section">
-                        <div className="section-header">
+                    <div className={`${styles.ordersSection}`}>
+                        <div className={`${styles.sectionHeader}`}>
                             <h2><Package size={24} /> Order History</h2>
-                            <p className="section-subtitle">View your past delivered orders</p>
+                            <p className={`${styles.sectionSubtitle}`}>View your past delivered orders</p>
                         </div>
 
                         {deliveredOrders.length === 0 ? (
-                            <div className="empty-state">
+                            <div className={`${styles.emptyState}`}>
                                 <ShoppingBag size={48} />
                                 <h3>No delivered orders yet</h3>
                                 <p>Once your orders are delivered, they will appear here.</p>
-                                <button className="btn-primary shop-btn" onClick={() => navigate('/allproducts')}>
+                                <button className={`${styles.btnPrimary} ${styles.shopBtn}`} onClick={() => navigate('/allproducts')}>
                                     Start Shopping
                                 </button>
                             </div>
                         ) : (
-                            <div className="orders-list">
+                            <div className={`${styles.ordersList}`}>
                                 {deliveredOrders.map((order, index) => (
-                                    <div key={order.id || index} className="order-item-card">
-                                        <div className="order-top">
-                                            <div className="order-id-group">
-                                                <span className="order-number">#{order.id || 'N/A'}</span>
-                                                <span className="order-date">{formatDate(order.createdAt)}</span>
+                                    <div key={order.id || index} className={`${styles.orderItemCard}`}>
+                                        <div className={`${styles.orderTop}`}>
+                                            <div className={`${styles.orderIdGroup}`}>
+                                                <span className={`${styles.orderNumber}`}>#{order.id || 'N/A'}</span>
+                                                <span className={`${styles.orderDate}`}>{formatDate(order.createdAt)}</span>
                                             </div>
-                                            <div className="order-status-badge status-delivered">
+                                            <div className={`${styles.orderStatusBadge} ${styles.statusDelivered}`}>
                                                 Delivered
                                             </div>
                                         </div>
 
-                                        <div className="order-products">
+                                        <div className={`${styles.orderProducts}`}>
                                             {(order.items || []).map((item, idx) => (
-                                                <div key={idx} className="product-preview">
+                                                <div key={idx} className={`${styles.productPreview}`}>
                                                     <img src={item.image || ''} alt={item.title} title={item.title} />
-                                                    <span className="product-qty">x{item.quantity}</span>
+                                                    <span className={`${styles.productQty}`}>x{item.quantity}</span>
                                                 </div>
                                             ))}
                                         </div>
 
-                                        <div className="order-footer">
-                                            <div className="order-total">
-                                                <span className="label">Total</span>
-                                                <span className="amount">{parseFloat(order.total || 0).toFixed(2)} EGP</span>
+                                        <div className={`${styles.orderFooter}`}>
+                                            <div className={`${styles.orderTotal}`}>
+                                                <span className={`${styles.label}`}>Total</span>
+                                                <span className={`${styles.amount}`}>{parseFloat(order.total || 0).toFixed(2)} EGP</span>
                                             </div>
                                             {/* Could add 'View Details' button here later */}
                                         </div>

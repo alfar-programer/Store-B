@@ -10,7 +10,7 @@ import { useFavorites } from '../../context/FavoritesContext';
 import { useLanguage } from '../../context/LanguageContext';
 import { useTranslation } from 'react-i18next';
 import { API_BASE_URL, PLACEHOLDER_IMAGE } from '../../config';
-import './RecentlyViewed.css';
+import styles from './RecentlyViewed.module.css';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -147,37 +147,37 @@ const RecentlyViewed = ({ products, currentProductId }) => {
     if (!displayProducts || displayProducts.length === 0) return null;
 
     return (
-        <section className="recently-viewed-section" ref={containerRef}>
-            <div className="rv-container">
-                <div className="rv-header">
+        <section className={`${styles.recentlyViewedSection}`} ref={containerRef}>
+            <div className={`${styles.rvContainer}`}>
+                <div className={`${styles.rvHeader}`}>
                     <h2>{t('recentlyViewed.title') || 'Recently Viewed'}</h2>
                     <p>{t('recentlyViewed.subtitle') || 'Continue where you left off'}</p>
-                    <div className="rv-slider-controls">
-                        <button className="rv-arrow" onClick={() => scrollRvSlider('left')}>
+                    <div className={`${styles.rvSliderControls}`}>
+                        <button className={`${styles.rvArrow}`} onClick={() => scrollRvSlider('left')}>
                             <ChevronLeft size={24} />
                         </button>
-                        <button className="rv-arrow" onClick={() => scrollRvSlider('right')}>
+                        <button className={`${styles.rvArrow}`} onClick={() => scrollRvSlider('right')}>
                             <ChevronRight size={24} />
                         </button>
                     </div>
                 </div>
                 
-                <div className="rv-scroll-container" ref={scrollRef}>
-                    <div className="rv-track">
+                <div className={`${styles.rvScrollContainer}`} ref={scrollRef}>
+                    <div className={`${styles.rvTrack}`}>
                         {displayProducts.map((product, index) => (
                             <Link 
                                 to={`/product/${product.id}`} 
-                                className="rv-card" 
+                                className={`${styles.rvCard}`} 
                                 key={product.id}
                                 ref={el => cardsRef.current[index] = el}
                             >
                                 {product.discount > 0 && (
-                                    <div className="rv-discount-badge">-{product.discount}%</div>
+                                    <div className={`${styles.rvDiscountBadge}`}>-{product.discount}%</div>
                                 )}
-                                <div className="rv-image-wrapper">
+                                <div className={`${styles.rvImageWrapper}`}>
                                     <img src={parseImage(product.image || product.images)} alt={getProductField(product, 'title')} loading="lazy" />
                                     <button 
-                                        className="rv-favorite-btn"
+                                        className={`${styles.rvFavoriteBtn}`}
                                         onClick={(e) => {
                                             e.preventDefault();
                                             e.stopPropagation();
@@ -190,25 +190,25 @@ const RecentlyViewed = ({ products, currentProductId }) => {
                                             color={isFavorite(product.id) ? '#ef4444' : '#6b7280'}
                                         />
                                     </button>
-                                    <div className="rv-overlay">
+                                    <div className={`${styles.rvOverlay}`}>
                                         <button
-                                            className="rv-quick-view-btn"
+                                            className={`${styles.rvQuickViewBtn}`}
                                             onClick={(e) => handleQuickView(e, product)}
                                         >
                                             Quick View
                                         </button>
                                     </div>
                                 </div>
-                                <div className="rv-info">
-                                    <h3 className="rv-title">{getProductField(product, 'title')}</h3>
-                                    <p className="rv-description">{getProductField(product, 'description') || ""}</p>
-                                    <div className="rv-rating-row">
-                                        <span className="rv-stars">
+                                <div className={`${styles.rvInfo}`}>
+                                    <h3 className={`${styles.rvTitle}`}>{getProductField(product, 'title')}</h3>
+                                    <p className={`${styles.rvDescription}`}>{getProductField(product, 'description') || ""}</p>
+                                    <div className={`${styles.rvRatingRow}`}>
+                                        <span className={`${styles.rvStars}`}>
                                             {[...Array(5)].map((_, i) => (
                                                 <Star key={i} size={14} fill={i < Math.round(product.rating?.average || product.rating || 5) ? "#fbbf24" : "none"} color={i < Math.round(product.rating?.average || product.rating || 5) ? "#fbbf24" : "#d1d5db"} />
                                             ))}
                                         </span>
-                                        <span className="rv-rating-value">
+                                        <span className={`${styles.rvRatingValue}`}>
                                             {(() => {
                                                 const r = product.rating;
                                                 if (!r) return '5.0';
@@ -219,24 +219,24 @@ const RecentlyViewed = ({ products, currentProductId }) => {
                                     </div>
                                     {/* Stock indicator */}
                                     {typeof product.stock === 'number' && product.stock > 0 && product.stock < 10 && (
-                                        <div className="rv-stock-warning" style={{ fontSize: '0.75rem', color: '#d97706', fontWeight: '600', width: '100%', marginBottom: '8px' }}>
+                                        <div className={`${styles.rvStockWarning}`} style={{ fontSize: '0.75rem', color: '#d97706', fontWeight: '600', width: '100%', marginBottom: '8px' }}>
                                             {t('homePage.prodLeftOnly', { count: product.stock }) || `Only ${product.stock} left!`}
                                         </div>
                                     )}
                                 </div>
-                                <div className="rv-footer">
-                                    <div className="rv-price-wrapper">
+                                <div className={`${styles.rvFooter}`}>
+                                    <div className={`${styles.rvPriceWrapper}`}>
                                         {product.discount > 0 ? (
                                             <>
-                                                <span className="rv-price">{(parseFloat(product.price) * (1 - product.discount / 100)).toFixed(2)} <small>EGP</small></span>
-                                                <span className="rv-original-price">{parseFloat(product.price).toFixed(2)} <small>EGP</small></span>
+                                                <span className={`${styles.rvPrice}`}>{(parseFloat(product.price) * (1 - product.discount / 100)).toFixed(2)} <small>EGP</small></span>
+                                                <span className={`${styles.rvOriginalPrice}`}>{parseFloat(product.price).toFixed(2)} <small>EGP</small></span>
                                             </>
                                         ) : (
-                                            <span className="rv-price">{parseFloat(product.price || 0).toFixed(2)} <small>EGP</small></span>
+                                            <span className={`${styles.rvPrice}`}>{parseFloat(product.price || 0).toFixed(2)} <small>EGP</small></span>
                                         )}
                                     </div>
                                     <button
-                                        className="rv-add-to-cart-btn"
+                                        className={`${styles.rvAddToCartBtn}`}
                                         disabled={typeof product.stock === 'number' && product.stock <= 0}
                                         style={typeof product.stock === 'number' && product.stock <= 0 ? { opacity: 0.5, cursor: 'not-allowed' } : {}}
                                         onClick={(e) => handleAddToCart(e, product)}
@@ -252,12 +252,12 @@ const RecentlyViewed = ({ products, currentProductId }) => {
 
             {/* Quick View Modal */}
             {isModalOpen && selectedProduct && createPortal(
-                <div className={`rv-modal-overlay active`} onClick={closeModal}>
-                    <div className="rv-modal-content" onClick={(e) => e.stopPropagation()}>
-                        <button className="rv-modal-close" onClick={closeModal}>×</button>
-                        <div className="rv-modal-image-wrapper">
+                <div className={`${styles.rvModalOverlay} active`} onClick={closeModal}>
+                    <div className={`${styles.rvModalContent}`} onClick={(e) => e.stopPropagation()}>
+                        <button className={`${styles.rvModalClose}`} onClick={closeModal}>×</button>
+                        <div className={`${styles.rvModalImageWrapper}`}>
                             <button 
-                                className="rv-modal-favorite-btn"
+                                className={`${styles.rvModalFavoriteBtn}`}
                                 onClick={(e) => {
                                     e.preventDefault();
                                     e.stopPropagation();
@@ -272,16 +272,16 @@ const RecentlyViewed = ({ products, currentProductId }) => {
                             </button>
                             <img src={parseImage(selectedProduct.image || selectedProduct.images)} alt={getProductField(selectedProduct, 'title')} />
                         </div>
-                        <div className="rv-modal-details">
+                        <div className={`${styles.rvModalDetails}`}>
                             <h2>{getProductField(selectedProduct, 'title')}</h2>
-                            <p className="rv-modal-description">{getProductField(selectedProduct, 'description')}</p>
-                            <div className="rv-modal-rating">
-                                <span className="rv-stars">
+                            <p className={`${styles.rvModalDescription}`}>{getProductField(selectedProduct, 'description')}</p>
+                            <div className={`${styles.rvModalRating}`}>
+                                <span className={`${styles.rvStars}`}>
                                     {[...Array(5)].map((_, i) => (
                                         <Star key={i} size={16} fill={i < Math.round(selectedProduct.rating?.average || selectedProduct.rating || 5) ? "#fbbf24" : "none"} color={i < Math.round(selectedProduct.rating?.average || selectedProduct.rating || 5) ? "#fbbf24" : "#d1d5db"} />
                                     ))}
                                 </span>
-                                <span className="rv-rating-value">
+                                <span className={`${styles.rvRatingValue}`}>
                                     {(() => {
                                         const r = selectedProduct.rating;
                                         if (!r) return '5.0';
@@ -292,23 +292,23 @@ const RecentlyViewed = ({ products, currentProductId }) => {
                             </div>
                             {/* Modal Stock Indicator */}
                             {typeof selectedProduct.stock === 'number' && selectedProduct.stock > 0 && selectedProduct.stock < 10 && (
-                                <div className="rv-modal-stock-warning" style={{ color: '#d97706', fontWeight: '600', marginBottom: '12px', fontSize: '0.9rem' }}>
+                                <div className={`${styles.rvModalStockWarning}`} style={{ color: '#d97706', fontWeight: '600', marginBottom: '12px', fontSize: '0.9rem' }}>
                                     {t('homePage.prodLeftOnly', { count: selectedProduct.stock }) || `Only ${selectedProduct.stock} left!`}
                                 </div>
                             )}
-                            <div className="rv-modal-price-section">
+                            <div className={`${styles.rvModalPriceSection}`}>
                                 {selectedProduct.discount > 0 ? (
                                     <>
-                                        <span className="rv-modal-price">{(parseFloat(selectedProduct.price) * (1 - selectedProduct.discount / 100)).toFixed(2)} <small>EGP</small></span>
-                                        <span className="rv-modal-original-price">{parseFloat(selectedProduct.price).toFixed(2)} <small>EGP</small></span>
-                                        <span className="rv-modal-discount-badge">-{selectedProduct.discount}% OFF</span>
+                                        <span className={`${styles.rvModalPrice}`}>{(parseFloat(selectedProduct.price) * (1 - selectedProduct.discount / 100)).toFixed(2)} <small>EGP</small></span>
+                                        <span className={`${styles.rvModalOriginalPrice}`}>{parseFloat(selectedProduct.price).toFixed(2)} <small>EGP</small></span>
+                                        <span className={`${styles.rvModalDiscountBadge}`}>-{selectedProduct.discount}% OFF</span>
                                     </>
                                 ) : (
-                                    <span className="rv-modal-price">{parseFloat(selectedProduct.price || 0).toFixed(2)} <small>EGP</small></span>
+                                    <span className={`${styles.rvModalPrice}`}>{parseFloat(selectedProduct.price || 0).toFixed(2)} <small>EGP</small></span>
                                 )}
                             </div>
                             <button
-                                className="rv-modal-add-to-cart"
+                                className={`${styles.rvModalAddToCart}`}
                                 onClick={(e) => {
                                     handleAddToCart(e, selectedProduct);
                                     closeModal();

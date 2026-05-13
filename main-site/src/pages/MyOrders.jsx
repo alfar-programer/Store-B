@@ -18,7 +18,7 @@ import {
     CreditCard
 } from 'lucide-react';
 import { PLACEHOLDER_IMAGE } from '../config';
-import '../pages/Orders.css';
+import styles from './Orders.module.css';
 
 // --- Components ---
 
@@ -34,7 +34,7 @@ const OrderTimeline = ({ status }) => {
     const isCancelled = status.toLowerCase() === 'cancelled';
 
     return (
-        <div className="timeline-container">
+        <div className={`${styles.timelineContainer}`}>
             {isCancelled ? (
                 <div className="flex items-center gap-3 text-red-600 bg-red-50 p-4 rounded-xl border border-red-100">
                     <XCircle size={24} />
@@ -44,17 +44,17 @@ const OrderTimeline = ({ status }) => {
                     </div>
                 </div>
             ) : (
-                <div className="order-timeline">
-                    <div className="timeline-track-bg"></div>
+                <div className={`${styles.orderTimeline}`}>
+                    <div className={`${styles.timelineTrackBg}`}></div>
                     {steps.map((step, index) => {
                         const isActive = index <= currentIdx;
                         const isCurrent = index === currentIdx;
                         return (
                             <div key={step.status} className={`timeline-step ${isActive ? 'active' : ''} ${index < currentIdx ? 'completed' : ''}`}>
-                                <div className="step-circle">
+                                <div className={`${styles.stepCircle}`}>
                                     {step.icon}
                                 </div>
-                                <span className="step-label">{step.label}</span>
+                                <span className={`${styles.stepLabel}`}>{step.label}</span>
                             </div>
                         );
                     })}
@@ -152,8 +152,8 @@ const MyOrders = () => {
     }
 
     return (
-        <div className="order-page">
-            <div className="main-orderpage">
+        <div className={`${styles.orderPage}`}>
+            <div className={`${styles.mainOrderpage}`}>
                 {showSuccess && (
                     <div className="mb-8 bg-green-500/10 backdrop-blur-md border border-green-500/20 text-green-800 p-6 rounded-2xl flex items-center justify-between animate-fade-in shadow-lg">
                         <div className="flex items-center gap-4">
@@ -171,24 +171,24 @@ const MyOrders = () => {
                     </div>
                 )}
 
-                <div className="order-header-section">
-                    <h1 className="order-title">My Orders</h1>
-                    <p className="order-subtitle">Track and manage your recent purchases</p>
+                <div className={`${styles.orderHeaderSection}`}>
+                    <h1 className={`${styles.orderTitle}`}>My Orders</h1>
+                    <p className={`${styles.orderSubtitle}`}>Track and manage your recent purchases</p>
                 </div>
 
-                <div className="order-controls">
-                    <div className="search-container">
+                <div className={`${styles.orderControls}`}>
+                    <div className={`${styles.searchContainer}`}>
                         <input
                             type="text"
-                            className="search-input"
+                            className={`${styles.searchInput}`}
                             placeholder="Search orders..."
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                         />
-                        <Search className="search-icon" size={20} />
+                        <Search className={`${styles.searchIcon}`} size={20} />
                     </div>
 
-                    <div className="filter-tabs">
+                    <div className={`${styles.filterTabs}`}>
                         {['All', 'Pending', 'Processing', 'Shipped', 'Delivered', 'Cancelled'].map((status) => (
                             <button
                                 key={status}
@@ -201,14 +201,14 @@ const MyOrders = () => {
                     </div>
                 </div>
 
-                <div className="orders-list-container">
+                <div className={`${styles.ordersListContainer}`}>
                     {filteredOrders.length === 0 ? (
-                        <div className="empty-state-card animate-fade-in">
-                            <div className="empty-state-icon">
+                        <div className={`${styles.emptyStateCard} animate-fade-in`}>
+                            <div className={`${styles.emptyStateIcon}`}>
                                 <ShoppingBag size={48} />
                             </div>
-                            <h3 className="empty-state-title">No orders found</h3>
-                            <p className="empty-state-text">
+                            <h3 className={`${styles.emptyStateTitle}`}>No orders found</h3>
+                            <p className={`${styles.emptyStateText}`}>
                                 {orders.length > 0
                                     ? "We couldn't find any orders matching your selected status or search."
                                     : "You haven't placed any orders yet. Explore our collection and find something you love!"}
@@ -220,12 +220,12 @@ const MyOrders = () => {
                                         setFilterStatus('All');
                                         setSearchQuery('');
                                     }}
-                                    className="shop-now-btn"
+                                    className={`${styles.shopNowBtn}`}
                                 >
                                     Clear Filters
                                 </button>
                             ) : (
-                                <button onClick={() => navigate('/allproducts')} className="shop-now-btn">
+                                <button onClick={() => navigate('/allproducts')} className={`${styles.shopNowBtn}`}>
                                     Start Shopping <ArrowRight size={20} />
                                 </button>
                             )}
@@ -240,15 +240,15 @@ const MyOrders = () => {
                             const isExpanded = expandedOrder === order.id;
 
                             return (
-                                <div key={order.id} className="order-card">
+                                <div key={order.id} className={`${styles.orderCard}`}>
                                     <div
-                                        className="order-card-header"
+                                        className={`${styles.orderCardHeader}`}
                                         onClick={() => setExpandedOrder(isExpanded ? null : order.id)}
                                     >
-                                        <div className="order-id-group">
-                                            <span className="order-id-label">Order ID</span>
-                                            <span className="order-id-value">#{order.id}</span>
-                                            <div className="order-date">
+                                        <div className={`${styles.orderIdGroup}`}>
+                                            <span className={`${styles.orderIdLabel}`}>Order ID</span>
+                                            <span className={`${styles.orderIdValue}`}>#{order.id}</span>
+                                            <div className={`${styles.orderDate}`}>
                                                 <Calendar size={14} />
                                                 {new Date(order.createdAt).toLocaleDateString('en-US', {
                                                     year: 'numeric', month: 'short', day: 'numeric'
@@ -262,9 +262,9 @@ const MyOrders = () => {
                                             </span>
                                         </div>
 
-                                        <div className="order-total-group">
-                                            <span className="total-label">Total Amount</span>
-                                            <span className="total-value">{parseFloat(order.total).toFixed(2)} <small>EGP</small></span>
+                                        <div className={`${styles.orderTotalGroup}`}>
+                                            <span className={`${styles.totalLabel}`}>Total Amount</span>
+                                            <span className={`${styles.totalValue}`}>{parseFloat(order.total).toFixed(2)} <small>EGP</small></span>
                                         </div>
 
                                         <div className={`expand-icon ${isExpanded ? 'rotate-180' : ''}`} style={{ transition: 'transform 0.3s' }}>
@@ -273,27 +273,27 @@ const MyOrders = () => {
                                     </div>
 
                                     <div className={`order-details-wrapper ${isExpanded ? 'expanded' : ''}`}>
-                                        <div className="order-details-inner">
+                                        <div className={`${styles.orderDetailsInner}`}>
                                             <OrderTimeline status={order.status} />
 
-                                            <div className="order-content-layout">
-                                                <div className="items-section">
+                                            <div className={`${styles.orderContentLayout}`}>
+                                                <div className={`${styles.itemsSection}`}>
                                                     <h4><Package size={18} className="text-indigo-600" /> Items in Order</h4>
                                                     <div className="items-list">
                                                         {items.map((item, index) => (
-                                                            <div key={index} className="order-item-row">
+                                                            <div key={index} className={`${styles.orderItemRow}`}>
                                                                 <img
                                                                     src={item.image}
                                                                     alt={item.title}
-                                                                    className="item-img"
+                                                                    className={`${styles.itemImg}`}
                                                                     onError={(e) => { e.target.src = PLACEHOLDER_IMAGE; }}
                                                                 />
-                                                                <div className="item-details-block">
-                                                                    <h5 className="item-title">{item.title}</h5>
-                                                                    <div className="item-specs">
+                                                                <div className={`${styles.itemDetailsBlock}`}>
+                                                                    <h5 className={`${styles.itemTitle}`}>{item.title}</h5>
+                                                                    <div className={`${styles.itemSpecs}`}>
                                                                         <span>Qty: {item.quantity}</span>
                                                                         <span className="w-px h-4 bg-gray-300"></span>
-                                                                        <span className="item-price-tag">{parseFloat(item.price).toFixed(2)} EGP</span>
+                                                                        <span className={`${styles.itemPriceTag}`}>{parseFloat(item.price).toFixed(2)} EGP</span>
                                                                     </div>
                                                                 </div>
                                                                 <div className="font-bold text-gray-900 self-center">
@@ -304,13 +304,13 @@ const MyOrders = () => {
                                                     </div>
                                                 </div>
 
-                                                <div className="summary-section">
-                                                    <div className="order-actions-card">
-                                                        <div className="need-help">
-                                                            <div className="help-title">
+                                                <div className={`${styles.summarySection}`}>
+                                                    <div className={`${styles.orderActionsCard}`}>
+                                                        <div className={`${styles.needHelp}`}>
+                                                            <div className={`${styles.helpTitle}`}>
                                                                 <AlertCircle size={18} /> Need Help?
                                                             </div>
-                                                            <p className="help-text">
+                                                            <p className={`${styles.helpText}`}>
                                                                 Having trouble with this order? Contact our support team for assistance.
                                                             </p>
                                                         </div>
@@ -319,7 +319,7 @@ const MyOrders = () => {
                                                                 e.stopPropagation();
                                                                 navigate('/contact', { state: { orderId: order.id } });
                                                             }}
-                                                            className="support-btn"
+                                                            className={`${styles.supportBtn}`}
                                                         >
                                                             <MessageCircle size={18} /> Contact Support
                                                         </button>

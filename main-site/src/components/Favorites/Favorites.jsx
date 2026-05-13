@@ -5,7 +5,7 @@ import { Heart, ShoppingCart, Trash2 } from 'lucide-react';
 import { useFavorites } from '../../context/FavoritesContext';
 import { useCart } from '../../context/CartContext';
 import { API_BASE_URL, PLACEHOLDER_IMAGE } from '../../config';
-import './favorites.css';
+import styles from './favorites.module.css';
 
 const Favorites = () => {
     const { favorites, toggleFavorite } = useFavorites();
@@ -62,63 +62,63 @@ const Favorites = () => {
     };
 
     return (
-        <section className="favorites-section">
+        <section className={`${styles.favoritesSection}`}>
             <Helmet>
                 <title>My Favorites | Warm Touch</title>
                 <meta name="description" content="View your favorite handmade items and home decor at Warm Touch." />
             </Helmet>
 
-            <div className="favorites-container">
-                <div className="favorites-header">
+            <div className={`${styles.favoritesContainer}`}>
+                <div className={`${styles.favoritesHeader}`}>
                     <h2>My Favorites</h2>
                     <p>Your curated collection of loved items</p>
                 </div>
 
                 {favorites.length === 0 ? (
-                    <div className="empty-favorites">
-                        <Heart size={64} className="empty-icon" />
+                    <div className={`${styles.emptyFavorites}`}>
+                        <Heart size={64} className={`${styles.emptyIcon}`} />
                         <h3>Your wishlist is empty</h3>
                         <p>Discover our beautiful products and add your favorites here!</p>
-                        <Link to="/allproducts" className="browse-btn">
+                        <Link to="/allproducts" className={`${styles.browseBtn}`}>
                             Browse Products
                         </Link>
                     </div>
                 ) : (
-                    <div className="favorites-grid">
+                    <div className={`${styles.favoritesGrid}`}>
                         {favorites.map((product) => (
-                            <div className="favorite-card" key={product.id}>
-                                <Link to={`/product/${product.id}`} className="favorite-image-wrapper">
+                            <div className={`${styles.favoriteCard}`} key={product.id}>
+                                <Link to={`/product/${product.id}`} className={`${styles.favoriteImageWrapper}`}>
                                     <img src={parseImage(product.image)} alt={product.title} />
                                     {product.discount > 0 && (
-                                        <div className="discount-badge">-{product.discount}%</div>
+                                        <div className={`${styles.discountBadge}`}>-{product.discount}%</div>
                                     )}
                                 </Link>
                                 
-                                <div className="favorite-info">
-                                    <Link to={`/product/${product.id}`} className="favorite-title">
+                                <div className={`${styles.favoriteInfo}`}>
+                                    <Link to={`/product/${product.id}`} className={`${styles.favoriteTitle}`}>
                                         <h3>{product.title}</h3>
                                     </Link>
                                     
-                                    <div className="favorite-price-wrapper">
+                                    <div className={`${styles.favoritePriceWrapper}`}>
                                         {product.discount > 0 ? (
                                             <>
-                                                <span className="price">{(parseFloat(product.price) * (1 - product.discount / 100)).toFixed(2)} <small>EGP</small></span>
-                                                <span className="original-price">{parseFloat(product.price).toFixed(2)} <small>EGP</small></span>
+                                                <span className={`${styles.price}`}>{(parseFloat(product.price) * (1 - product.discount / 100)).toFixed(2)} <small>EGP</small></span>
+                                                <span className={`${styles.originalPrice}`}>{parseFloat(product.price).toFixed(2)} <small>EGP</small></span>
                                             </>
                                         ) : (
-                                            <span className="price">{parseFloat(product.price).toFixed(2)} <small>EGP</small></span>
+                                            <span className={`${styles.price}`}>{parseFloat(product.price).toFixed(2)} <small>EGP</small></span>
                                         )}
                                     </div>
                                     
                                     {typeof product.stock === 'number' && product.stock > 0 && product.stock < 10 && (
-                                        <span className="stock-warning">
+                                        <span className={`${styles.stockWarning}`}>
                                             Only {product.stock} left!
                                         </span>
                                     )}
                                     
-                                    <div className="favorite-actions">
+                                    <div className={`${styles.favoriteActions}`}>
                                         <button 
-                                            className="action-btn remove-btn"
+                                            className={`${styles.actionBtn} ${styles.removeBtn}`}
                                             onClick={() => toggleFavorite(product)}
                                             aria-label="Remove from favorites"
                                         >
@@ -127,7 +127,7 @@ const Favorites = () => {
                                         </button>
                                         
                                         <button 
-                                            className="action-btn add-cart-btn"
+                                            className={`${styles.actionBtn} ${styles.addCartBtn}`}
                                             disabled={typeof product.stock === 'number' && product.stock <= 0}
                                             onClick={(e) => handleAddToCart(e, product)}
                                         >

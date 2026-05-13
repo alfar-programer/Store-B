@@ -1,34 +1,34 @@
-.favorites-section {
+.favoritesSection {
     padding: 120px 0 60px;
     min-height: calc(100vh - 200px);
     background-color: #f9fafb;
 }
 
-.favorites-container {
+.favoritesContainer {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 20px;
 }
 
-.favorites-header {
+.favoritesHeader {
     text-align: center;
     margin-bottom: 40px;
 }
 
-.favorites-header h2 {
+.favoritesHeader h2 {
     font-size: 2.5rem;
     color: #1a202c;
     margin-bottom: 10px;
     font-family: 'Playfair Display', serif;
 }
 
-.favorites-header p {
+.favoritesHeader p {
     color: #718096;
     font-size: 1.1rem;
 }
 
 /* Empty State */
-.empty-favorites {
+.emptyFavorites {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -40,23 +40,23 @@
     text-align: center;
 }
 
-.empty-icon {
+.emptyIcon {
     color: #cbd5e0;
     margin-bottom: 20px;
 }
 
-.empty-favorites h3 {
+.emptyFavorites h3 {
     font-size: 1.8rem;
     color: #2d3748;
     margin-bottom: 10px;
 }
 
-.empty-favorites p {
+.emptyFavorites p {
     color: #718096;
     margin-bottom: 30px;
 }
 
-.browse-btn {
+.browseBtn {
     padding: 12px 30px;
     background: #2d3748;
     color: white;
@@ -66,18 +66,18 @@
     transition: background 0.3s ease;
 }
 
-.browse-btn:hover {
+.browseBtn:hover {
     background: #1a202c;
 }
 
 /* Grid Layout */
-.favorites-grid {
+.favoritesGrid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 30px;
 }
 
-.favorite-card {
+.favoriteCard {
     background: white;
     border-radius: 12px;
     overflow: hidden;
@@ -87,30 +87,30 @@
     flex-direction: column;
 }
 
-.favorite-card:hover {
+.favoriteCard:hover {
     transform: translateY(-5px);
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
 }
 
-.favorite-image-wrapper {
+.favoriteImageWrapper {
     position: relative;
     height: 250px;
     overflow: hidden;
     display: block;
 }
 
-.favorite-image-wrapper img {
+.favoriteImageWrapper img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     transition: transform 0.5s ease;
 }
 
-.favorite-card:hover .favorite-image-wrapper img {
+.favoriteCard:hover .favoriteImageWrapper img {
     transform: scale(1.05);
 }
 
-.discount-badge {
+.discountBadge {
     position: absolute;
     top: 15px;
     left: 15px;
@@ -123,20 +123,20 @@
     z-index: 2;
 }
 
-.favorite-info {
+.favoriteInfo {
     padding: 20px;
     display: flex;
     flex-direction: column;
     flex: 1;
 }
 
-.favorite-title {
+.favoriteTitle {
     text-decoration: none;
     color: inherit;
     margin-bottom: 10px;
 }
 
-.favorite-title h3 {
+.favoriteTitle h3 {
     font-size: 1.1rem;
     color: #2d3748;
     font-weight: 600;
@@ -147,11 +147,11 @@
     overflow: hidden;
 }
 
-.favorite-title:hover h3 {
+.favoriteTitle:hover h3 {
     color: #3182ce;
 }
 
-.favorite-price-wrapper {
+.favoritePriceWrapper {
     margin-bottom: 15px;
     display: flex;
     align-items: center;
@@ -169,26 +169,26 @@
     font-weight: normal;
 }
 
-.original-price {
+.originalPrice {
     font-size: 0.9rem;
     color: #a0aec0;
     text-decoration: line-through;
 }
 
-.stock-warning {
+.stockWarning {
     font-size: 0.8rem;
     color: #dd6b20;
     font-weight: 600;
     margin-bottom: 15px;
 }
 
-.favorite-actions {
+.favoriteActions {
     display: flex;
     gap: 10px;
     margin-top: auto;
 }
 
-.action-btn {
+.actionBtn {
     flex: 1;
     display: flex;
     align-items: center;
@@ -203,41 +203,41 @@
     border: none;
 }
 
-.remove-btn {
+.removeBtn {
     background: #fed7d7;
     color: #c53030;
 }
 
-.remove-btn:hover {
+.removeBtn:hover {
     background: #feb2b2;
 }
 
-.add-cart-btn {
+.addCartBtn {
     background: #edf2f7;
     color: #2d3748;
 }
 
-.add-cart-btn:hover:not(:disabled) {
+.addCartBtn:hover:not(:disabled) {
     background: #e2e8f0;
 }
 
-.add-cart-btn:disabled {
+.addCartBtn:disabled {
     opacity: 0.5;
     cursor: not-allowed;
 }
 
 /* Responsive */
 @media (max-width: 768px) {
-    .favorites-header h2 {
+    .favoritesHeader h2 {
         font-size: 2rem;
     }
     
-    .favorites-grid {
+    .favoritesGrid {
         grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
         gap: 20px;
     }
     
-    .favorite-actions {
+    .favoriteActions {
         flex-direction: column;
     }
 }

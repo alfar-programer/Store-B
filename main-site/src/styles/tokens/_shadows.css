@@ -1,0 +1,14 @@
+/* ============================================================
+   SHADOWS & OVERLAYS TOKENS (Strict Original Fidelity)
+   ============================================================ */
+:root {
+    /* ===== SHADOWS ===== */
+    --shadow-sm: 0 2px 8px rgba(45, 33, 24, 0.06);
+    --shadow-md: 0 4px 20px rgba(45, 33, 24, 0.08);
+    --shadow-lg: 0 10px 40px rgba(45, 33, 24, 0.1);
+    --shadow-xl: 0 20px 60px rgba(45, 33, 24, 0.12);
+
+    /* ===== OVERLAYS ===== */
+    --overlay-bg: rgba(45, 33, 24, 0.85);
+    --card-overlay: rgba(255, 255, 255, 0.95);
+}

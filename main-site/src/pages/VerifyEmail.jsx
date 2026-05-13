@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { useAuth } from '../context/AuthContext';
-import './Auth.css';
+import styles from './Auth.module.css';
 
 const VerifyEmail = () => {
     const location = useLocation();
@@ -118,19 +118,19 @@ const VerifyEmail = () => {
     };
 
     return (
-        <div className="auth-container">
+        <div className={`${styles.authContainer}`}>
             <Helmet>
                 <title>تحقق من البريد الإلكتروني | Verify Email – Warm Touch</title>
                 <meta name="robots" content="noindex, nofollow" />
             </Helmet>
-            <div className="auth-box">
+            <div className={`${styles.authBox}`}>
                 <h2>Verify Your Email</h2>
-                <p className="auth-subtitle">
+                <p className={`${styles.authSubtitle}`}>
                     We've sent a 6-digit code to<br />
                     <strong>{email}</strong>
                 </p>
 
-                {error && <div className="error-message">{error}</div>}
+                {error && <div className={`${styles.errorMessage}`}>{error}</div>}
                 {success && <div className="success-message">{success}</div>}
 
                 <form onSubmit={handleSubmit}>
@@ -154,14 +154,14 @@ const VerifyEmail = () => {
 
                     <button
                         type="submit"
-                        className="auth-btn"
+                        className={`${styles.authBtn}`}
                         disabled={loading || code.join('').length !== 6}
                     >
                         {loading ? 'Verifying...' : 'Verify Email'}
                     </button>
                 </form>
 
-                <div className="auth-footer">
+                <div className={`${styles.authFooter}`}>
                     <p>
                         Didn't receive the code?{' '}
                         <button

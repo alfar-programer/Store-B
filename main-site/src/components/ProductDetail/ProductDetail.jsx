@@ -13,7 +13,8 @@ import ReviewsSection from './ReviewsSection';
 import { useRecentlyViewed } from '../../hooks/useRecentlyViewed';
 import RecentlyViewed from '../RecentlyViewed/RecentlyViewed';
 import { useTranslation } from 'react-i18next';
-import './ProductDetail.css';
+import styles from './ProductDetail.module.css';
+import rvStyles from '../RecentlyViewed/RecentlyViewed.module.css';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -245,46 +246,46 @@ const ProductDetail = () => {
 
     if (loading) {
         return (
-            <div className="product-detail-container">
-                <div className="pd-skeleton">
+            <div className={`${styles.productDetailContainer}`}>
+                <div className={`${styles.pdSkeleton}`}>
                     {/* Breadcrumb skeleton */}
-                    <div className="pd-sk-breadcrumb">
-                        <div className="pd-sk-line" style={{width: '60px'}}></div>
-                        <div className="pd-sk-line" style={{width: '80px'}}></div>
-                        <div className="pd-sk-line" style={{width: '120px'}}></div>
+                    <div className={`${styles.pdSkBreadcrumb}`}>
+                        <div className={`${styles.pdSkLine}`} style={{width: '60px'}}></div>
+                        <div className={`${styles.pdSkLine}`} style={{width: '80px'}}></div>
+                        <div className={`${styles.pdSkLine}`} style={{width: '120px'}}></div>
                     </div>
                     {/* Hero skeleton */}
-                    <div className="pd-sk-hero">
-                        <div className="pd-sk-image"></div>
-                        <div className="pd-sk-info">
-                            <div className="pd-sk-line" style={{width: '40%', height: '14px'}}></div>
-                            <div className="pd-sk-line" style={{width: '80%', height: '28px'}}></div>
-                            <div className="pd-sk-line" style={{width: '50%', height: '16px'}}></div>
-                            <div className="pd-sk-line" style={{width: '30%', height: '24px', marginTop: '16px'}}></div>
-                            <div className="pd-sk-line" style={{width: '45%', height: '14px'}}></div>
+                    <div className={`${styles.pdSkHero}`}>
+                        <div className={`${styles.pdSkImage}`}></div>
+                        <div className={`${styles.pdSkInfo}`}>
+                            <div className={`${styles.pdSkLine}`} style={{width: '40%', height: '14px'}}></div>
+                            <div className={`${styles.pdSkLine}`} style={{width: '80%', height: '28px'}}></div>
+                            <div className={`${styles.pdSkLine}`} style={{width: '50%', height: '16px'}}></div>
+                            <div className={`${styles.pdSkLine}`} style={{width: '30%', height: '24px', marginTop: '16px'}}></div>
+                            <div className={`${styles.pdSkLine}`} style={{width: '45%', height: '14px'}}></div>
                             <div style={{display: 'flex', gap: '12px', marginTop: '24px'}}>
-                                <div className="pd-sk-line" style={{width: '120px', height: '44px', borderRadius: '8px'}}></div>
-                                <div className="pd-sk-line" style={{width: '180px', height: '44px', borderRadius: '8px'}}></div>
+                                <div className={`${styles.pdSkLine}`} style={{width: '120px', height: '44px', borderRadius: '8px'}}></div>
+                                <div className={`${styles.pdSkLine}`} style={{width: '180px', height: '44px', borderRadius: '8px'}}></div>
                             </div>
                             <div style={{display: 'flex', gap: '16px', marginTop: '24px'}}>
-                                <div className="pd-sk-line" style={{width: '80px', height: '60px', borderRadius: '10px'}}></div>
-                                <div className="pd-sk-line" style={{width: '80px', height: '60px', borderRadius: '10px'}}></div>
-                                <div className="pd-sk-line" style={{width: '80px', height: '60px', borderRadius: '10px'}}></div>
-                                <div className="pd-sk-line" style={{width: '80px', height: '60px', borderRadius: '10px'}}></div>
+                                <div className={`${styles.pdSkLine}`} style={{width: '80px', height: '60px', borderRadius: '10px'}}></div>
+                                <div className={`${styles.pdSkLine}`} style={{width: '80px', height: '60px', borderRadius: '10px'}}></div>
+                                <div className={`${styles.pdSkLine}`} style={{width: '80px', height: '60px', borderRadius: '10px'}}></div>
+                                <div className={`${styles.pdSkLine}`} style={{width: '80px', height: '60px', borderRadius: '10px'}}></div>
                             </div>
                         </div>
                     </div>
                     {/* Description + Reviews skeleton */}
-                    <div className="pd-sk-bottom">
-                        <div className="pd-sk-desc">
-                            <div className="pd-sk-line" style={{width: '50%', height: '20px'}}></div>
-                            <div className="pd-sk-line" style={{width: '100%', height: '12px'}}></div>
-                            <div className="pd-sk-line" style={{width: '90%', height: '12px'}}></div>
-                            <div className="pd-sk-line" style={{width: '70%', height: '12px'}}></div>
+                    <div className={`${styles.pdSkBottom}`}>
+                        <div className={`${styles.pdSkDesc}`}>
+                            <div className={`${styles.pdSkLine}`} style={{width: '50%', height: '20px'}}></div>
+                            <div className={`${styles.pdSkLine}`} style={{width: '100%', height: '12px'}}></div>
+                            <div className={`${styles.pdSkLine}`} style={{width: '90%', height: '12px'}}></div>
+                            <div className={`${styles.pdSkLine}`} style={{width: '70%', height: '12px'}}></div>
                         </div>
-                        <div className="pd-sk-desc">
-                            <div className="pd-sk-line" style={{width: '40%', height: '20px'}}></div>
-                            <div className="pd-sk-line" style={{width: '100%', height: '80px', borderRadius: '10px'}}></div>
+                        <div className={`${styles.pdSkDesc}`}>
+                            <div className={`${styles.pdSkLine}`} style={{width: '40%', height: '20px'}}></div>
+                            <div className={`${styles.pdSkLine}`} style={{width: '100%', height: '80px', borderRadius: '10px'}}></div>
                         </div>
                     </div>
                 </div>
@@ -323,62 +324,62 @@ const ProductDetail = () => {
     const displayDescription = getProductField(product, 'description');
 
     return (
-        <div className="product-detail-container">
+        <div className={`${styles.productDetailContainer}`}>
             <Helmet>
                 <title>{`${displayTitle} — WarmTouch`}</title>
                 <meta name="description" content={displayDescription ? displayDescription.substring(0, 155) : ''} />
                 <html lang={lang} />
             </Helmet>
 
-            <nav className="breadcrumb-nav">
+            <nav className={`${styles.breadcrumbNav}`}>
                 <Link to="/">{t('productDetail.home')}</Link>
-                <span className="chevron">&gt;</span>
+                <span className={`${styles.chevron}`}>&gt;</span>
                 <Link to="/allproducts">{product.category}</Link>
-                <span className="chevron">&gt;</span>
-                <span className="current-page">{displayTitle}</span>
+                <span className={`${styles.chevron}`}>&gt;</span>
+                <span className={`${styles.currentPage}`}>{displayTitle}</span>
             </nav>
 
-            <div className="product-hero-split">
+            <div className={`${styles.productHeroSplit}`}>
                 {/* Image Gallery */}
-                <div className="hero-gallery-side">
-                    <div className="main-image-viewport">
+                <div className={`${styles.heroGallerySide}`}>
+                    <div className={`${styles.mainImageViewport}`}>
                         {images.length > 1 && (
-                            <div className="gallery-nav-overlay">
-                                <button className="gal-nav-btn" onClick={(e) => { e.stopPropagation(); handlePrevImage(); }}>
+                            <div className={`${styles.galleryNavOverlay}`}>
+                                <button className={`${styles.galNavBtn}`} onClick={(e) => { e.stopPropagation(); handlePrevImage(); }}>
                                     <ChevronLeft size={20} />
                                 </button>
-                                <button className="gal-nav-btn" onClick={(e) => { e.stopPropagation(); handleNextImage(); }}>
+                                <button className={`${styles.galNavBtn}`} onClick={(e) => { e.stopPropagation(); handleNextImage(); }}>
                                     <ChevronRight size={20} />
                                 </button>
                             </div>
                         )}
                         
                         {product?.discount > 0 && (
-                            <div className="sale-badge">{t('productDetail.sale')} -{product.discount}%</div>
+                            <div className={`${styles.saleBadge}`}>{t('productDetail.sale')} -{product.discount}%</div>
                         )}
                         {product?.createdAt && (new Date() - new Date(product.createdAt)) < 14 * 24 * 60 * 60 * 1000 && (
                             <span className="badge-new">{t('productDetail.new')}</span>
                         )}
-                        <div className="main-image-container" onClick={() => setIsLightboxOpen(true)}>
+                        <div className={`${styles.mainImageContainer}`} onClick={() => setIsLightboxOpen(true)}>
                             <img 
                                 key={currentImageIndex}
                                 src={images[currentImageIndex]} 
                                 alt={product.title} 
-                                className="main-product-img"
+                                className={`${styles.mainProductImg}`}
                             />
                             
                         </div>
                     </div>
                     {images.length > 1 && (
-                        <div className="hero-thumbnails">
+                        <div className={`${styles.heroThumbnails}`}>
                             {images.map((img, idx) => (
                                 <button 
                                     key={idx} 
-                                    className={`thumb-box ${idx === currentImageIndex ? 'active' : ''}`}
+                                    className={`${styles.thumbBox} ${idx === currentImageIndex ? '${rvStyles.active}' : ''}`}
                                     onClick={() => setCurrentImageIndex(idx)}
                                 >
                                     <img src={img} alt={`Thumbnail ${idx + 1}`} />
-                                    <div className="thumb-indicator"></div>
+                                    <div className={`${styles.thumbIndicator}`}></div>
                                 </button>
                             ))}
                         </div>
@@ -386,48 +387,48 @@ const ProductDetail = () => {
                 </div>
 
                 {/* Product Core Info */}
-                <div className="hero-content-side">
-                    <div className="content-header">
-                        <span className="category-label">{product.category}</span>
-                        <button className="share-circle" onClick={handleCopyShare}><Share2 size={18} /></button>
+                <div className={`${styles.heroContentSide}`}>
+                    <div className={`${styles.contentHeader}`}>
+                        <span className={`${styles.categoryLabel}`}>{product.category}</span>
+                        <button className={`${styles.shareCircle}`} onClick={handleCopyShare}><Share2 size={18} /></button>
                     </div>
 
-                    <h1 className="display-title">{displayTitle}</h1>
+                    <h1 className={`${styles.displayTitle}`}>{displayTitle}</h1>
                     
-                    <div className="rating-summary-row">
-                        <div className="stars-row">
-                            {[1,2,3,4,5].map(s => <span key={s} className={`star-ui ${s <= Math.round(ratingValue) ? 'filled' : ''}`}>★</span>)}
+                    <div className={`${styles.ratingSummaryRow}`}>
+                        <div className={`${styles.starsRow}`}>
+                            {[1,2,3,4,5].map(s => <span key={s} className={`${styles.starUi} ${s <= Math.round(ratingValue) ? '${styles.filled}' : ''}`}>★</span>)}
                         </div>
-                        <span className="rating-score">{ratingValue > 0 ? ratingValue.toFixed(1) : '0.0'}</span>
-                        <span className="review-link">({ratingCount} {ratingCount === 1 ? t('productDetail.review') : t('productDetail.reviews')})</span>
+                        <span className={`${styles.ratingScore}`}>{ratingValue > 0 ? ratingValue.toFixed(1) : '0.0'}</span>
+                        <span className={`${styles.reviewLink}`}>({ratingCount} {ratingCount === 1 ? t('productDetail.review') : t('productDetail.reviews')})</span>
                     </div>
 
-                    <div className="price-tag-row">
-                        <span className="amount-main">{price.toFixed(2)} EGP</span>
+                    <div className={`${styles.priceTagRow}`}>
+                        <span className={`${styles.amountMain}`}>{price.toFixed(2)} EGP</span>
                     </div>
 
-                    <div className="inventory-status">
+                    <div className={`${styles.inventoryStatus}`}>
                         {product.stock > 0 && product.stock < 10 ? (
-                            <><span className="dot orange-dot"></span><span className="status-text">{t('productDetail.onlyLeft', { count: product.stock })}</span></>
+                            <><span className={`${styles.dot} ${styles.orangeDot}`}></span><span className={`${styles.statusText}`}>{t('productDetail.onlyLeft', { count: product.stock })}</span></>
                         ) : product.stock >= 10 ? (
-                            <><span className="dot green-dot"></span><span className="status-text">{t('productDetail.inStock')}</span></>
+                            <><span className={`${styles.dot} ${styles.greenDot}`}></span><span className={`${styles.statusText}`}>{t('productDetail.inStock')}</span></>
                         ) : (
-                            <><span className="dot red-dot"></span><span className="status-text">{t('productDetail.outOfStock')}</span></>
+                            <><span className={`${styles.dot} ${styles.redDot}`}></span><span className={`${styles.statusText}`}>{t('productDetail.outOfStock')}</span></>
                         )}
                     </div>
 
-                    <div className="hero-actions-row">
-                        <div className="qty-picker-ui">
-                            <button className="q-btn" onClick={() => setQuantity(q => Math.max(1, q-1))}><Minus size={16} /></button>
-                            <span className="q-val">{quantity}</span>
-                            <button className="q-btn" onClick={() => setQuantity(q => Math.min(product.stock || 1, q+1))}><Plus size={16} /></button>
+                    <div className={`${styles.heroActionsRow}`}>
+                        <div className={`${styles.qtyPickerUi}`}>
+                            <button className={`${styles.qBtn}`} onClick={() => setQuantity(q => Math.max(1, q-1))}><Minus size={16} /></button>
+                            <span className={`${styles.qVal}`}>{quantity}</span>
+                            <button className={`${styles.qBtn}`} onClick={() => setQuantity(q => Math.min(product.stock || 1, q+1))}><Plus size={16} /></button>
                         </div>
-                        <button className="add-cart-primary" onClick={handleAddToCart}>
+                        <button className={`${styles.addCartPrimary}`} onClick={handleAddToCart}>
                             <ShoppingBag size={20} />
                             <span>{t('productDetail.addToCart')}</span>
                         </button>
                         <button 
-                            className="wishlist-btn-ui"
+                            className={`${styles.wishlistBtnUi}`}
                             onClick={() => toggleFavorite(product)}
                             style={{ transition: 'color 0.2s ease, transform 0.2s ease' }}
                         >
@@ -439,57 +440,57 @@ const ProductDetail = () => {
                         </button>
                     </div>
 
-                    <div className="feature-icon-strip">
-                        <div className="f-item">
-                            <div className="f-icon purple"><Hand size={18} /></div>
-                            <div className="f-label">{t('productDetail.featHandmade')}</div>
+                    <div className={`${styles.featureIconStrip}`}>
+                        <div className={`${styles.fItem}`}>
+                            <div className={`${styles.fIcon} ${styles.purple}`}><Hand size={18} /></div>
+                            <div className={`${styles.fLabel}`}>{t('productDetail.featHandmade')}</div>
                         </div>
-                        <div className="f-item">
-                            <div className="f-icon green"><Leaf size={18} /></div>
-                            <div className="f-label">{t('productDetail.featEco')}</div>
+                        <div className={`${styles.fItem}`}>
+                            <div className={`${styles.fIcon} ${styles.green}`}><Leaf size={18} /></div>
+                            <div className={`${styles.fLabel}`}>{t('productDetail.featEco')}</div>
                         </div>
-                        <div className="f-item">
-                            <div className="f-icon gray"><Truck size={18} /></div>
-                            <div className="f-label">{t('productDetail.featCod')}</div>
+                        <div className={`${styles.fItem}`}>
+                            <div className={`${styles.fIcon} ${styles.gray}`}><Truck size={18} /></div>
+                            <div className={`${styles.fLabel}`}>{t('productDetail.featCod')}</div>
                         </div>
-                        <div className="f-item">
-                            <div className="f-icon orange"><RotateCcw size={18} /></div>
-                            <div className="f-label">{t('productDetail.featReturns')}</div>
+                        <div className={`${styles.fItem}`}>
+                            <div className={`${styles.fIcon} ${styles.orange}`}><RotateCcw size={18} /></div>
+                            <div className={`${styles.fLabel}`}>{t('productDetail.featReturns')}</div>
                         </div>
                     </div>
 
-                    <div className="info-attribute-bars">
-                        <div className="attr-bar">
-                            <span className="attr-label">{t('productDetail.lblCategory')}</span>
-                            <span className="attr-val">{product.category}</span>
+                    <div className={`${styles.infoAttributeBars}`}>
+                        <div className={`${styles.attrBar}`}>
+                            <span className={`${styles.attrLabel}`}>{t('productDetail.lblCategory')}</span>
+                            <span className={`${styles.attrVal}`}>{product.category}</span>
                         </div>
-                        <div className="attr-bar">
-                            <span className="attr-label">{t('productDetail.lblSku')}</span>
-                            <span className="attr-val">{product.id}</span>
+                        <div className={`${styles.attrBar}`}>
+                            <span className={`${styles.attrLabel}`}>{t('productDetail.lblSku')}</span>
+                            <span className={`${styles.attrVal}`}>{product.id}</span>
                         </div>
-                        <div className="attr-bar">
-                            <span className="attr-label">{t('productDetail.lblDelivery')}</span>
-                            <span className="attr-val">{t('productDetail.featCod')}</span>
+                        <div className={`${styles.attrBar}`}>
+                            <span className={`${styles.attrLabel}`}>{t('productDetail.lblDelivery')}</span>
+                            <span className={`${styles.attrVal}`}>{t('productDetail.featCod')}</span>
                         </div>
                     </div>
                 </div>
             </div>
 
             {/* Split Section: About vs Reviews */}
-            <div className="product-split-details">
+            <div className={`${styles.productSplitDetails}`}>
                 <div className="about-col">
-                    <h2 className="col-title">{t('productDetail.aboutTitle')}</h2>
-                    <div className="about-desc-ar">
+                    <h2 className={`${styles.colTitle}`}>{t('productDetail.aboutTitle')}</h2>
+                    <div className={`${styles.aboutDescAr}`}>
                         <p>{displayDescription || t('productDetail.aboutFallbackDesc')}</p>
                     </div>
-                    <ul className="checkmark-list">
-                        <li><span className="check">✓</span> مصنوع من خيوط قطنية طبيعية</li>
-                        <li><span className="check">✓</span> تصميم يدوي فريد</li>
-                        <li><span className="check">✓</span> متين وسهل التنظيف</li>
-                        <li><span className="check">✓</span> مثالي لهدية راقية</li>
+                    <ul className={`${styles.checkmarkList}`}>
+                        <li><span className={`${styles.check}`}>✓</span> مصنوع من خيوط قطنية طبيعية</li>
+                        <li><span className={`${styles.check}`}>✓</span> تصميم يدوي فريد</li>
+                        <li><span className={`${styles.check}`}>✓</span> متين وسهل التنظيف</li>
+                        <li><span className={`${styles.check}`}>✓</span> مثالي لهدية راقية</li>
                     </ul>
-                    <div className="unique-box">
-                        <div className="u-icon"><RotateCcw size={18} /></div>
+                    <div className={`${styles.uniqueBox}`}>
+                        <div className={`${styles.uIcon}`}><RotateCcw size={18} /></div>
                         <p>{t('productDetail.uniqueNotice')}</p>
                     </div>
                 </div>
@@ -499,23 +500,23 @@ const ProductDetail = () => {
 
             {/* Recommendations Section */}
             {(!recLoading && recommendations.length < 2) ? null : (
-                <div className="recommendations-section">
-                    <div className="section-header-row">
+                <div className={`${styles.recommendationsSection}`}>
+                    <div className={`${styles.sectionHeaderRow}`}>
                         <h2>{t('productDetail.youMayLike')}</h2>
-                        <div className="slider-controls">
-                            <button className="slider-arrow" onClick={() => scrollRecSlider('left')} disabled={recLoading}>
+                        <div className={`${styles.sliderControls}`}>
+                            <button className={`${styles.sliderArrow}`} onClick={() => scrollRecSlider('left')} disabled={recLoading}>
                                 <ChevronLeft size={20} />
                             </button>
-                            <button className="slider-arrow" onClick={() => scrollRecSlider('right')} disabled={recLoading}>
+                            <button className={`${styles.sliderArrow}`} onClick={() => scrollRecSlider('right')} disabled={recLoading}>
                                 <ChevronRight size={20} />
                             </button>
                         </div>
                     </div>
-                    <div className="rec-slider-wrapper">
-                        <div className="rec-grid" ref={recSliderRef}>
+                    <div className={`${styles.recSliderWrapper}`}>
+                        <div className={`${styles.recGrid}`} ref={recSliderRef}>
                             {recLoading ? (
                                 Array.from({ length: 4 }).map((_, i) => (
-                                    <div key={i} className="rec-card skeleton-block">
+                                    <div key={i} className={`${styles.recCard} skeleton-block`}>
                                         <div className="rec-img" style={{height: '200px'}}></div>
                                         <div className="rec-info">
                                             <div className="skeleton-line" style={{width: '80%'}}></div>
@@ -531,14 +532,14 @@ const ProductDetail = () => {
                                     const ratingVal = typeof ratingObj === 'object' ? ratingObj.average : ratingObj;
 
                                     return (
-                                        <div key={item.id} className="rv-card rec-card-override" onClick={() => navigate(`/product/${item.id}`)}>
+                                        <div key={item.id} className={`${rvStyles.rvCard} ${styles.recCardOverride}`} onClick={() => navigate(`/product/${item.id}`)}>
                                             {item.discount > 0 && (
-                                                <div className="rv-discount-badge">-{item.discount}%</div>
+                                                <div className={`${rvStyles.rvDiscountBadge}`}>-{item.discount}%</div>
                                             )}
-                                            <div className="rv-image-wrapper">
+                                            <div className={`${rvStyles.rvImageWrapper}`}>
                                                 <img src={img} alt={getProductField(item, 'title')} loading="lazy" />
                                                 <button 
-                                                    className="rv-favorite-btn"
+                                                    className={`${rvStyles.rvFavoriteBtn}`}
                                                     onClick={(e) => {
                                                         e.preventDefault();
                                                         e.stopPropagation();
@@ -551,25 +552,25 @@ const ProductDetail = () => {
                                                         color={isFavorite(item.id) ? '#ef4444' : '#6b7280'}
                                                     />
                                                 </button>
-                                                <div className="rv-overlay">
+                                                <div className={`${rvStyles.rvOverlay}`}>
                                                     <button
-                                                        className="rv-quick-view-btn"
+                                                        className={`${rvStyles.rvQuickViewBtn}`}
                                                         onClick={(e) => handleRecQuickView(e, item)}
                                                     >
                                                         {t('productDetail.quickView')}
                                                     </button>
                                                 </div>
                                             </div>
-                                            <div className="rv-info">
-                                                <h3 className="rv-title">{getProductField(item, 'title')}</h3>
-                                                <p className="rv-description">{getProductField(item, 'description') || ""}</p>
-                                                <div className="rv-rating-row">
-                                                    <span className="rv-stars">
+                                            <div className={`${rvStyles.rvInfo}`}>
+                                                <h3 className={`${rvStyles.rvTitle}`}>{getProductField(item, 'title')}</h3>
+                                                <p className={`${rvStyles.rvDescription}`}>{getProductField(item, 'description') || ""}</p>
+                                                <div className={`${rvStyles.rvRatingRow}`}>
+                                                    <span className={`${rvStyles.rvStars}`}>
                                                         {[...Array(5)].map((_, i) => (
                                                             <Star key={i} size={14} fill={i < Math.round(ratingVal) ? "#fbbf24" : "none"} color={i < Math.round(ratingVal) ? "#fbbf24" : "#d1d5db"} />
                                                         ))}
                                                     </span>
-                                                    <span className="rv-rating-value">{Number(ratingVal).toFixed(1)}</span>
+                                                    <span className={`${rvStyles.rvRatingValue}`}>{Number(ratingVal).toFixed(1)}</span>
                                                 </div>
                                                 {/* Stock indicator */}
                                                 {typeof item.stock === 'number' && item.stock > 0 && item.stock < 10 && (
@@ -578,19 +579,19 @@ const ProductDetail = () => {
                                                     </div>
                                                 )}
                                             </div>
-                                            <div className="rv-footer">
-                                                <div className="rv-price-wrapper">
+                                            <div className={`${rvStyles.rvFooter}`}>
+                                                <div className={`${rvStyles.rvPriceWrapper}`}>
                                                     {item.discount > 0 ? (
                                                         <>
-                                                            <span className="rv-price">{(parseFloat(item.price) * (1 - item.discount / 100)).toFixed(2)} <small>EGP</small></span>
-                                                            <span className="rv-original-price">{parseFloat(item.price).toFixed(2)} <small>EGP</small></span>
+                                                            <span className={`${rvStyles.rvPrice}`}>{(parseFloat(item.price) * (1 - item.discount / 100)).toFixed(2)} <small>EGP</small></span>
+                                                            <span className={`${rvStyles.rvOriginalPrice}`}>{parseFloat(item.price).toFixed(2)} <small>EGP</small></span>
                                                         </>
                                                     ) : (
-                                                        <span className="rv-price">{parseFloat(item.price || 0).toFixed(2)} <small>EGP</small></span>
+                                                        <span className={`${rvStyles.rvPrice}`}>{parseFloat(item.price || 0).toFixed(2)} <small>EGP</small></span>
                                                     )}
                                                 </div>
                                                 <button
-                                                    className="rv-add-to-cart-btn"
+                                                    className={`${rvStyles.rvAddToCartBtn}`}
                                                     disabled={typeof item.stock === 'number' && item.stock <= 0}
                                                     onClick={(e) => {
                                                         e.preventDefault();
@@ -614,12 +615,12 @@ const ProductDetail = () => {
 
             {/* Recommendation Quick View Modal */}
             {isRecModalOpen && selectedRecProduct && (
-                <div className={`rv-modal-overlay active`} onClick={closeRecModal}>
-                    <div className="rv-modal-content" onClick={(e) => e.stopPropagation()}>
-                        <button className="rv-modal-close" onClick={closeRecModal}>×</button>
-                        <div className="rv-modal-image-wrapper">
+                <div className={`${rvStyles.rvModalOverlay} ${rvStyles.active}`} onClick={closeRecModal}>
+                    <div className={`${rvStyles.rvModalContent}`} onClick={(e) => e.stopPropagation()}>
+                        <button className={`${rvStyles.rvModalClose}`} onClick={closeRecModal}>×</button>
+                        <div className={`${rvStyles.rvModalImageWrapper}`}>
                             <button 
-                                className="rv-modal-favorite-btn"
+                                className={`${rvStyles.rvModalFavoriteBtn}`}
                                 onClick={(e) => {
                                     e.preventDefault();
                                     e.stopPropagation();
@@ -634,16 +635,16 @@ const ProductDetail = () => {
                             </button>
                             <img src={cleanImageUrl((getImages(selectedRecProduct.image || selectedRecProduct.images))[0])} alt={getProductField(selectedRecProduct, 'title')} />
                         </div>
-                        <div className="rv-modal-details">
+                        <div className={`${rvStyles.rvModalDetails}`}>
                             <h2>{getProductField(selectedRecProduct, 'title')}</h2>
-                            <p className="rv-modal-description">{getProductField(selectedRecProduct, 'description')}</p>
+                            <p className={`${rvStyles.rvModalDescription}`}>{getProductField(selectedRecProduct, 'description')}</p>
                             <div className="rv-modal-rating">
-                                <span className="rv-stars">
+                                <span className={`${rvStyles.rvStars}`}>
                                     {[...Array(5)].map((_, i) => (
                                         <Star key={i} size={16} fill={i < Math.round(selectedRecProduct.rating?.average || selectedRecProduct.rating || 5) ? "#fbbf24" : "none"} color={i < Math.round(selectedRecProduct.rating?.average || selectedRecProduct.rating || 5) ? "#fbbf24" : "#d1d5db"} />
                                     ))}
                                 </span>
-                                <span className="rv-rating-value">
+                                <span className={`${rvStyles.rvRatingValue}`}>
                                     {Number(selectedRecProduct.rating?.average || selectedRecProduct.rating || 5).toFixed(1)}
                                 </span>
                             </div>
@@ -653,19 +654,19 @@ const ProductDetail = () => {
                                     {t('homePage.prodLeftOnly', { count: selectedRecProduct.stock }) || `Only ${selectedRecProduct.stock} left!`}
                                 </div>
                             )}
-                            <div className="rv-modal-price-section">
+                            <div className={`${rvStyles.rvModalPriceSection}`}>
                                 {selectedRecProduct.discount > 0 ? (
                                     <>
-                                        <span className="rv-modal-price">{(parseFloat(selectedRecProduct.price) * (1 - selectedRecProduct.discount / 100)).toFixed(2)} <small>EGP</small></span>
-                                        <span className="rv-modal-original-price">{parseFloat(selectedRecProduct.price).toFixed(2)} <small>EGP</small></span>
-                                        <span className="rv-modal-discount-badge">-{selectedRecProduct.discount}% OFF</span>
+                                        <span className={`${rvStyles.rvModalPrice}`}>{(parseFloat(selectedRecProduct.price) * (1 - selectedRecProduct.discount / 100)).toFixed(2)} <small>EGP</small></span>
+                                        <span className={`${rvStyles.rvModalOriginalPrice}`}>{parseFloat(selectedRecProduct.price).toFixed(2)} <small>EGP</small></span>
+                                        <span className={`${rvStyles.rvModalDiscountBadge}`}>-{selectedRecProduct.discount}% OFF</span>
                                     </>
                                 ) : (
-                                    <span className="rv-modal-price">{parseFloat(selectedRecProduct.price || 0).toFixed(2)} <small>EGP</small></span>
+                                    <span className={`${rvStyles.rvModalPrice}`}>{parseFloat(selectedRecProduct.price || 0).toFixed(2)} <small>EGP</small></span>
                                 )}
                             </div>
                             <button
-                                className="rv-modal-add-to-cart"
+                                className={`${rvStyles.rvModalAddToCart}`}
                                 onClick={(e) => {
                                     addToCart(selectedRecProduct, 1);
                                     closeRecModal();
@@ -687,21 +688,21 @@ const ProductDetail = () => {
 
             {/* Lightbox Overlay */}
             {isLightboxOpen && (
-                <div className="lightbox-overlay" onClick={() => setIsLightboxOpen(false)}>
-                    <button className="lb-close" onClick={() => setIsLightboxOpen(false)}>
+                <div className={`${styles.lightboxOverlay}`} onClick={() => setIsLightboxOpen(false)}>
+                    <button className={`${styles.lbClose}`} onClick={() => setIsLightboxOpen(false)}>
                         <X size={32} />
                     </button>
                     
                     {images.length > 1 && (
                         <>
                             <button 
-                                className="lb-nav-btn lb-prev" 
+                                className={`${styles.lbNavBtn} ${styles.lbPrev}`} 
                                 onClick={(e) => { e.stopPropagation(); handlePrevImage(); }}
                             >
                                 <ChevronLeft size={48} />
                             </button>
                             <button 
-                                className="lb-nav-btn lb-next" 
+                                className={`${styles.lbNavBtn} ${styles.lbNext}`} 
                                 onClick={(e) => { e.stopPropagation(); handleNextImage(); }}
                             >
                                 <ChevronRight size={48} />
@@ -709,9 +710,9 @@ const ProductDetail = () => {
                         </>
                     )}
 
-                    <div className="lb-content" onClick={e => e.stopPropagation()}>
+                    <div className={`${styles.lbContent}`} onClick={e => e.stopPropagation()}>
                         <img src={images[currentImageIndex]} alt="Product Large View" />
-                        <div className="lb-caption">
+                        <div className={`${styles.lbCaption}`}>
                             {product.title} - {t('productDetail.imageOf', { current: currentImageIndex + 1, total: images.length })}
                         </div>
                     </div>
@@ -720,7 +721,7 @@ const ProductDetail = () => {
 
             {/* Toast Notification */}
             {showToast && (
-                <div className="share-toast">
+                <div className={`${styles.shareToast}`}>
                     <CheckCircle size={20} />
                     <span>{t('productDetail.linkCopied')}</span>
                 </div>
