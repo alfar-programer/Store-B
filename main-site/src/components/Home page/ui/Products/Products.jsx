@@ -154,7 +154,7 @@ const handleAddToCart = (e, product) => {
                         </div>
                     ) : (
                         products.map((product) => (
-                            <Link to={`/product/${product.id}`} className={`${styles.productCard}`} key={product.id} style={{ textDecoration: 'none', color: 'inherit', display: 'flex', flexDirection: 'column' }}>
+                            <Link to={`/product/${product.id}`} className={`${styles.productCard}`} key={product.id} style={{ textDecoration: 'none', color: 'inherit' }}>
                                 {product.discount > 0 && (
                                     <div className={`${styles.discountBadge}`}>-{product.discount}%</div>
                                 )}
