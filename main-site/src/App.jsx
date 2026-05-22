@@ -27,19 +27,37 @@ import Favorites from './components/Favorites/Favorites'
 
 const App = () => {
   const [loading, setLoading] = useState(true)
+  const [showLoader, setShowLoader] = useState(true)
   const { isRTL } = useLanguage()
 
   useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 1500)
-    return () => clearTimeout(timer)
-  }, [])
+    // Standard window load event covers all assets (images, styles, etc.)
+    const handleLoad = () => {
+      setLoading(false)
+      // Wait for progress to hit 100 and exit animation (1.8s total) before unmounting
+      setTimeout(() => setShowLoader(false), 2000)
+    }
 
-  if (loading) return <LoadingScreen />
+    if (document.readyState === 'complete') {
+      const timer = setTimeout(handleLoad, 800)
+      return () => clearTimeout(timer)
+    } else {
+      window.addEventListener('load', handleLoad)
+      
+      const fallbackTimer = setTimeout(handleLoad, 8000)
+
+      return () => {
+        window.removeEventListener('load', handleLoad)
+        clearTimeout(fallbackTimer)
+      }
+    }
+  }, [])
 
   return (
     <Router>
       <AuthProvider>
         <FavoritesProvider>
+          {showLoader && <LoadingScreen isExiting={!loading} />}
           <ScrollToTop />
         {/* Layout is strictly LTR as requested by user */}
         <div className="app-container">
