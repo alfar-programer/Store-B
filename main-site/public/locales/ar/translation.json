@@ -1,7 +1,7 @@
 {
   "nav": {
     "home": "الرئيسية",
-    "allProducts": "جميع المنتجات",
+    "allProducts": "المنتجات",
     "about": "من نحن",
     "contact": "تواصل معنا",
     "myOrders": "طلباتي",
@@ -29,7 +29,7 @@
     "onlyLeft": "باقي {{count}} فقط!",
     "noProducts": "لا توجد منتجات متاحة حالياً",
     "loading": "جارٍ التحميل...",
-    "viewAll": "عرض جميع المنتجات",
+    "viewAll": "عرض المنتجات",
     "comingSoon": "قريباً"
   },
   "product": {
@@ -198,7 +198,7 @@
     "prodLeftOnly": "باقي {{count}} فقط!"
   },
   "allProducts": {
-    "pageTitle": "كل المنتجات",
+    "pageTitle": "المنتجات",
     "pageDesc": "اكتشف تشكيلتنا المختارة بعناية",
     "errorOops": "عذراً! حدث خطأ ما.",
     "errorTryAgain": "حاول مرة أخرى",
@@ -214,14 +214,25 @@
     "btnOutOfStock": "نفذت الكمية",
     "stockLeft": "باقي {{count}} فقط!",
     "btnLoadMore": "عرض المزيد",
+    "btnBack": "السابق",
+    "btnNext": "التالي",
     "moreProductsCount": "({{count}} منتج إضافي)",
     "allLoaded": "✓ تم عرض جميع المنتجات",
-    "added": "✓ تمت الإضافة!"
+    "added": "✓ تمت الإضافة!",
+    "filters": "الفلاتر",
+    "productsText": "منتج",
+    "categories": "الأقسام",
+    "priceRange": "نطاق السعر",
+    "availability": "خيارات إضافية",
+    "inStockOnly": "المتوفر فقط",
+    "onSaleOnly": "العروض فقط",
+    "clearFilters": "مسح الكل",
+    "applyFilters": "تطبيق الفلاتر"
   },
   "productDetail": {
     "notFoundTitle": "المنتج غير موجود",
     "notFoundDesc": "هذا المنتج غير موجود أو تم حذفه.",
-    "browseAll": "تصفح جميع المنتجات",
+    "browseAll": "تصفح المنتجات",
     "errorTitle": "حدث خطأ ما",
     "tryRefreshing": "حاول التحديث",
     "home": "الرئيسية",

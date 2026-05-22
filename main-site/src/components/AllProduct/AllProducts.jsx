@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react'
 import { Helmet } from 'react-helmet-async'
-import { Heart, ArrowUpDown, ShoppingBag } from 'lucide-react'
+import { Heart, ArrowUpDown, ShoppingBag, ChevronLeft, ChevronRight, SlidersHorizontal, Check, X } from 'lucide-react'
 import { useCart } from '../../context/CartContext'
 import { useFavorites } from '../../context/FavoritesContext'
 import { useSearchParams, useNavigate, Link } from 'react-router-dom'
@@ -25,7 +25,13 @@ const AllProducts = () => {
     const categoryParam = searchParams.get('category')
     const [selectedCategory, setSelectedCategory] = useState(categoryParam || 'All')
     const [sortOrder, setSortOrder] = useState('default')
-    const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE)
+    const [currentPage, setCurrentPage] = useState(1)
+    
+    // Comprehensive Filters State
+    const [priceRange, setPriceRange] = useState({ min: 0, max: 0 })
+    const [inStockOnly, setInStockOnly] = useState(false)
+    const [hasDiscountOnly, setHasDiscountOnly] = useState(false)
+    const [isFilterOpen, setIsFilterOpen] = useState(false)
     const { addToCart } = useCart()
     const { toggleFavorite, isFavorite } = useFavorites()
     const { getProductField, getCategoryField, lang } = useLanguage()
@@ -125,11 +131,27 @@ const AllProducts = () => {
         return map
     }, [categoriesData])
 
-    // Filter products based on selected category
+    // Filter products based on selected category and comprehensive filters
     const filteredProducts = useMemo(() => {
         let result = selectedCategory === 'All'
             ? products
             : products.filter(product => product.category === selectedCategory)
+
+        // Apply advanced filters
+        result = result.filter(product => {
+            const productPrice = parseFloat(product.price) || 0
+            const finalPrice = productPrice * (1 - (product.discount || 0) / 100)
+            
+            // Price Filter
+            if (finalPrice < priceRange.min) return false
+            if (priceRange.max > 0 && finalPrice > priceRange.max) return false
+            
+            // Availability Filter
+            if (inStockOnly && (typeof product.stock === 'number' && product.stock <= 0)) return false
+            if (hasDiscountOnly && (!product.discount || product.discount <= 0)) return false
+            
+            return true
+        })
 
         switch (sortOrder) {
             case 'price-asc':
@@ -143,11 +165,14 @@ const AllProducts = () => {
             default:
                 return result
         }
-    }, [selectedCategory, products, sortOrder])
+    }, [selectedCategory, products, sortOrder, priceRange, inStockOnly, hasDiscountOnly])
 
     // Visible products slice for Load More
-    const visibleProducts = useMemo(() => filteredProducts.slice(0, visibleCount), [filteredProducts, visibleCount])
-    const hasMore = visibleCount < filteredProducts.length
+    const totalPages = Math.ceil(filteredProducts.length / ITEMS_PER_PAGE)
+    const visibleProducts = useMemo(() => {
+        const startIndex = (currentPage - 1) * ITEMS_PER_PAGE
+        return filteredProducts.slice(startIndex, startIndex + ITEMS_PER_PAGE)
+    }, [filteredProducts, currentPage])
 
     // Helper to get all images
     const getImages = (imageField) => {
@@ -235,7 +260,7 @@ const handleAddToCart = (e, product) => {
 
     const handleCategoryChange = (category) => {
         setSelectedCategory(category)
-        setVisibleCount(ITEMS_PER_PAGE) // reset pagination on category change
+        setCurrentPage(1) // reset pagination on category change
         // Update URL with category parameter
         if (category === 'All') {
             navigate('/allproducts')
@@ -244,8 +269,9 @@ const handleAddToCart = (e, product) => {
         }
     }
 
-    const handleLoadMore = () => {
-        setVisibleCount(prev => prev + ITEMS_PER_PAGE)
+    const handlePageChange = (page) => {
+        setCurrentPage(page)
+        window.scrollTo({ top: 0, behavior: 'smooth' })
     }
 
     const getSEO = () => {
@@ -273,7 +299,7 @@ const handleAddToCart = (e, product) => {
                 };
             default:
                 return {
-                    title: `All Products - Handmade Decor & Gifts | كل المنتجات${baseTitle}`,
+                    title: `Products - Handmade Decor & Gifts | المنتجات${baseTitle}`,
                     description: "Browse our full collection of handmade macrame, mugs, and home decor at Warm Touch. كل ما تحتاجه من ديكورات يدوية وهدايا."
                 };
         }
@@ -381,42 +407,150 @@ const handleAddToCart = (e, product) => {
                             <p>{t('allProducts.pageDesc')}</p>
                         </div>
 
-                        {/* Category Navigation */}
-                        <div className="category-nav">
-                            <button
-                                className={`category-btn ${selectedCategory === 'All' ? 'active' : ''}`}
-                                onClick={() => handleCategoryChange('All')}
-                            >
-                                {t('allProducts.filterAll')}
-                            </button>
-                            {categories.map((category) => (
-                                <button
-                                    key={category}
-                                    className={`category-btn ${selectedCategory === category ? 'active' : ''}`}
-                                    onClick={() => handleCategoryChange(category)}
-                                >
-                                    {getCategoryField(categoryMap[category], 'name') || category}
-                                </button>
-                            ))}
-                        </div>
-
-                        {/* Sort Toolbar */}
-                        <div className="sort-toolbar">
-                            <span className="sort-count">{t('allProducts.productsCount', { count: filteredProducts.length })}</span>
-                            <div className="sort-select-wrapper">
-                                <ArrowUpDown size={16} className="sort-icon" />
-                                <select
-                                    id="sort-order"
-                                    className="sort-select"
-                                    value={sortOrder}
-                                    onChange={(e) => { setSortOrder(e.target.value); setVisibleCount(ITEMS_PER_PAGE) }}
-                                >
-                                    <option value="default">{t('allProducts.sortDefault')}</option>
-                                    <option value="newest">{t('allProducts.sortNewest')}</option>
-                                    <option value="price-asc">{t('allProducts.sortPriceAsc')}</option>
-                                    <option value="price-desc">{t('allProducts.sortPriceDesc')}</option>
-                                    <option value="discount">{t('allProducts.sortDiscount')}</option>
-                                </select>
+                        {/* Ecommerce Actions Bar & Filters */}
+                        <div className="shop-actions-container">
+                            <div className="collection-actions-bar">
+                                <div className="actions-left">
+                                    <button 
+                                        className={`filter-toggle-btn ${isFilterOpen ? 'active' : ''}`}
+                                        onClick={() => setIsFilterOpen(!isFilterOpen)}
+                                    >
+                                        <SlidersHorizontal size={18} />
+                                        <span>{t('allProducts.filters', 'Filters')}</span>
+                                        {(inStockOnly || hasDiscountOnly || selectedCategory !== 'All' || priceRange.min > 0 || priceRange.max < 100000) && (
+                                            <span className="filter-active-dot"></span>
+                                        )}
+                                    </button>
+                                </div>
+                                <div className="actions-right">
+                                    <span className="sort-count">{filteredProducts.length} {t('allProducts.productsText', 'Products')}</span>
+                                    <div className="sort-select-wrapper modern">
+                                        <select
+                                            id="sort-order"
+                                            className="sort-select"
+                                            value={sortOrder}
+                                            onChange={(e) => { setSortOrder(e.target.value); setCurrentPage(1) }}
+                                        >
+                                            <option value="default">{t('allProducts.sortDefault')}</option>
+                                            <option value="newest">{t('allProducts.sortNewest')}</option>
+                                            <option value="price-asc">{t('allProducts.sortPriceAsc')}</option>
+                                            <option value="price-desc">{t('allProducts.sortPriceDesc')}</option>
+                                            <option value="discount">{t('allProducts.sortDiscount')}</option>
+                                        </select>
+                                        <ArrowUpDown size={14} className="sort-indicator" />
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            {/* Expandable Filter Panel */}
+                            <div className={`comprehensive-filter-panel ${isFilterOpen ? 'open' : ''}`}>
+                                <div className="filter-panel-inner">
+                                    {/* Categories Group */}
+                                    <div className="filter-group">
+                                        <h4>{t('allProducts.categories', 'Categories')}</h4>
+                                        <div className="filter-pills-scroll">
+                                            <button
+                                                className={`filter-pill ${selectedCategory === 'All' ? 'active' : ''}`}
+                                                onClick={() => handleCategoryChange('All')}
+                                            >
+                                                {t('allProducts.filterAll')}
+                                            </button>
+                                            {categories.map((category) => (
+                                                <button
+                                                    key={category}
+                                                    className={`filter-pill ${selectedCategory === category ? 'active' : ''}`}
+                                                    onClick={() => handleCategoryChange(category)}
+                                                >
+                                                    {getCategoryField(categoryMap[category], 'name') || category}
+                                                </button>
+                                            ))}
+                                        </div>
+                                    </div>
+                                    
+                                    <div className="filter-row">
+                                        {/* Price Range Group */}
+                                        <div className="filter-group flex-1">
+                                            <h4>{t('allProducts.priceRange', 'Price Range')}</h4>
+                                            <div className="price-inputs">
+                                                <div className="price-input-wrapper">
+                                                    <span className="currency">EGP</span>
+                                                    <input 
+                                                        type="number" 
+                                                        min="0" 
+                                                        value={priceRange.min || ''} 
+                                                        onChange={(e) => {
+                                                            const val = e.target.value ? parseInt(e.target.value) : 0;
+                                                            setPriceRange({...priceRange, min: val});
+                                                            setCurrentPage(1);
+                                                        }}
+                                                        placeholder="Min"
+                                                    />
+                                                </div>
+                                                <span className="price-separator">-</span>
+                                                <div className="price-input-wrapper">
+                                                    <span className="currency">EGP</span>
+                                                    <input 
+                                                        type="number" 
+                                                        min="0" 
+                                                        value={priceRange.max || ''} 
+                                                        onChange={(e) => {
+                                                            const val = e.target.value ? parseInt(e.target.value) : 0;
+                                                            setPriceRange({...priceRange, max: val});
+                                                            setCurrentPage(1);
+                                                        }}
+                                                        placeholder="Max"
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        {/* Availability Group */}
+                                        <div className="filter-group flex-1 availability-group">
+                                            <h4>{t('allProducts.availability', 'More Options')}</h4>
+                                            <div className="checkboxes-wrapper">
+                                                <label className="checkbox-label">
+                                                    <input 
+                                                        type="checkbox" 
+                                                        checked={inStockOnly} 
+                                                        onChange={(e) => { setInStockOnly(e.target.checked); setCurrentPage(1); }} 
+                                                    />
+                                                    <span className="custom-checkbox">
+                                                        {inStockOnly && <Check size={12} strokeWidth={4} />}
+                                                    </span>
+                                                    {t('allProducts.inStockOnly', 'In Stock Only')}
+                                                </label>
+                                                <label className="checkbox-label">
+                                                    <input 
+                                                        type="checkbox" 
+                                                        checked={hasDiscountOnly} 
+                                                        onChange={(e) => { setHasDiscountOnly(e.target.checked); setCurrentPage(1); }} 
+                                                    />
+                                                    <span className="custom-checkbox">
+                                                        {hasDiscountOnly && <Check size={12} strokeWidth={4} />}
+                                                    </span>
+                                                    {t('allProducts.onSaleOnly', 'On Sale Only')}
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div className="filter-actions-bottom">
+                                        <button 
+                                            className="clear-filters-btn"
+                                            onClick={() => {
+                                                setPriceRange({ min: 0, max: 0 });
+                                                setInStockOnly(false);
+                                                setHasDiscountOnly(false);
+                                                handleCategoryChange('All');
+                                            }}
+                                        >
+                                            {t('allProducts.clearFilters', 'Clear All')}
+                                        </button>
+                                        <button className="apply-filters-btn" onClick={() => setIsFilterOpen(false)}>
+                                            {t('allProducts.applyFilters', 'Apply Selected')}
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
@@ -505,17 +639,44 @@ const handleAddToCart = (e, product) => {
                             ))}
                         </div>
 
-                        {/* Load More */}
-                        {hasMore && (
-                            <div className="load-more-wrapper">
-                                <button className="load-more-btn" onClick={handleLoadMore}>
-                                    {t('allProducts.btnLoadMore')}
-                                    <span className="load-more-count">{t('allProducts.moreProductsCount', { count: filteredProducts.length - visibleCount })}</span>
+                        {/* Pagination */}
+                        {totalPages > 1 && (
+                            <div className="pagination-wrapper">
+                                <button 
+                                    className="pagination-btn pagination-arrow" 
+                                    onClick={() => handlePageChange(currentPage - 1)}
+                                    disabled={currentPage === 1}
+                                    title={t('allProducts.btnBack')}
+                                >
+                                    <ChevronLeft size={20} />
+                                    <span>{t('allProducts.btnBack')}</span>
+                                </button>
+                                
+                                <div className="pagination-pages">
+                                    {[...Array(totalPages)].map((_, idx) => {
+                                        const pageNum = idx + 1;
+                                        return (
+                                            <button
+                                                key={pageNum}
+                                                className={`pagination-btn ${currentPage === pageNum ? 'active' : ''}`}
+                                                onClick={() => handlePageChange(pageNum)}
+                                            >
+                                                {pageNum}
+                                            </button>
+                                        );
+                                    })}
+                                </div>
+                                
+                                <button 
+                                    className="pagination-btn pagination-arrow" 
+                                    onClick={() => handlePageChange(currentPage + 1)}
+                                    disabled={currentPage === totalPages}
+                                    title={t('allProducts.btnNext')}
+                                >
+                                    <span>{t('allProducts.btnNext')}</span>
+                                    <ChevronRight size={20} />
                                 </button>
                             </div>
-                        )}
-                        {!hasMore && filteredProducts.length > ITEMS_PER_PAGE && (
-                            <p className="all-loaded-msg">{t('allProducts.allLoaded')}</p>
                         )}
 
                         {/* Quick View Modal */}

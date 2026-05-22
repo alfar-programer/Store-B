@@ -1,7 +1,7 @@
 {
   "nav": {
     "home": "Home",
-    "allProducts": "All Products",
+    "allProducts": "Products",
     "about": "About",
     "contact": "Contact Us",
     "myOrders": "My Orders",
@@ -29,7 +29,7 @@
     "onlyLeft": "Only {{count}} left!",
     "noProducts": "No products available",
     "loading": "Loading products...",
-    "viewAll": "View All Products",
+    "viewAll": "View Products",
     "comingSoon": "Coming Soon"
   },
   "product": {
@@ -198,7 +198,7 @@
     "prodLeftOnly": "Only {{count}} left!"
   },
   "allProducts": {
-    "pageTitle": "All Products",
+    "pageTitle": "Products",
     "pageDesc": "Discover our handpicked selection of items",
     "errorOops": "Oops! Something went wrong.",
     "errorTryAgain": "Try Again",
@@ -214,14 +214,25 @@
     "btnOutOfStock": "Out of Stock",
     "stockLeft": "Only {{count}} left!",
     "btnLoadMore": "Load More",
+    "btnBack": "Back",
+    "btnNext": "Next",
     "moreProductsCount": "({{count}} more products)",
     "allLoaded": "✓ All products displayed",
-    "added": "✓ Added!"
+    "added": "✓ Added!",
+    "filters": "Filters",
+    "productsText": "Products",
+    "categories": "Categories",
+    "priceRange": "Price Range",
+    "availability": "More Options",
+    "inStockOnly": "In Stock Only",
+    "onSaleOnly": "On Sale Only",
+    "clearFilters": "Clear All",
+    "applyFilters": "Apply Selected"
   },
   "productDetail": {
     "notFoundTitle": "Product Not Found",
     "notFoundDesc": "This product doesn't exist or has been removed.",
-    "browseAll": "Browse all products",
+    "browseAll": "Browse products",
     "errorTitle": "Something went wrong",
     "tryRefreshing": "Try refreshing",
     "home": "Home",

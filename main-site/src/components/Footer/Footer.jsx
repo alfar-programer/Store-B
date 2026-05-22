@@ -36,7 +36,7 @@ const Footer = () => {
                     <div className="footer-v2-col">
                         <h4>Shop</h4>
                         <ul>
-                            <li><Link to="/allproducts">All Products</Link></li>
+                            <li><Link to="/allproducts">Products</Link></li>
                             <li><Link to="/allproducts?sort=newest">New Arrivals</Link></li>
                             <li><Link to="/allproducts?sort=popular">Best Sellers</Link></li>
                             <li><Link to="/allproducts?sale=true">Sale</Link></li>
