@@ -117,7 +117,7 @@ const LoadingScreen = ({ isExiting }) => {
                 </div>
 
                 <div className="text-container">
-                    <h2 className="loading-brand">STORE-B</h2>
+                    <h2 className="loading-brand">Warm Touch</h2>
                     <p className="loading-text">
                         Designing your premium experience
                     </p>
