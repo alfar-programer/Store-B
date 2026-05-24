@@ -32,6 +32,11 @@ const OrderTimeline = ({ status }) => {
 
     const currentIdx = steps.findIndex(s => s.status === status.toLowerCase());
     const isCancelled = status.toLowerCase() === 'cancelled';
+    const stepSpan = 100 / steps.length; // 25% for each step
+    const totalProgressSpan = 100 - stepSpan; // 75% total span between first and last step centers
+    
+    // Calculate progress width: 0% starting from first icon center, up to totalProgressSpan
+    const progressWidth = currentIdx === -1 ? 0 : (currentIdx / (steps.length - 1)) * totalProgressSpan;
 
     return (
         <div className={`${styles.timelineContainer}`}>
@@ -46,11 +51,17 @@ const OrderTimeline = ({ status }) => {
             ) : (
                 <div className={`${styles.orderTimeline}`}>
                     <div className={`${styles.timelineTrackBg}`}></div>
+                    <div 
+                        className={`${styles.timelineTrackProgress}`} 
+                        style={{ width: `${progressWidth}%` }}
+                    ></div>
                     {steps.map((step, index) => {
                         const isActive = index <= currentIdx;
-                        const isCurrent = index === currentIdx;
                         return (
-                            <div key={step.status} className={`timeline-step ${isActive ? 'active' : ''} ${index < currentIdx ? 'completed' : ''}`}>
+                            <div 
+                                key={step.status} 
+                                className={`${styles.timelineStep} ${isActive ? styles.active : ''} ${index < currentIdx ? styles.completed : ''}`}
+                            >
                                 <div className={`${styles.stepCircle}`}>
                                     {step.icon}
                                 </div>
@@ -115,11 +126,11 @@ const MyOrders = () => {
 
     const getStatusClass = (status) => {
         switch (status.toLowerCase()) {
-            case 'pending': return 'status-pending';
-            case 'processing': return 'status-processing';
-            case 'shipped': return 'status-shipped';
-            case 'delivered': return 'status-delivered';
-            case 'cancelled': return 'status-cancelled';
+            case 'pending': return styles.statusPending;
+            case 'processing': return styles.statusProcessing;
+            case 'shipped': return styles.statusShipped;
+            case 'delivered': return styles.statusDelivered;
+            case 'cancelled': return styles.statusCancelled;
             default: return '';
         }
     };
@@ -257,7 +268,7 @@ const MyOrders = () => {
                                         </div>
 
                                         <div className="flex items-center">
-                                            <span className={`status-badge ${getStatusClass(order.status)}`}>
+                                            <span className={`${styles.statusBadge} ${getStatusClass(order.status)}`}>
                                                 {order.status}
                                             </span>
                                         </div>

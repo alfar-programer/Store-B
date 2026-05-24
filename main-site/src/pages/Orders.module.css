@@ -362,13 +362,25 @@
 .timelineTrackBg {
     position: absolute;
     top: 50%;
-    left: 0;
-    right: 0;
+    left: 12.5%;
+    right: 12.5%;
     height: 4px;
     background: #e2e8f0;
     transform: translateY(-50%);
     border-radius: 4px;
     z-index: 0;
+}
+
+.timelineTrackProgress {
+    position: absolute;
+    top: 50%;
+    left: 12.5%;
+    height: 4px;
+    background: var(--primary-color);
+    transform: translateY(-50%);
+    border-radius: 4px;
+    z-index: 1;
+    transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .timelineStep {
@@ -381,6 +393,8 @@
     gap: 0.75rem;
     width: 25%;
 }
+
+
 
 .stepCircle {
     width: 36px;
